@@ -4,8 +4,9 @@ import socket
 from time import sleep, localtime
 
 SERVER_ADDR = "127.0.0.1"
-PORT = 50000
+PORT = 80
 SENSOR_NO = 1
+LOCATION = "Harman Science Library"
 
 try:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -22,20 +23,22 @@ try:
 
             # Get time data
             t = localtime()
-            tstamp = f"{t.tm_mday}/{t.tm_mon}/{t.tm_year} \
-                {t.tm_hour}:{t.tm_min}:{t.tm_sec}" # Only on python
+            tstamp = f"{t.tm_mday}/{t.tm_mon}/{t.tm_year} {t.tm_hour}:{t.tm_min}:{t.tm_sec}" # Only on python
             # tstamp = f"{t[2]}/{t[1]}/{t[0]}, {t[3]}:{t[4]}:{t[5]}" # Only on Micropython
 
             # Send data
-            data = {"S.N.":SENSOR_NO,
-                    "Time":tstamp,
-                    "Entrances":entrances,
-                    "Exits":exits}
+            data = {"S.N.": SENSOR_NO,
+                    "Location": LOCATION,
+                    "Time": tstamp,
+                    "Entrances": entrances,
+                    "Exits": exits}
 
             print(data)
             try:
                 s.send(str(data).encode())
                 print("Sent successfully.")
+                s.close()
+                print("Connection terminated.")
                 # Make green LED light up or something
             except:
                 # Make red LED light up or something

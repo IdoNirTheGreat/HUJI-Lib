@@ -1,9 +1,19 @@
 import socket
+from ast import literal_eval
 
-ALLOWED_HOSTS = ""
+ALLOWED_HOSTS = "127.0.0.1"
 PORT = 80
 MAX_CONNECTIONS = 5
 REQ_SIZE = 1024
+LOCATION_LIST = [   "Harman Science Library", 
+                    "Einstein Maths Institute Library",
+                ]
+FIELDS = [  "S.N.",
+            "Location",
+            "Time",
+            "Entrances",
+            "Exits"
+        ]
 
 def build_webpage():
     page = """
@@ -93,17 +103,27 @@ if __name__ == '__main__':
 
                 # Recieve request:
                 req = cli_sock.recv(REQ_SIZE)
-                req = str(req)
-                print(f"\nRequest:\n {req}\n\n\n")
+                req = str(req)[2:-1] # The slice is to delete the 'b' indicating binary stream
+                print(f"\nRequest:\n {req}\n\n")
+                
+                # Send response according to the request:
+                # If sensor sent request:
+                if "GET" not in req and type(literal_eval(req)) is dict and FIELDS == list(literal_eval(req).keys()):
+                    print("Sensor " + str(literal_eval(req)['S.N.']) + " has transmitted.\n")
 
-                # Send response:
-                res = build_webpage().encode("Windows-1255")
-                cli_sock.send(b'HTTP/2.0 200 OK\n')
-                cli_sock.send(b'Accept-Language: he-IL\n')
-                cli_sock.send(b'Content-Type: text/html\n')
-                cli_sock.send(b'Accept-Encoding: gzip, deflate\n')
-                cli_sock.send(b'Connection: close\n\n')
-                cli_sock.sendall(res)
+                # If HTTP client requested to download webpage:
+                elif "GET" in req:
+                    res = build_webpage().encode("Windows-1255") # Windows-1255 encoding is to support Hebrew on HTML
+                    cli_sock.send(b'HTTP/2.0 200 OK\n')
+                    cli_sock.send(b'Accept-Language: he-IL\n')
+                    cli_sock.send(b'Content-Type: text/html\n')
+                    cli_sock.send(b'Accept-Encoding: gzip, deflate\n')
+                    cli_sock.send(b'Connection: close\n\n')
+                    cli_sock.sendall(res)
+
+                else:
+                    # If another type of request was made, do something:
+                    pass
 
                 # Close client socket:
                 cli_sock.close()
