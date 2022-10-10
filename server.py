@@ -6,7 +6,6 @@ MAX_CONNECTIONS = 5
 REQ_SIZE = 1024
 
 def build_webpage():
-    led_state = 1
     page = """
     <html>
         <style>
@@ -38,7 +37,7 @@ def build_webpage():
 
             <center>
                 <h2>Library Status</h2>
-                <h3>Harman Science Library</h3>
+                <h3>Harman Science Library ספריית הרמן למדע</h3>
                 <a  href="https://www.google.com/maps/place/Harman+Science+Library/@31.7762469,35.1962321,15z/data=!4m5!3m4!1s0x0:0x976933b668603686!8m2!3d31.7765422!4d35.1956818"
                     target="_blank">
                     <img    class="lu-fs"
@@ -98,7 +97,7 @@ if __name__ == '__main__':
                 print(f"\nRequest:\n {req}\n\n\n")
 
                 # Send response:
-                res = build_webpage().encode()
+                res = build_webpage().encode("Windows-1255")
                 cli_sock.send(b'HTTP/2.0 200 OK\n')
                 cli_sock.send(b'Accept-Language: he-IL\n')
                 cli_sock.send(b'Content-Type: text/html\n')
