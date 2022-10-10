@@ -17,18 +17,28 @@ try:
 
         while(True):
             # Get data from sensors
+            entrances = 30
+            exits = 20
 
             # Get time data
             t = localtime()
-            tstamp = f"{t.tm_mday}/{t.tm_mon}/{t.tm_year} {t.tm_hour}:{t.tm_min}:{t.tm_sec}"
+            tstamp = f"{t.tm_mday}/{t.tm_mon}/{t.tm_year} \
+                {t.tm_hour}:{t.tm_min}:{t.tm_sec}" # Only on python
+            # tstamp = f"{t[2]}/{t[1]}/{t[0]}, {t[3]}:{t[4]}:{t[5]}" # Only on Micropython
 
             # Send data
-            data = {"S.N.":SENSOR_NO, "Time":tstamp, "In":30, "Out":20}
+            data = {"S.N.":SENSOR_NO,
+                    "Time":tstamp,
+                    "Entrances":entrances,
+                    "Exits":exits}
+
             print(data)
             try:
                 s.send(str(data).encode())
                 print("Sent successfully.")
+                # Make green LED light up or something
             except:
+                # Make red LED light up or something
                 print("Transmission failed.")
             sleep(60)
 
