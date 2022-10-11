@@ -1,4 +1,5 @@
 import socket
+import logging
 from ast import literal_eval
 
 ALLOWED_HOSTS = "127.0.0.1"
@@ -6,7 +7,10 @@ PORT = 80
 MAX_CONNECTIONS = 5
 REQ_SIZE = 1024
 LOCATION_LIST = [   "Harman Science Library", 
-                    "Einstein Maths Institute Library",
+                    "Einstein Institute Math Library",
+                    "Harman Science Library - Floor 2 (Quiet)",
+                    "CSE Aquarium C100",
+                    "Harman Science Library - Floor 2 (Loud)",
                 ]
 FIELDS = [  "S.N.",
             "Location",
@@ -86,8 +90,16 @@ def build_webpage():
     
     return page
 
-
 if __name__ == '__main__':
+    # Setup logger:
+    logging.basicConfig(filename="server.log",
+                        filemode='w',
+                        format='%(asctime)s - %(levelname)s - %(message)s',
+                        level=logging.INFO,
+                        )
+
+    logging.info("Server has started running.")
+
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as est_sock:
             # Establish a connection with a socket designated only for making connections:
@@ -95,7 +107,7 @@ if __name__ == '__main__':
                 est_sock.bind((ALLOWED_HOSTS, PORT))
                 est_sock.listen(MAX_CONNECTIONS)
             except:
-                raise("Socket bind or listening failed.")
+                logging.error("Socket bind or listening failed.")
 
             while(True):
                 # Create a new socket with a client, and save client's address:
@@ -108,8 +120,11 @@ if __name__ == '__main__':
                 
                 # Send response according to the request:
                 # If sensor sent request:
-                if "GET" not in req and type(literal_eval(req)) is dict and FIELDS == list(literal_eval(req).keys()):
-                    print("Sensor " + str(literal_eval(req)['S.N.']) + " has transmitted.\n")
+                if  "GET" not in req and \
+                    type(literal_eval(req)) is dict and \
+                    FIELDS == list(literal_eval(req).keys()) and \
+                    literal_eval(req)['Location'] in LOCATION_LIST:
+                    logging.info("Sensor " + str(literal_eval(req)['S.N.']) + " has transmitted.")
 
                 # If HTTP client requested to download webpage:
                 elif "GET" in req:
@@ -123,12 +138,11 @@ if __name__ == '__main__':
 
                 else:
                     # If another type of request was made, do something:
-                    pass
+                    logging.warning("An unknown type of request was sent: \n{req}\n")
 
                 # Close client socket:
                 cli_sock.close()
 
-
     except:
-        raise("Socket creation failed.")
+        logging.error("Socket creation failed.")
         
