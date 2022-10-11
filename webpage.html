@@ -1,76 +1,297 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en" scroll-behavior: smooth;>
 
     <head>
         <title>HUJI-Lib</title>
         <meta charset="UTF-8">
-        <style>
-            body {
-                background: lightcyan;
-                font-family:    Arial, Helvetica, sans-serif;
-            }
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/35872213.jpg">
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+        <!-- Core theme CSS-->
+        <link href="css/styles.css" rel="stylesheet">
 
-            .grid-container{
-                display: grid;
-                grid-template-rows: 1fr 1fr 1fr 1fr;
-                grid-auto-rows: minmax(100px, auto); 
-                justify-items: center;
-                grid-row-gap: 2em;
-            }
-          
-            .welcome{
-                align-self: center;
-                font-size: 50px;
-                background: rgb(164, 202, 198);
-                border-radius: 10px;
-            }
-
-
-            .locations{
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-            }
-            .loc-img {width: 200px;
-                border-radius: 100px;
-                float: left;
-                margin-right: 10px;                
+        <!--progress bar-->
+        <style media="screen">
+            .circle-wrap {
+              margin: 80px auto;
+              width: 150px;
+              height: 100px;
+              background: #fefcff;
+              border-radius: 50%;  
             }  
-            .location-link:hover {opacity: 0.8;
-                transition: opacity 0.3s;}
-            .loc-txt{
-                align-self: center;
-                font-family:    Arial, Helvetica, sans-serif;
-                font-weight:    bold;
+            .circle-wrap .circle .mask,
+            .circle-wrap .circle .fill {
+              width: 150px;
+              height: 150px;
+              position: absolute;
+              border-radius: 50%;
             }
+            .circle-wrap .circle .mask {
+              clip: rect(0px, 150px, 150px, 75px);
+            }
+            .circle-wrap .inside-circle {
+              width: 122px;
+              height: 122px;
+              border-radius: 50%;
+              background: white;
+              line-height: 120px;
+              text-align: center;
+              margin-top: 14px;
+              margin-left: 14px;
+              position: absolute;
+              z-index: 100;
+              font-weight: 700;
+              font-size: 2em;
+            }
+            .mask .fill {
+              clip: rect(0px, 75px, 150px, 0px);
+              background-color: #227ded;
+            }
+            .mask.full,
+            .circle .fill {
+              animation: fill ease-in-out 3s;
+              transform: rotate(180deg);
+            }
+            @keyframes fill{0% {transform: rotate(0deg);}
+              100% {transform: rotate(180deg);}
+            }
+            
+            
+            .accordion-button{align-items: center;}
         </style>
     </head>
 
 
     <body>
-
-
-        <div class="grid-container">
-            <div class="welcome">
-                HUJI-Lib
-            </div>
-            <div>Library Current Status</div>
-            <div class="locations">
-                <div>
-                    <a class="location-link" href="https://www.google.com/maps/place/Harman+Science+Library/@31.7762469,35.1962321,15z/data=!4m5!3m4!1s0x0:0x976933b668603686!8m2!3d31.7765422!4d35.1956818" target = "_blank">
-                        <img class="loc-img" src="https://www.google.com/maps/vt/data=2Gg6lDK-Ci_csXy4ooB7HY3z3OD5M72cJpuqxgBut-j4hf5II4i74YjIvdTHwymV1_ndigc94sVyNi5WJcaKgAPrBBD5ipRKocwV45VoHvipyIW_ivbx7wOohW9rp-HrXcZdqpUg6DFOXiqacMxq9kKSTamjNZdqJAz1HjlF-kj3HmT-bd1rb9zY3xXj5R7sN7pIlyjivtASSQ&amp;w=182&amp;h=160">
-                    </a>
+        <!-- Responsive navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container px-lg-5">
+                <a class="navbar-brand" href="#!"><i class="bi bi-book"></i>HUJI-Lib</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#section1">current status & weakly statistics</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#!">reservations</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#!">alternative locations</a></li>
+                    </ul>
                 </div>
-                <div class="loc-txt">Library location</div>
             </div>
+        </nav>
+        <!-- Header-->
+        <header class="py-5">
+            <div class="container px-lg-5" id="section0">
+                <div class="p-4 p-lg-5 bg-light rounded-3 text-center">
+                    <div class="m-4 m-lg-5">
+                        <h1 class="display-5 fw-bold">welcome to <i class="bi bi-book"></i>HUJI-lib</h1>
+                        <p class="fs-4">a platform created by students for students to help you find the right space to study around the campus</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- locations-->
+        <div class="container px-lg-5" id="section0">
+          <div class="p-4 p-lg-5 bg-light rounded-3 text-center">
+              <div class="m-4 m-lg-5">
+                  <h3>available locations</h3>
+                  <div class="container text-center">
+                    <div class="row row-cols-3">
+                      
 
 
-            <div>alternative study locations</div>
+                      <div class="col">
+                        <div class="card" style="width: 18rem;">
+                          <img src="assets/herman_library.jpg" class="card-img-top" style="height: 150px;">
+                          <div class="card-body">
+                            <h5 class="card-title">herman library</h5>
+                            <div class="accordion" id="accordionPanelsStayOpenExample">
+                              <div class="accordion-item">
+                                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                      קומה עליונה חדר מרכזי
+                                  </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                                  <div class="accordion-body">
+                                    <!--progress bar herman-->
+                                      <div class="circle-wrap">
+                                          <div class="circle">
+                                          <div class="mask full">
+                                              <div class="fill"></div>
+                                          </div>
+                                          <div class="mask half">
+                                              <div class="fill"></div>
+                                          </div>
+                                          <div class="inside-circle"> 100% </div>
+                                          </div>
+                                      </div> 
+                                  </div>
+                                </div>
+
+
+
+
+
+
+
+
+
+
+                              </div>
+                              <div class="accordion-item">
+                                <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                                  <button class="accordion-button collapsed" type="button" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                      קומה עליונה חדר שקט
+                                  </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                                  <div class="accordion-body">
+                                      <p>coming soon</p>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="accordion-item">
+                                <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                                      קומה תחתונה חדר מרכזי
+                                  </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                                  <div class="accordion-body">
+                                      <p>coming soon</p>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="accordion-item">
+                                <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                                      קומה תחתונה חדר שקט
+                                  </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                                  <div class="accordion-body">
+                                      <p>coming soon</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div> 
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col">
+                        <div class="card" style="width: 18rem; ">
+                          <img src="assets/mtmtyqh.jpg" class="card-img-top" style="height: 150px;">
+                          <div class="card-body">
+                            <h5 class="card-title">mathematics library</h5>
+                            <div class="accordion" id="accordionPanelsStayOpenExample">
+                              <div class="accordion-item">
+                                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                      קומה עליונה חדר מרכזי
+                                  </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                                  <div class="accordion-body">
+                                    coming soon
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                              
+
+                      <div class="col">
+                        <div class="card" style="width: 18rem; ">
+                          <img src="assets/aquarium.jpg" class="card-img-top" style="height: 150px;">
+                          <div class="card-body">
+                            <h5 class="card-title">the aquarium</h5>
+                            <div class="accordion" id="accordionPanelsStayOpenExample">
+                              <div class="accordion-item">
+                                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                      c100
+                                  </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                                  <div class="accordion-body">
+                                    coming soon
+                                  </div>
+
+
+
+                                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                    c100
+                                </button>
+                              </h2>
+                              <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                                <div class="accordion-body">
+                                  coming soon
+                                  
+                                </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                  </div>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
 
 
-    </body> 
+
+
+
+
+
+
+        <section class="pt-4">
+            <div class="container px-lg-5">
+                
+                <!-- Page Features-->
+                <div class="row gx-lg-5" id="section1">
+                    <div class="col-lg-6 col-xxl-4 mb-5" >
+                        <div class="card bg-light border-0 h-100">
+                            <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
+                                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-4 mt-n4"><i class="bi bi-compass-fill"></i></div>
+                                <h2 class="fs-4 fw-bold">current state</h2>
+
+
+
+                                                         
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-xxl-4 mb-5">
+                        <div class="card bg-light border-0 h-100">
+                            <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
+                                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-4 mt-n4"><i class="bi bi-bar-chart-fill"></i></div>
+                                <h2 class="fs-4 fw-bold">weakly statistics</h2>
+                                <!--weakly chart-->
+                                
+                                <div><i class="fas fa-chart-area me-1"></i>עומס במהלך השבוע</div>
+                                    <div><canvas id="myAreaChart" width="100%" height="60"></canvas></div>  
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2022</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
 </html>
-
-
-
