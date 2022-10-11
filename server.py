@@ -1,11 +1,14 @@
 import socket
 import logging
+import csv
 from ast import literal_eval
 
 ALLOWED_HOSTS = "127.0.0.1"
 PORT = 80
 MAX_CONNECTIONS = 5
 REQ_SIZE = 1024
+DB_FILENAME = 'current_status.csv'
+RAW_DATA_FILENAME = 'all_sensor_transmissions.csv'
 LOCATION_LIST = [   "Harman Science Library", 
                     "Einstein Institute Math Library",
                     "Harman Science Library - Floor 2 (Quiet)",
@@ -90,15 +93,38 @@ def build_webpage():
     
     return page
 
+def create_csv(filename, headers):
+    try:
+        with open(filename, 'w') as db:
+            w = csv.DictWriter(db, fieldnames=headers)
+            w.writeheader()
+    except IOError:
+        logger.error(f"An I/O error has occurred when writing to {filename}.")
+
+def insert_to_csv(filename, dict_data, logger):
+    try:
+        with open(filename, 'a', newline='') as db:
+            w = csv.DictWriter(db, fieldnames=FIELDS)
+            w.writerow(dict_data)
+    except IOError:
+        logger.error(f"An I/O error has occurred when writing to {filename}.")
+
+def update_current_status(filename, dict_data):
+    pass
+    
+
 if __name__ == '__main__':
-    # Setup logger:
+    # Logger setup:
     logging.basicConfig(filename="server.log",
                         filemode='w',
                         format='%(asctime)s - %(levelname)s - %(message)s',
                         level=logging.INFO,
                         )
+    logger = logging.getLogger()
+    logger.info("Server has started running.")
 
-    logging.info("Server has started running.")
+    # DB setup:
+    create_csv(RAW_DATA_FILENAME, FIELDS)
 
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as est_sock:
@@ -122,9 +148,11 @@ if __name__ == '__main__':
                 # If sensor sent request:
                 if  "GET" not in req and \
                     type(literal_eval(req)) is dict and \
-                    FIELDS == list(literal_eval(req).keys()) and \
-                    literal_eval(req)['Location'] in LOCATION_LIST:
-                    logging.info("Sensor " + str(literal_eval(req)['S.N.']) + " has transmitted.")
+                    FIELDS == list(literal_eval(req).keys()):
+                    
+                    sensor_data = literal_eval(req)
+                    logger.info("Sensor " + str(sensor_data['S.N.']) + " has transmitted.")
+                    insert_to_csv(RAW_DATA_FILENAME, sensor_data, logger)
 
                 # If HTTP client requested to download webpage:
                 elif "GET" in req:
@@ -138,11 +166,11 @@ if __name__ == '__main__':
 
                 else:
                     # If another type of request was made, do something:
-                    logging.warning("An unknown type of request was sent: \n{req}\n")
+                    logger.warning("An unknown type of request was sent: \n{req}\n")
 
                 # Close client socket:
                 cli_sock.close()
 
     except:
-        logging.error("Socket creation failed.")
+        logger.error("Socket creation failed.")
         
