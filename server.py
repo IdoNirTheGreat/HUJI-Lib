@@ -121,6 +121,7 @@ if __name__ == '__main__':
     # DB setup:
     create_csv(RAW_DATA_FILENAME, FIELDS, logger)
 
+    # HTTP setup:
     server = HTTPServer((HOST, PORT), hujilib_http)
     server.serve_forever()
     logger.info("The server has started running.")
