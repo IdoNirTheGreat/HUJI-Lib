@@ -2,13 +2,15 @@ import logging
 import csv
 from ast import literal_eval
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from os.path import splitext
+from typing import Dict
 
 ALLOWED_HOSTS = "127.0.0.1"
 HOST = "127.0.0.1"
 PORT = 80
 MAX_CONNECTIONS = 5
 REQ_SIZE = 1024
-HEBREW_ENCODING = "iso-8859-1" #"Windows-1255"  # Windows-1255 encoding is to support Hebrew on HTML)
+HEBREW_ENCODING = "iso-8859-1" #An encoding that supports Hebrew on HTML)
 DB_FILENAME = 'current_status.csv'
 RAW_DATA_FILENAME = 'all_sensor_transmissions.csv'
 HOMEPAGE_FILENAME = 'webpage.html'
@@ -29,14 +31,31 @@ FIELDS = [  "S.N.",
 class hujilib_http(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
-        self.send_header('Content-Type', 'text/html')
         self.send_header('Accept-Language', 'he-IL')
+       
+        # If a specific file was requested:
+        if len(self.path[1:]): 
+            extension = splitext(self.path[1:])[1]
+            if extension == '.css':
+                self.send_header('Content-Type', 'text/css')
+                self.end_headers()
+                self.wfile.write(file_to_string(self.path[1:]))
+            elif extension == '.js':
+                self.send_header('Content-Type', 'application/javascript')
+                self.end_headers()
+                self.wfile.write(file_to_string(self.path[1:]))
+            elif extension == '.jpg':
+                self.send_header('Content-Type', 'image/jpg')
+                self.end_headers()
+                self.wfile.write(open_image(self.path[1:]))
 
-        self.end_headers()
+        # If no file was specified, send the mainpage html:
+        else:
+            self.send_header('Content-Type', 'text/html')
+            self.end_headers()
+            self.wfile.write(file_to_string(HOMEPAGE_FILENAME))
 
-        self.wfile.write(file_to_string(HOMEPAGE_FILENAME))
-
-def file_to_string(filename: str, encoder: str=HEBREW_ENCODING) -> str:
+def file_to_string(filename: str, encoder: str=HEBREW_ENCODING) -> bytes:
     """ Recieves a filename and an encoder and returns the file 
         as a binary stream with the requested encoding.
         Writes to the logger if an error has occurred."""
@@ -46,7 +65,18 @@ def file_to_string(filename: str, encoder: str=HEBREW_ENCODING) -> str:
             return buffer.encode(encoder)
 
     except IOError:
-        logger.error(f"An I/O error has occurred when reading {filename}.")
+        logger.error(f"An I/O error has occurred when opening {filename}.")
+
+def open_image(filename: str) -> bytes:
+    """ Recieves an image filename and an encoder and returns
+        the image as a binary stream with the requested 
+        encoding. 
+        Writes to the logger if an error has occurred."""
+    try:
+        with open(filename, 'rb') as img:
+            return img.read()
+    except IOError:
+        logger.error(f"An I/O error has occurred when opening {filename}.")
 
 def create_csv(csv_filename: str, headers: str, logger: logging.Logger) -> None:
     """ Receives a filename and headers and creates a csv 
@@ -58,7 +88,7 @@ def create_csv(csv_filename: str, headers: str, logger: logging.Logger) -> None:
     except IOError:
         logger.error(f"An I/O error has occurred when writing to {csv_filename}.")
 
-def insert_to_csv(filename, dict_data, logger):
+def insert_to_csv(filename: str, dict_data: Dict, logger: logging.Logger) -> None:
     """ Recieves the filename of a csv file, a dictionary and
         a logger, and appends the corresponding values of the 
         csv fields in a new row in the csv file.
@@ -72,20 +102,11 @@ def insert_to_csv(filename, dict_data, logger):
         logger.error(f"An I/O error has occurred when writing to {filename}.")
 
 def update_current_status(filename, dict_data):
+    ''' Recieves the filename of the current status DB and a 
+        dictionary dataset sent from a sensor, then updates 
+        the current status in the file.
+        Writes to the logger if an error has occurred.'''
     pass
-    
-def fetch_filename(req):
-    """
-    Fetch filename from an HTTP request and return it.
-    """
-    req = req[4:] # Skip ' GET '
-    filename = "."
-
-    for c in req:
-        if c is ' ': break
-        else: filename += c
-
-    return filename
 
 if __name__ == '__main__':
     # Logger setup:
