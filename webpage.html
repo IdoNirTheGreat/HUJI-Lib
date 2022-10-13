@@ -63,6 +63,8 @@
             }
             .circ{border-radius: 12px;
             margin-bottom: 1em; align-self: center;}
+            .circ1{border-radius: 12px;
+            margin-bottom: 1em; margin-top: 25px; align-self: center;}
             
             .row{margin-left: 10em;
                  margin-right: 10em;
@@ -79,26 +81,17 @@
             }
             .container2 { 
                 margin:auto; align-items: center; text-align: center; 
-                background-color:rgb(255, 255, 255); max-width: 1100px; border-radius: 12px;}
-            
-            .card-header{
-                height: 70px;
-                text-align: center;
-                align-items: center;
-            }
-            .accordion{align-items: center;}
-            .accordion-button{
-                background-color: #25272900;
-            }
-            .accordion-button:not(.collapsed){color: rgb(94, 94, 94); border-radius: 12px; background: rgba(167, 173, 171, 0.265);}
-            .accordion-button:focus {
-                z-index: 3; 
-                border-color: #918f8f57;
-                border-radius: 12px;
-                box-shadow: 0 0 0 0.25rem rgba(152, 154, 154, 0.361);
-                }
+                background-color:rgba(255, 255, 255, 0.235); max-width: 1100px; border-radius: 12px;}
+                .card3 { 
+                margin:auto;
+                ; align-items: center; text-align: center; 
+                background-color:rgba(247, 239, 239, 0.288); border-radius: 12px;}
+               
 
             
+
+                .current_state{margin-bottom: 3em;}
+
             </style>
 
             
@@ -118,10 +111,10 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="#section0">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#section1">Locations</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">Current Status & Weekly Statistics</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#section1">Locations current status</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#section2">Weekly Statistics</a></li>
                         <li class="nav-item"><a class="nav-link" href="https://www.huji.ac.il/rooms/" target="_blank">Room Reservation</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">Alternative Locations</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#!">how to get to & opening hours</a></li>
                     </ul>
                 </div>
             </div>
@@ -145,121 +138,137 @@
 
        
         <!-- locations-->
-        <div class="container2 px-lg-5">
-        <div class="row gx-lg-5" id="section1">
+        <div class="container2 px-lg-5" id="section1">
+          
+<div class="feature"><i class="bi bi-compass-fill" ></i></div>
+<div class="current_state"><h3><strong>Current State</strong></h3></div>
+
+
+        <div class="row gx-lg-5" >
                 <div class="col-md">
                     <h5 >Harman Science Library</h5>
-                        <img class= "circ" src="assets/herman_library.jpg" width="250" height="150">
+                        <img class= "circ1" src="assets/herman_library.jpg" width="250" height="150">
                         <div class="accordion" id="accordion0">
-                          <div class="card">
-                            <div class="card-header" id="heading-1">
-                              <h2>
+                          <div class="accordion-item">
+                            <div class="accordion-header" id="heading-1">
+                            <h2>
                                 <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
-                                  Top Floor, Main Room
+                                top floor, main room
                                 </button>
-                              </h2>
+                            </h2>
                             </div>
                             <div id="collapse-1" class="collapse show" aria-labelledby="heading-1" data-parent="#accordion0">
-                              <div class="card-body">
-                                <p>How busy is it currently:</p>
-                                <!--progress bar herman-->
+                            <div class="accordion-body">
+                              <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
+                                 <!--progress bar herman-->
                                 <div class="circle-wrap">
-                                    <div class="circle">
-                                    <div class="mask full">
-                                        <div class="fill"></div>
-                                    </div>
-                                    <div class="mask half">
-                                        <div class="fill"></div>
-                                    </div>
-                                    <div class="inside-circle"> 100% </div>
-                                    </div>
-                                </div>
-                            </div> 
+                                  <div class="circle">
+                                  <div class="mask full">
+                                      <div class="fill"></div>
+                                  </div>
+                                  <div class="mask half">
+                                      <div class="fill"></div>
+                                  </div>
+                                  <div class="inside-circle"> 100% </div>
+                                  </div>
                               </div>
                             </div>
                           </div>
-                          <div class="card">
-                            <div class="card-header" id="heading-2">
-                              <h2>
+        
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                          <div class="accordion-header" id="heading-2">
+                            <h2>
                                 <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
-                                  Top Floor, Quiet Room
+                                top floor, quiet room
                                 </button>
-                              </h2>
+                            </h2>
                             </div>
                             <div id="collapse-2" class="collapse" aria-labelledby="heading-2" data-parent="#accordion0">
-                              <div class="card-body">
-                                <p><strong>Coming Soon</strong></p>
-                              </div>
+                            <div class="accordion-body">
+                              <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
+        
+                                <p><strong>coming soom</strong></p>
                             </div>
                           </div>
-                          <div class="card">
-                            <div class="card-header" id="heading-3">
-                              <h2>
+        
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                          <div class="accordion-header" id="heading-3">
+                            <h2>
                                 <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
-                                  Bottom Floor, Main Room
+                                lower floor, main room
                                 </button>
-                              </h2>
+                            </h2>
                             </div>
                             <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#accordion0">
-                              <div class="card-body">
-                                <p><strong>Coming Soon</strong></p>
-                              </div>
+                            <div class="accordion-body">
+                              <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
+        
+                                <p><strong>coming soom</strong></p>
+
                             </div>
                           </div>
+        
+                            </div>
                         </div>
-                            
-                                            
- 
+                        </div>
+                      </div>
+                                     
+        
+                        
+    
 
          
                 <div class="col-md ">
-                            <h5 >Mathematics and Computer Science Library</h5>
-                                <img class= "circ" src="assets/mtmtyqh.jpg" width="250" height="150">
+                <h5 >Mathematics and Computer Science Library</h5>
+                    <img class= "circ" src="assets/mtmtyqh.jpg" width="250" height="150">
 
                 <div class="accordion" id="accordion1">
-                <div class="card">
-                    <div class="card-header" id="heading-4">
+                  <div class="accordion-item">
+                    
+                    
+                    <div class="accordion-header" id="heading-4">
                     <h2>
                         <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse-4" aria-expanded="true" aria-controls="collapse-4">
-                        111
+                        main room, quiet
                         </button>
                     </h2>
                     </div>
 
                     <div id="collapse-4" class="collapse show" aria-labelledby="heading-4" data-parent="#accordion1">
-                    <div class="card-body">
-                        111
+                    <div class="accordion-body">
+                      <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
+
+                        <p><strong>coming soom</strong></p>
+
                     </div>
+                  </div>
+
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-header" id="heading-5">
+                <div class="accordion-item">
+                  <div class="accordion-header" id="heading-5">
                     <h2>
                         <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
-                        222
+                        lower floor room
                         </button>
                     </h2>
                     </div>
                     <div id="collapse-5" class="collapse" aria-labelledby="heading-5" data-parent="#accordion1">
-                    <div class="card-body">
-                        222
+                    <div class="accordion-body">
+                      <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
+
+                        <p><strong>coming soom</strong></p>
+
                     </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header" id="heading-6">
-                    <h2>
-                        <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-6" aria-expanded="false" aria-controls="collapse-6">
-                        333
-                        </button>
-                    </h2>
-                    </div>
-                    <div id="collapse-6" class="collapse" aria-labelledby="heading-6" data-parent="#accordion1">
-                    <div class="card-body">
-                        333
-                    </div>
+                  </div>
+
                     </div>
                 </div>
+                
                 </div>
          
 
@@ -268,51 +277,66 @@
 
                 <div class="col-md">
                             <h5>Rothberg CSE Aquarium</h5>
-                    <img class= "circ" src="assets/aquarium.jpg" width="250" height="150">
+                    <img class= "circ1" src="assets/aquarium.jpg" width="250" height="150">
 
 
                     <div class="accordion" id="accordion2">
-                        <div class="card">
-                          <div class="card-header" id="heading-7">
+                      <div class="accordion-item">
+                        <div class="accordion-header" id="heading-7">
                             <h2>
                               <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse-7" aria-expanded="true" aria-controls="collapse-7">
-                                111
+                                C100
                               </button>
                             </h2>
                           </div>
                       
                           <div id="collapse-7" class="collapse show" aria-labelledby="heading-7" data-parent="#accordion2">
-                            <div class="card-body">
-                              111
+                            <div class="accordion-body">
+                              <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
+
+                                <p><strong>coming soom</strong></p>
+
                             </div>
                           </div>
+
+                          </div>
                         </div>
-                        <div class="card">
-                          <div class="card-header" id="heading-8">
+                        <div class="accordion-item">
+                          <div class="accordion-header" id="heading-8">
                             <h2>
                               <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-8" aria-expanded="false" aria-controls="collapse-8">
-                                222
+                                B100
                               </button>
                             </h2>
                           </div>
                           <div id="collapse-8" class="collapse" aria-labelledby="heading-8" data-parent="#accordion2">
-                            <div class="card-body">
-                              222
+                            <div class="accordion-body">
+                              <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
+
+                                <p><strong>coming soom</strong></p>
+
                             </div>
                           </div>
+
+                          </div>
                         </div>
-                        <div class="card">
-                          <div class="card-header" id="heading-9">
+                        <div class="accordion-item">
+                          <div class="accordion-header" id="heading-9">
                             <h2>
                               <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-9" aria-expanded="false" aria-controls="collapse-9">
-                                333
+                                A100
                               </button>
                             </h2>
                           </div>
                           <div id="collapse-9" class="collapse" aria-labelledby="heading-9" data-parent="#accordion2">
-                            <div class="card-body">
-                              333
+                            <div class="accordion-body">
+                              <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
+
+                                <p><strong>coming soom</strong></p>
+
                             </div>
+                          </div>
+
                           </div>
                         </div>
                       </div>
@@ -324,29 +348,20 @@
 
         <section class="pt-4">
             <div class="container px-lg-5">                
-                <div class="row gx-lg-5" id="section1">
-                    <div class="col-lg-6 col-xxl-4 mb-5" >
-                        <div class="card bg-light border-0 h-100">
+                <div class="row gx-lg-5" id="section2">
+                
+                        <div class="card3 border-0 h-100">
                             <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
-                                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-4 mt-n4"><i class="bi bi-compass-fill"></i></div>
-                                <h2 class="fs-4 fw-bold">Current State</h2>                       
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-xxl-4 mb-5">
-                        <div class="card bg-light border-0 h-100">
-                            <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
-                                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-4 mt-n4"><i class="bi bi-bar-chart-fill"></i></div>
+                              <div class="feature"><i class="bi bi-bar-chart-fill"></i></div>
+
                                 <h2 class="fs-4 fw-bold">Weekly Statistics</h2>
                                 <!--weakly chart-->
                                 
-                                <div><i class="fas fa-chart-area me-1"></i>עומס במהלך השבוע</div>
                                     <div><canvas id="myAreaChart" width="100%" height="60"></canvas></div>  
                             </div>
                             </div>
                         </div>
                     </div>
-                </div>
         </section>
         <!-- Footer-->
         <footer class="py-5 bg-dark">
