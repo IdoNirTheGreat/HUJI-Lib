@@ -10,7 +10,7 @@ HOST = "127.0.0.1"
 PORT = 80
 MAX_CONNECTIONS = 5
 REQ_SIZE = 1024
-HEBREW_ENCODING = "iso-8859-1" #An encoding that supports Hebrew on HTML)
+HEBREW_ENCODING = "iso-8859-1" # An encoding that supports Hebrew on HTML)
 DB_FILENAME = 'current_status.csv'
 RAW_DATA_FILENAME = 'all_sensor_transmissions.csv'
 HOMEPAGE_FILENAME = 'webpage.html'
@@ -26,7 +26,6 @@ FIELDS = [  "S.N.",
             "Entrances",
             "Exits"
         ]
-
 
 class hujilib_http(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -54,6 +53,14 @@ class hujilib_http(BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'text/html')
             self.end_headers()
             self.wfile.write(file_to_string(HOMEPAGE_FILENAME))
+
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length)
+        print(post_data.decode())
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/html')
+        self.end_headers()
 
 def file_to_string(filename: str, encoder: str=HEBREW_ENCODING) -> bytes:
     """ Recieves a filename and an encoder and returns the file 
@@ -123,8 +130,11 @@ if __name__ == '__main__':
 
     # HTTP setup:
     server = HTTPServer((HOST, PORT), hujilib_http)
-    server.serve_forever()
-    logger.info("The server has started running.")
+    try:
+        server.serve_forever()
+        logger.info("The server has started running.")
+    except KeyboardInterrupt:
+        logger.warning("The server has catched a keyboard interrupt.")
     server.server_close()
     logger.info("The server has finished running.")
 
