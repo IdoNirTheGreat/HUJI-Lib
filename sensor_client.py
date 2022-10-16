@@ -6,14 +6,15 @@ from time import sleep, localtime
 SERVER_ADDR = "127.0.0.1"
 PORT = 80
 SENSOR_NO = 1
-LOCATION = "Harman Science Library"
+LOCATION = "Harman Science Library - Floor -1"
 SLEEP_INTERVAL = 10
 
 if __name__ == "__main__":
+    # Get data from sensors
+    entrances = 30
+    exits = 20
+
     while(True):
-        # Get data from sensors
-        entrances = 30
-        exits = 20
 
         # Get time data
         t = localtime()
@@ -41,3 +42,4 @@ if __name__ == "__main__":
             # Make red LED light up or something
 
         sleep(SLEEP_INTERVAL)
+        entrances += 1

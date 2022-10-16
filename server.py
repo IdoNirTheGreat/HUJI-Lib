@@ -1,3 +1,4 @@
+from email.policy import default
 import logging
 import csv
 from ast import literal_eval
@@ -11,21 +12,36 @@ PORT = 80
 MAX_CONNECTIONS = 5
 REQ_SIZE = 1024
 HEBREW_ENCODING = "iso-8859-1" # An encoding that supports Hebrew on HTML)
-DB_FILENAME = 'current_status.csv'
-RAW_DATA_FILENAME = 'transmission_log.csv'
+CURRENT_STATE_DB = 'current_state.csv'
+TRANSMISSION_LOG_DB = 'transmission_log.csv'
 HOMEPAGE_FILENAME = 'webpage.html'
-LOCATION_LIST = [   "Harman Science Library", 
+LOCATION_LIST = [   "CSE Aquarium C100",
+                    "CSE Aquarium B100",
+                    "CSE Aquarium A100",
                     "Einstein Institute Math Library",
                     "Harman Science Library - Floor 2 (Quiet)",
-                    "CSE Aquarium C100",
                     "Harman Science Library - Floor 2 (Loud)",
+                    "Harman Science Library - Floor -1",
                 ]
-FIELDS = [  "S.N.",
-            "Location",
-            "Time",
-            "Entrances",
-            "Exits"
+TRANSMISSION_FIELDS = [ "S.N.",
+                        "Location",
+                        "Time",
+                        "Entrances",
+                        "Exits",
         ]
+CURRENT_STATE_DEFAULTS = [  "CSE Aquarium C100,0,90",
+                            "CSE Aquarium B100,0,55",
+                            "CSE Aquarium A100,0,55",
+                            "Harman Science Library - Floor 2 (Loud),0,100",
+                            "Harman Science Library - Floor 2 (Quiet),0,50",
+                            "Harman Science Library - Floor -1,0,150",
+                            "Einstein Institute Math Library,0,50",
+                            
+                        ]
+CURRENT_STATE_FIELDS = [    "Location",
+                            "Current Amount",
+                            "Max Amount",
+                        ]
 
 class hujilib_http(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -58,15 +74,19 @@ class hujilib_http(BaseHTTPRequestHandler):
         # Get data dictionary from request and send response:
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
-        print(post_data.decode())
+        # print(post_data.decode())
         self.send_response(200)
         self.send_header('Content-Type', 'text/html')
         self.end_headers()
 
-        # Put dictionary in transmission log:
+        # Update transmission log:
         data_dict = literal_eval(str(post_data)[2:-1])
         logger.info("Sensor " + str(data_dict['S.N.']) + " has transmitted.")
-        insert_to_csv(RAW_DATA_FILENAME, data_dict, logger)
+        insert_to_csv(TRANSMISSION_LOG_DB, data_dict, logger)
+
+        # Update current state data:
+        update_current_state(data_dict, logger)
+
 
 def file_to_string(filename: str, encoder: str=HEBREW_ENCODING) -> bytes:
     """ Recieves a filename and an encoder and returns the file 
@@ -101,7 +121,7 @@ def create_csv(csv_filename: str, headers: str, logger: logging.Logger) -> None:
     except IOError:
         logger.error(f"An I/O error has occurred when writing to {csv_filename}.")
 
-def insert_to_csv(filename: str, dict_data: Dict, logger: logging.Logger) -> None:
+def insert_to_csv(filename: str, data_dict: Dict, logger: logging.Logger) -> None:
     """ Recieves the filename of a csv file, a dictionary and
         a logger, and appends the corresponding values of the 
         csv fields in a new row in the csv file.
@@ -109,17 +129,56 @@ def insert_to_csv(filename: str, dict_data: Dict, logger: logging.Logger) -> Non
         """
     try:
         with open(filename, 'a', newline='') as db:
-            w = csv.DictWriter(db, fieldnames=FIELDS)
-            w.writerow(dict_data)
+            writer = csv.DictWriter(db, fieldnames=TRANSMISSION_FIELDS)
+            writer.writerow(data_dict)
     except IOError:
         logger.error(f"An I/O error has occurred when writing to {filename}.")
 
-def update_current_status(filename, dict_data):
-    ''' Recieves the filename of the current status DB and a 
-        dictionary dataset sent from a sensor, then updates 
-        the current status in the file.
+def update_current_state(data_dict: Dict, logger: logging.Logger, filename: str=CURRENT_STATE_DB, is_setup: bool=False) -> None:
+    ''' Recieves a dictionary dataset sent from a sensor,
+        the server's logger, then updates the current status 
+        in the file. 
+        Set 'is_setup_ to true only when inputting the 
+        default values into the DB (is used to reset current 
+        people amount in a selected location to zero).
         Writes to the logger if an error has occurred.'''
-    pass
+    
+    # Read current state DB:
+    reader_rows = []
+    try:
+        with open(filename, 'r', newline='') as db:
+            reader = csv.reader(db)
+            for row in reader: reader_rows.append(row)
+    except IOError:
+        logger.error(f"An I/O error has occurred when writing to {filename}.")
+
+    # Takes csv fields and values and puts them in a list of dicts:
+    current_state_dicts = [{field: value for (field, value) in zip(reader_rows[0], row)} for row in reader_rows[2:]]
+    
+    # Update the current state according to the new data:
+    found = False
+    for location_dict in current_state_dicts:
+        if location_dict['Location'] == data_dict['Location']:
+            location_dict['Current Amount'] = str(int(data_dict['Entrances']) - int(data_dict['Exits']))
+            found = True
+            break
+
+    # If the new location wasn't found in the DB, notify error and stop running this function:  
+    if not found:
+        logger.error(f"Current state DB could not be updated according to sensor {data_dict['S.N.']}'s data, because the location name {data_dict['Location']} could not be found in {filename}.")
+    
+    # Else, rewrite the DB:
+    else:
+        create_csv(CURRENT_STATE_DB, CURRENT_STATE_FIELDS, logger)
+        try:
+            with open(filename, 'a', newline='') as db:
+                writer = csv.DictWriter(db, fieldnames=CURRENT_STATE_FIELDS)
+                for location_dict in current_state_dicts:  
+                    writer.writerow(location_dict)
+            logger.info(f"Current state DB was updated according to sensor {data_dict['S.N.']}'s data.")
+            
+        except IOError:
+            logger.error(f"An I/O error has occurred when writing to {filename}.")
 
 if __name__ == '__main__':
     # Logger setup:
@@ -131,10 +190,18 @@ if __name__ == '__main__':
     logger = logging.getLogger()
     logger.info("Server has started running.")
 
-    # DB setup:
-    create_csv(RAW_DATA_FILENAME, FIELDS, logger)
+    # DBs setup:
+    create_csv(TRANSMISSION_LOG_DB, TRANSMISSION_FIELDS, logger)
+    create_csv(CURRENT_STATE_DB, CURRENT_STATE_FIELDS, logger)
+    try:
+        with open(CURRENT_STATE_DB, 'a') as f:
+            for line in CURRENT_STATE_DEFAULTS:
+                f.write(line + '\n')
+    except IOError:
+        logger.error(f"An I/O error has occurred when writing to {CURRENT_STATE_DB}.")
+    logger.info("DBs were created and set to default.")
 
-    # HTTP setup:
+    # HTTP handling:
     server = HTTPServer((HOST, PORT), hujilib_http)
     try:
         server.serve_forever()
