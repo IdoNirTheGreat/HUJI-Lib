@@ -7,7 +7,7 @@ SERVER_ADDR = "127.0.0.1"
 PORT = 80
 SENSOR_NO = 1
 LOCATION = "Harman Science Library"
-TRANSMIT_INTERVAL = 60
+SLEEP_INTERVAL = 10
 
 if __name__ == "__main__":
     while(True):
@@ -40,4 +40,4 @@ if __name__ == "__main__":
             print("Exception raised: "+str(e))
             # Make red LED light up or something
 
-        sleep(60)
+        sleep(SLEEP_INTERVAL)

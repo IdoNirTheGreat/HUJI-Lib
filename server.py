@@ -12,7 +12,7 @@ MAX_CONNECTIONS = 5
 REQ_SIZE = 1024
 HEBREW_ENCODING = "iso-8859-1" # An encoding that supports Hebrew on HTML)
 DB_FILENAME = 'current_status.csv'
-RAW_DATA_FILENAME = 'all_sensor_transmissions.csv'
+RAW_DATA_FILENAME = 'transmission_log.csv'
 HOMEPAGE_FILENAME = 'webpage.html'
 LOCATION_LIST = [   "Harman Science Library", 
                     "Einstein Institute Math Library",
@@ -55,12 +55,18 @@ class hujilib_http(BaseHTTPRequestHandler):
             self.wfile.write(file_to_string(HOMEPAGE_FILENAME))
 
     def do_POST(self):
+        # Get data dictionary from request and send response:
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
         print(post_data.decode())
         self.send_response(200)
         self.send_header('Content-Type', 'text/html')
         self.end_headers()
+
+        # Put dictionary in transmission log:
+        data_dict = literal_eval(str(post_data)[2:-1])
+        logger.info("Sensor " + str(data_dict['S.N.']) + " has transmitted.")
+        insert_to_csv(RAW_DATA_FILENAME, data_dict, logger)
 
 def file_to_string(filename: str, encoder: str=HEBREW_ENCODING) -> bytes:
     """ Recieves a filename and an encoder and returns the file 
