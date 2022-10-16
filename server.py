@@ -176,7 +176,7 @@ def update_current_state(data_dict: Dict, logger: logging.Logger, filename: str=
                 for location_dict in current_state_dicts:  
                     writer.writerow(location_dict)
             logger.info(f"Current state DB was updated according to sensor {data_dict['S.N.']}'s data.")
-            
+
         except IOError:
             logger.error(f"An I/O error has occurred when writing to {filename}.")
 
@@ -210,70 +210,3 @@ if __name__ == '__main__':
         logger.warning("The server has catched a keyboard interrupt.")
     server.server_close()
     logger.info("The server has finished running.")
-
-    # Old code:
-    """
-    try:
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as est_sock:
-            # Establish a connection with a socket designated only for making connections:
-            try:
-                est_sock.bind((ALLOWED_HOSTS, PORT))
-                est_sock.listen(MAX_CONNECTIONS)
-            except:
-                logging.error("Socket bind or listening failed.")
-
-            while(True):
-                # Create a new socket with a client, and save client's address:
-                cli_sock, cli_addr = est_sock.accept()
-
-                # Recieve request:
-                req = cli_sock.recv(REQ_SIZE)
-                req = str(req)[2:-1] # The slice is to delete the 'b' indicating binary stream
-                print(f"\nRequest:\n {req}\n\n")
-                print(f"File requested: {fetch_filename(req)}\n\n")
-                
-                # Send response according to the request:
-                # If sensor sent request:
-                if  "GET" not in req and \
-                    type(literal_eval(req)) is dict and \
-                    FIELDS == list(literal_eval(req).keys()):
-                    
-                    sensor_data = literal_eval(req)
-                    logger.info("Sensor " + str(sensor_data['S.N.']) + " has transmitted.")
-                    insert_to_csv(RAW_DATA_FILENAME, sensor_data, logger)
-
-                # If HTTP client requested to download webpage and its elements:
-                elif "GET" in req:
-                    cli_sock.send(b'HTTP/1.1 200 OK\n')
-                    cli_sock.send(b'Accept-Language: he-IL\n')
-                    cli_sock.send(b'Content-Type: text/html\n')
-                    cli_sock.send(b'Accept-Encoding: gzip, deflate\n')
-                    cli_sock.send(b'Connection: close\n\n')
-                    req_file = fetch_filename(req)
-                    
-                    if req_file == "./":
-                        res = build_webpage().encode("Windows-1255") # Windows-1255 encoding is to support Hebrew on HTML
-                        cli_sock.sendall(res)
-                    
-                    else:
-                        try:
-                            with open(req_file, 'r') as f:
-                                f_stream = str(f.readlines())
-                                print(type(f_stream))
-                                res = f_stream.encode("Windows-1255")
-                                cli_sock.sendall(res)
-                        
-                        except:
-                            print(f"The file '{req_file}' does not exist.")
-
-
-                else:
-                    # If another type of request was made, do something:
-                    logger.warning("An unknown type of request was sent: \n{req}\n")
-
-                # Close client socket:
-                cli_sock.close()
-
-    except:
-        logger.error("Socket creation failed.")
-    """
