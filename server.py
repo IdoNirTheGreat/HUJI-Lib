@@ -5,6 +5,7 @@ from ast import literal_eval
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from os.path import splitext
 from typing import Dict
+from jinja2 import Template
 
 ALLOWED_HOSTS = "127.0.0.1"
 HOST = "127.0.0.1"
@@ -68,7 +69,7 @@ class hujilib_http(BaseHTTPRequestHandler):
         else:
             self.send_header('Content-Type', 'text/html')
             self.end_headers()
-            self.wfile.write(file_to_string(HOMEPAGE_FILENAME))
+            self.wfile.write(file_to_string_html(HOMEPAGE_FILENAME))
 
     def do_POST(self):
         # Get data dictionary from request and send response:
@@ -87,7 +88,6 @@ class hujilib_http(BaseHTTPRequestHandler):
         # Update current state data:
         update_current_state(data_dict, logger)
 
-
 def file_to_string(filename: str, encoder: str=HEBREW_ENCODING) -> bytes:
     """ Recieves a filename and an encoder and returns the file 
         as a binary stream with the requested encoding.
@@ -96,6 +96,20 @@ def file_to_string(filename: str, encoder: str=HEBREW_ENCODING) -> bytes:
         with open(filename, 'r', encoding=encoder) as f:
             buffer = f.read()
             return buffer.encode(encoder)
+
+    except IOError:
+        logger.error(f"An I/O error has occurred when opening {filename}.")
+
+def file_to_string_html(filename: str, encoder: str=HEBREW_ENCODING) -> bytes:
+    """ Recieves specifically an html filename and an encoder and returns the file 
+        as a binary stream with the requested encoding.
+        Writes to the logger if an error has occurred."""
+    try:
+        with open(filename, 'r', encoding=encoder) as f:
+            buffer = f.read()
+            tm = Template(buffer)
+            sub = str(tm.render(parm = 'sup'))
+            return sub.encode(encoder)
 
     except IOError:
         logger.error(f"An I/O error has occurred when opening {filename}.")
