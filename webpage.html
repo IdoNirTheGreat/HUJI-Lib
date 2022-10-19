@@ -13,7 +13,10 @@
     <link href="css/styles.css" rel="stylesheet">
     <!--progress bar style-->
     <style media="screen">
+
+    /* circle animation for each room\library */
       .circle-wrap {
+
           margin: 80px auto;
           width: 150px;
           height: 100px;
@@ -22,7 +25,9 @@
       }
 
       .circle-wrap .circle .mask,
-      .circle-wrap .circle .fill {
+      .circle-wrap .circle .fill-1,
+      .circle-wrap .circle .fill-2
+       {
         width: 150px;
         height: 150px;
         position: absolute;
@@ -48,20 +53,44 @@
         font-size: 2em;
       }
         
-      .mask .fill{
+      /* herman top floor, main room */
+      .mask .fill-1{
         clip: rect(0px, 75px, 150px, 0px);
         background-color: #252729;
       }
-        
-      .mask.full, .circle .fill {
-        animation: fill ease-in-out 3s;
-        transform: rotate(180deg);
+
+      .mask.full-1,
+      .circle .fill-1 {
+        animation: fill-1 ease-in-out 3s;
+        transform: rotate({{herman_top}}deg);
       }
 
-      @keyframes fill{
+      @keyframes fill-1{
         0% {transform: rotate(0deg);}
-        100% {transform: rotate(180deg);}
+        100% {transform: rotate({{herman_top}}deg)}
       }
+
+      /* herman top floor, quiet room */  
+      .mask .fill-2 {
+        clip: rect(0px, 75px, 150px, 0px);
+        background-color: #252729;
+      }
+
+      .mask.full-2,
+      .circle .fill-2 {
+        animation: fill-2 ease-in-out 3s;
+        transform: rotate({{herman_top_quiet}}deg);
+      }
+
+      @keyframes fill-2{
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate({{herman_top_quiet}}deg);
+        }
+      }
+    
       
       body{
         display: block;
@@ -150,7 +179,7 @@
       <div  class="container1 px-lg-5" id="section0">
         <div class="container1 p-4 p-lg-5 rounded-3 text-center">
           <div class="m-4 m-lg-5">
-            <h1 class="display-5 fw-bold">{{parm}} to <i class="bi bi-book"></i> HUJI-Lib</h1>
+            <h1 class="display-5 fw-bold">Welcome to <i class="bi bi-book"></i> HUJI-Lib</h1>
             <p class="fs-4">A platform created by students for students to help you find the right space to study around the campus.</p>
             <br></br>
             <p class="fs-4">The website is currently under development. Browse safely!</p>
@@ -158,7 +187,9 @@
         </div>
       </div>
     </header>
-    
+
+
+
     <!-- locations-->
     <div class="container2 px-lg-5" id="section1">
       <div class="feature"><i class="bi bi-compass-fill" ></i></div>
@@ -181,22 +212,23 @@
                 <div id="collapse-1" class="collapse show" aria-labelledby="heading-1" data-parent="#accordion0">
                 <div class="accordion-body">
                   <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
-                      <!--progress bar herman-->
+
+
+                    <!-- progress bar top-floor herman-->
                     <div class="circle-wrap">
                       <div class="circle">
-                      <div class="mask full">
-                          <div class="fill"></div>
+                      <div class="mask full-1">
+                          <div class="fill-1"></div>
                       </div>
                       <div class="mask half">
-                          <div class="fill"></div>
+                          <div class="fill-1"></div>
                       </div>
-                      <div class="inside-circle"> 100% </div>
+                      <div class="inside-circle"> {{parm_1}}% </div>
                       </div>
-                  </div>
+                  </div> 
                 </div>
               </div>
-
-                </div>
+            </div>
             </div>
 
             <div class="accordion-item">
@@ -211,7 +243,22 @@
               <div id="collapse-2" class="collapse" aria-labelledby="heading-2" data-parent="#accordion0">
                 <div class="accordion-body">
                   <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
-                    <p><strong>Coming Soon</strong></p>
+                      
+
+                    <!-- progress bar top-floor quiet room herman-->
+                     <div class="circle-wrap">
+                      <div class="circle">
+                      <div class="mask full-2">
+                          <div class="fill-2"></div>
+                      </div>
+                      <div class="mask half">
+                          <div class="fill-2"></div>
+                      </div>
+                      <div class="inside-circle"> {{parm_2}}% </div>
+                      </div>
+                    </div> 
+
+
                   </div>
                 </div>
               </div>

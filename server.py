@@ -33,8 +33,8 @@ TRANSMISSION_FIELDS = [ "S.N.",
 CURRENT_STATE_DEFAULTS = [  "CSE Aquarium C100,0,90",
                             "CSE Aquarium B100,0,55",
                             "CSE Aquarium A100,0,55",
-                            "Harman Science Library - Floor 2 (Loud),0,100",
-                            "Harman Science Library - Floor 2 (Quiet),0,50",
+                            "Harman Science Library - Floor 2 (Loud),50,100",
+                            "Harman Science Library - Floor 2 (Quiet),50,50",
                             "Harman Science Library - Floor -1,0,150",
                             "Einstein Institute Math Library,0,50",
                             
@@ -104,13 +104,23 @@ def file_to_string_html(filename: str, encoder: str=HEBREW_ENCODING) -> bytes:
     """ Recieves specifically an html filename and an encoder and returns the file 
         as a binary stream with the requested encoding.
         Writes to the logger if an error has occurred."""
+    
+    # Read current state DB:
+    rows = []
+    try:
+        with open('current_state.csv', 'r', newline='') as db:
+            reader = csv.reader(db)
+            for row in reader: rows.append(row)
+    except IOError:
+        logger.error(f"An I/O error has occurred when opening {filename}.")
+    # Read webpage file Html:
     try:
         with open(filename, 'r', encoding=encoder) as f:
             buffer = f.read()
             tm = Template(buffer)
-            sub = str(tm.render(parm = 'sup'))
+            sub = str(tm.render(parm_1=str(int(int(rows[5][1]) / int(rows[5][2]) * 100)), herman_top=str(int(int(rows[5][1]) / int(rows[5][2]) * 180)),
+            parm_2=str(int(int(rows[6][1]) / int(rows[6][2]) * 100)), herman_top_quiet= str(int(int(rows[6][1]) / int(rows[6][2])*180)))) # all the parameters that should be substituted according to the current_state.csv
             return sub.encode(encoder)
-
     except IOError:
         logger.error(f"An I/O error has occurred when opening {filename}.")
 
