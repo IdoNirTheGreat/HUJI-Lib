@@ -90,7 +90,6 @@
           transform: rotate({{herman_top_quiet}}deg);
         }
       }
-    
       
       body{
         display: block;
@@ -155,6 +154,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    
     
     <!-- Responsive navbar-->                
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
@@ -187,225 +188,226 @@
         </div>
       </div>
     </header>
+    
+  
+<!-- locations-->
+<div class="container2 px-lg-5" id="section1">
+  <div class="feature"><i class="bi bi-compass-fill" ></i></div>
+  <div class="current_state"><h3><strong>Current State</strong></h3></div>
+  <div class="row gx-lg-5" >
+    <div class="col-md">
 
-
-
-    <!-- locations-->
-    <div class="container2 px-lg-5" id="section1">
-      <div class="feature"><i class="bi bi-compass-fill" ></i></div>
-      <div class="current_state"><h3><strong>Current State</strong></h3></div>
-      <div class="row gx-lg-5" >
-        <div class="col-md">
-
-          <h5 >Harman Science Library</h5>
-          <img class= "circ1" src="assets/herman_library.jpg" width="250" height="150">
-          <div class="accordion" id="accordion0">
-            
-            <div class="accordion-item">
-                <div class="accordion-header" id="heading-1">
-                <h2>
-                    <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
-                    Top Floor, Main Room
-                    </button>
-                </h2>
-                </div>
-                <div id="collapse-1" class="collapse show" aria-labelledby="heading-1" data-parent="#accordion0">
-                <div class="accordion-body">
-                  <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
-
-
-                    <!-- progress bar top-floor herman-->
-                    <div class="circle-wrap">
-                      <div class="circle">
-                      <div class="mask full-1">
-                          <div class="fill-1"></div>
-                      </div>
-                      <div class="mask half">
-                          <div class="fill-1"></div>
-                      </div>
-                      <div class="inside-circle"> {{parm_1}}% </div>
-                      </div>
-                  </div> 
-                </div>
-              </div>
-            </div>
-            </div>
-
-            <div class="accordion-item">
-              <div class="accordion-header" id="heading-2">
-                <h2>
-                    <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
-                    Top Floor, Quiet Room
-                    </button>
-                </h2>
-              </div>
-
-              <div id="collapse-2" class="collapse" aria-labelledby="heading-2" data-parent="#accordion0">
-                <div class="accordion-body">
-                  <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
-                      
-
-                    <!-- progress bar top-floor quiet room herman-->
-                     <div class="circle-wrap">
-                      <div class="circle">
-                      <div class="mask full-2">
-                          <div class="fill-2"></div>
-                      </div>
-                      <div class="mask half">
-                          <div class="fill-2"></div>
-                      </div>
-                      <div class="inside-circle"> {{parm_2}}% </div>
-                      </div>
-                    </div> 
-
-
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-            <div class="accordion-item">
-              <div class="accordion-header" id="heading-3">
-                <h2>
-                    <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
-                    Lower Floor, Main Room
-                    </button>
-                </h2>
-                </div>
-                <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#accordion0">
-                <div class="accordion-body">
-                  <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
-                    <p><strong>Coming Soon</strong></p>
-                </div>
-              </div>
-
-                </div>
-            </div>
-
-          </div>
-
-        </div>
+      <h5 >Harman Science Library</h5>
+      <img class= "circ1" src="assets/herman_library.jpg" width="250" height="150">
+      <div class="accordion" id="accordion0">
         
-        <div class="col-md ">
+        <div class="accordion-item">
+            <div class="accordion-header" id="heading-1">
+            <h2>
+                <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
+                Top Floor, Main Room
+                </button>
+            </h2>
+            </div>
+            <div id="collapse-1" class="collapse show" aria-labelledby="heading-1" data-parent="#accordion0">
+            <div class="accordion-body">
+              <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
 
-          <h5>Mathematics and Computer Science Library</h5>
-          <img class= "circ" src="assets/mtmtyqh.jpg" width="250" height="150">
 
-          <div class="accordion" id="accordion1">
-            
-            <div class="accordion-item">
-              
-              <div class="accordion-header" id="heading-4">
-                <h2>
-                    <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse-4" aria-expanded="true" aria-controls="collapse-4">
-                    Main Room (quiet only)
-                    </button>
-                </h2>
-              </div>
-
-              <div id="collapse-4" class="collapse show" aria-labelledby="heading-4" data-parent="#accordion1">
-                
-                <div class="accordion-body">
-                  <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
-                    <p><strong>Coming soon</strong></p>
+                <!-- progress bar top-floor herman-->
+                <div class="circle-wrap">
+                  <div class="circle">
+                  <div class="mask full-1">
+                      <div class="fill-1"></div>
                   </div>
-                </div>
+                  <div class="mask half">
+                      <div class="fill-1"></div>
+                  </div>
+                  <div class="inside-circle"> {{parm_1}}% </div>
+                  </div>
+              </div> 
+            </div>
+          </div>
+        </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" id="heading-2">
+            <h2>
+                <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
+                Top Floor, Quiet Room
+                </button>
+            </h2>
+          </div>
+
+          <div id="collapse-2" class="collapse" aria-labelledby="heading-2" data-parent="#accordion0">
+            <div class="accordion-body">
+              <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
+                  
+
+                <!-- progress bar top-floor quiet room herman-->
+                 <div class="circle-wrap">
+                  <div class="circle">
+                  <div class="mask full-2">
+                      <div class="fill-2"></div>
+                  </div>
+                  <div class="mask half">
+                      <div class="fill-2"></div>
+                  </div>
+                  <div class="inside-circle"> {{parm_2}}% </div>
+                  </div>
+                </div> 
+
 
               </div>
-              
+            </div>
+          </div>
+
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" id="heading-3">
+            <h2>
+                <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
+                Lower Floor, Main Room
+                </button>
+            </h2>
+            </div>
+            <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#accordion0">
+            <div class="accordion-body">
+              <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
+                <p><strong>Coming Soon</strong></p>
+            </div>
+          </div>
+
+            </div>
+        </div>
+
+      </div>
+
+    </div>
+    
+    <div class="col-md ">
+
+      <h5>Mathematics and Computer Science Library</h5>
+      <img class= "circ" src="assets/mtmtyqh.jpg" width="250" height="150">
+
+      <div class="accordion" id="accordion1">
+        
+        <div class="accordion-item">
+          
+          <div class="accordion-header" id="heading-4">
+            <h2>
+                <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse-4" aria-expanded="true" aria-controls="collapse-4">
+                Main Room (quiet only)
+                </button>
+            </h2>
+          </div>
+
+          <div id="collapse-4" class="collapse show" aria-labelledby="heading-4" data-parent="#accordion1">
+            
+            <div class="accordion-body">
+              <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
+                <p><strong>Coming soon</strong></p>
+              </div>
             </div>
 
-            <div class="accordion-item">
-            <div class="accordion-header" id="heading-5">
-              <h2>
-                  <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
-                  Lower Floor Room
-                  </button>
-              </h2>
-              </div>
-              <div id="collapse-5" class="collapse" aria-labelledby="heading-5" data-parent="#accordion1">
-              <div class="accordion-body">
-                <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
+          </div>
+          
+        </div>
 
-                  <p><strong>Coming Soon</strong></p>
+        <div class="accordion-item">
+        <div class="accordion-header" id="heading-5">
+          <h2>
+              <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
+              Lower Floor Room
+              </button>
+          </h2>
+          </div>
+          <div id="collapse-5" class="collapse" aria-labelledby="heading-5" data-parent="#accordion1">
+          <div class="accordion-body">
+            <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
 
+              <p><strong>Coming Soon</strong></p>
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+                
+    <div class="col-md">
+      <h5>Rothberg CSE Aquarium</h5>
+      <img class= "circ1" src="assets/aquarium.jpg" width="250" height="150">
+
+      <div class="accordion" id="accordion2">
+        
+        <div class="accordion-item">
+          <div class="accordion-header" id="heading-7">
+            <h2>
+              <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse-7" aria-expanded="true" aria-controls="collapse-7">
+                C100
+              </button>
+            </h2>
+          </div>
+        
+          <div id="collapse-7" class="collapse show" aria-labelledby="heading-7" data-parent="#accordion2">
+            <div class="accordion-body">
+              <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
+                <p><strong>Coming Soon</strong></p>
               </div>
             </div>
+          </div>
+
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" id="heading-8">
+            <h2>
+              <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-8" aria-expanded="false" aria-controls="collapse-8">
+                B100
+              </button>
+            </h2>
+          </div>
+          <div id="collapse-8" class="collapse" aria-labelledby="heading-8" data-parent="#accordion2">
+            <div class="accordion-body">
+              <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
+                <p><strong>Coming Soon</strong></p>
               </div>
             </div>
           </div>
         </div>
-                    
-        <div class="col-md">
-          <h5>Rothberg CSE Aquarium</h5>
-          <img class= "circ1" src="assets/aquarium.jpg" width="250" height="150">
 
-          <div class="accordion" id="accordion2">
-            
-            <div class="accordion-item">
-              <div class="accordion-header" id="heading-7">
-                <h2>
-                  <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse-7" aria-expanded="true" aria-controls="collapse-7">
-                    C100
-                  </button>
-                </h2>
-              </div>
-            
-              <div id="collapse-7" class="collapse show" aria-labelledby="heading-7" data-parent="#accordion2">
-                <div class="accordion-body">
-                  <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
-                    <p><strong>Coming Soon</strong></p>
-                  </div>
-                </div>
-              </div>
+        <div class="accordion-item">
+          
+          <div class="accordion-header" id="heading-9">
+            <h2>
+              <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-9" aria-expanded="false" aria-controls="collapse-9">
+                A100
+              </button>
+            </h2>
+          </div>
 
-            </div>
-   
-            <div class="accordion-item">
-              <div class="accordion-header" id="heading-8">
-                <h2>
-                  <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-8" aria-expanded="false" aria-controls="collapse-8">
-                    B100
-                  </button>
-                </h2>
-              </div>
-              <div id="collapse-8" class="collapse" aria-labelledby="heading-8" data-parent="#accordion2">
-                <div class="accordion-body">
-                  <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
-                    <p><strong>Coming Soon</strong></p>
-                  </div>
-                </div>
+          <div id="collapse-9" class="collapse" aria-labelledby="heading-9" data-parent="#accordion2">
+            <div class="accordion-body">
+              <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
+                <p><strong>Coming Soon</strong></p>
               </div>
             </div>
-
-            <div class="accordion-item">
-              
-              <div class="accordion-header" id="heading-9">
-                <h2>
-                  <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-9" aria-expanded="false" aria-controls="collapse-9">
-                    A100
-                  </button>
-                </h2>
-              </div>
-
-              <div id="collapse-9" class="collapse" aria-labelledby="heading-9" data-parent="#accordion2">
-                <div class="accordion-body">
-                  <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
-                    <p><strong>Coming Soon</strong></p>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
           </div>
 
         </div>
 
       </div>
+
     </div>
-            
+
+  </div>
+</div>
+        
+
+        
 
     <!--Weekly chart-->
     <section class="pt-4">
@@ -415,12 +417,187 @@
             <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
               <div class="feature"><i class="bi bi-bar-chart-fill"></i></div>
               <h2 class="fs-4 fw-bold">Weekly Statistics</h2>
-              <div><canvas id="myAreaChart" width="100%" height="60"></canvas></div>  
+              <!-- <div class="vstack gap-2 col-md-5 mx-auto"> -->
+
+                <div id="carouselExampleControls" class="carousel slide" data-bs-interval="false">
+                  <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+
+                  </div>
+                  <div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-interval="false">
+
+
+                      <div class="vstack gap-2 col-md-5 mx-auto">
+                      <canvas id="myChart1" style="width:100%;max-width:600px"></canvas>
+                      <script>
+                        var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
+                        var yValues = [6, 20, 44, 70, 50];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        new Chart("myChart1", {
+                          type: "bar",
+                          data: {
+                            labels: xValues,
+                            datasets: [{
+                              backgroundColor: barColors,
+                              data: yValues
+                            }]
+                          },
+                          options: {
+                            legend: {display: false},
+                            title: {
+                              display: true,
+                              text: "sunday"
+                            }
+                          }
+                        });
+                        </script>
+
+                      </div>
+                    </div>
+                    <div class="carousel-item" data-bs-interval="false">
+                      <div class="vstack gap-2 col-md-5 mx-auto">
+                      <canvas id="myChart2" style="width:100%;max-width:600px"></canvas>
+                      <script>
+                       var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
+                        var yValues = [6, 20, 44, 70, 50];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        new Chart("myChart2", {
+                          type: "bar",
+                          data: {
+                            labels: xValues,
+                            datasets: [{
+                              backgroundColor: barColors,
+                              data: yValues
+                            }]
+                          },
+                          options: {
+                            legend: {display: false},
+                            title: {
+                              display: true,
+                              text: "monday"
+                            }
+                          }
+                        });
+                        </script>
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="carousel-item" data-bs-interval="false">
+                      <div class="vstack gap-2 col-md-5 mx-auto">
+                        <canvas id="myChart3" style="width:100%;max-width:600px"></canvas>
+                        <script>
+                          var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
+                        var yValues = [6, 20, 44, 70, 50];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                          new Chart("myChart3", {
+                            type: "bar",
+                            data: {
+                              labels: xValues,
+                              datasets: [{
+                                backgroundColor: barColors,
+                                data: yValues
+                              }]
+                            },
+                            options: {
+                              legend: {display: false},
+                              title: {
+                                display: true,
+                                text: "Tuesday"
+                              }
+                            }
+                          });
+                          </script>
+
+
+                      </div>
+                      </div>
+
+                      <div class="carousel-item" data-bs-interval="false">
+                        <div class="vstack gap-2 col-md-5 mx-auto">
+                          <canvas id="myChart4" style="width:100%;max-width:600px"></canvas>
+                          <script>
+                            var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
+                          var yValues = [6, 20, 44, 70, 50];
+                          var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                            new Chart("myChart4", {
+                              type: "bar",
+                              data: {
+                                labels: xValues,
+                                datasets: [{
+                                  backgroundColor: barColors,
+                                  data: yValues
+                                }]
+                              },
+                              options: {
+                                legend: {display: false},
+                                title: {
+                                  display: true,
+                                  text: "Wednesday"
+                                }
+                              }
+                            });
+                            </script>
+  
+  
+                        </div>
+                        </div>
+
+
+                        <div class="carousel-item" data-bs-interval="false">
+                          <div class="vstack gap-2 col-md-5 mx-auto">
+                            <canvas id="myChart5" style="width:100%;max-width:600px"></canvas>
+                            <script>
+                              var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
+                            var yValues = [6, 20, 44, 70, 50];
+                            var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                              new Chart("myChart5", {
+                                type: "bar",
+                                data: {
+                                  labels: xValues,
+                                  datasets: [{
+                                    backgroundColor: barColors,
+                                    data: yValues
+                                  }]
+                                },
+                                options: {
+                                  legend: {display: false},
+                                  title: {
+                                    display: true,
+                                    text: "Thursday"
+                                  }
+                                }
+                              });
+                              </script>
+    
+    
+                          </div>
+                          </div>
+
+
+
+                  </div>
+                  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
+                </div>
+                    </div>
+                    </div>
+                  </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
 
 
 
@@ -433,15 +610,15 @@
             <div class="feature"><i class="bi bi-geo-alt-fill"></i></div>
               <h2 class="fs-4 fw-bold">navigation</h2>
               <div class="row d-flex justify-content-center">
-              <div class="col">
+              <div class="col-md">
               <!--herman map-->
               <div class="mapouter"><div class="gmap_canvas"><iframe width="300" height="200" id="gmap_canvas" src="https://maps.google.com/maps?q=%D7%A1%D7%A4%D7%A8%D7%99%D7%99%D7%AA%20%D7%94%D7%A8%D7%9E%D7%9F&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://fmovies-online.net">fmovies</a><br><style>.mapouter{position:relative;text-align:right;height:200px;width:300px;}</style><a href="https://www.embedgooglemap.net">google maps on webpage</a><style>.gmap_canvas {overflow:hidden;background:none!important;height:200px;width:300px;}</style></div></div>
               </div>
-              <div class="col">
-              <!--math map-->
+              <div class="col-md">
+             <!--math map-->
               <div class="mapouter"><div class="gmap_canvas"><iframe width="300" height="200" id="gmap_canvas" src="https://maps.google.com/maps?q=%D7%94%D7%A1%D7%A4%D7%A8%D7%99%D7%94%20%D7%9C%D7%9E%D7%AA%D7%9E%D7%98%D7%99%D7%A7%D7%94%20%D7%95%D7%9E%D7%93%D7%A2%D7%99&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://fmovies-online.net">fmovies</a><br><style>.mapouter{position:relative;text-align:right;height:200px;width:300px;}</style><a href="https://www.embedgooglemap.net">google maps on webpage</a><style>.gmap_canvas {overflow:hidden;background:none!important;height:200px;width:300px;}</style></div></div>
               </div>
-              <div class="col">
+              <div class="col-md">
               <!--cse map-->
               <div class="mapouter"><div class="gmap_canvas"><iframe width="300" height="200" id="gmap_canvas" src="https://maps.google.com/maps?q=%D7%94%D7%A0%D7%93%D7%A1%D7%94%20%D7%95%D7%9E%D7%93%D7%A2%D7%99%20%D7%94%D7%9E%D7%97%D7%A9%D7%91&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://fmovies-online.net">fmovies</a><br><style>.mapouter{position:relative;text-align:right;height:200px;width:300px;}</style><a href="https://www.embedgooglemap.net">google maps on webpage</a><style>.gmap_canvas {overflow:hidden;background:none!important;height:200px;width:300px;}</style></div></div>
               </div>
@@ -450,19 +627,19 @@
 
               <!--opening hours-->
               <div class="row justify-content-center">
-                <div class="col">
+                <div class="col-md">
                 <div class="card text-white rounded-8" style="background-color: rgba(26, 25, 32, 0.333); width: 300px;">
                 <!--herman-->
                 <p><strong>opening hours:</strong></p>
                 </div>
                 </div>
-                <div class="col">
+                <div class="col-md">
                 <div class="card text-white rounded-8" style="background-color: rgba(26, 25, 32, 0.333) ; width: 300px;">
                 <!--math library-->
                 <p><strong>opening hours:</strong></p>
                 </div>
                 </div>
-                <div class="col">
+                <div class="col-md">
                 <div class="card text-white rounded-8" style="background-color: rgba(26, 25, 32, 0.333); width: 300px;">
                 <!--sce aquarium-->
                 <p><strong>opening hours:</strong></p>

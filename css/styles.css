@@ -5972,6 +5972,7 @@ textarea.form-control-lg {
   display: none;
   float: left;
   width: 100%;
+  margin-bottom: 20px;
   margin-right: -100%;
   -webkit-backface-visibility: hidden;
           backface-visibility: hidden;
@@ -6102,7 +6103,8 @@ textarea.form-control-lg {
   justify-content: center;
   padding: 0;
   margin-right: 15%;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
+  margin-top: 2em;
   margin-left: 15%;
   list-style: none;
 }
@@ -12156,6 +12158,4 @@ textarea.form-control-lg {
   width: 4rem;
   font-size: 2rem;
 }
-
-
 
