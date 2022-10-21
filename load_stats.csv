@@ -1,1 +1,211 @@
 Location,Day,Start Time,End Time,Average,No. of Occurences
+CSE Aquarium C100,Sun,8:00,10:00,0,0
+CSE Aquarium C100,Sun,10:00,12:00,0,0
+CSE Aquarium C100,Sun,12:00,14:00,0,0
+CSE Aquarium C100,Sun,14:00,16:00,0,0
+CSE Aquarium C100,Sun,16:00,18:00,0,0
+CSE Aquarium C100,Sun,18:00,20:00,0,0
+CSE Aquarium C100,Mon,8:00,10:00,0,0
+CSE Aquarium C100,Mon,10:00,12:00,0,0
+CSE Aquarium C100,Mon,12:00,14:00,0,0
+CSE Aquarium C100,Mon,14:00,16:00,0,0
+CSE Aquarium C100,Mon,16:00,18:00,0,0
+CSE Aquarium C100,Mon,18:00,20:00,0,0
+CSE Aquarium C100,Tue,8:00,10:00,0,0
+CSE Aquarium C100,Tue,10:00,12:00,0,0
+CSE Aquarium C100,Tue,12:00,14:00,0,0
+CSE Aquarium C100,Tue,14:00,16:00,0,0
+CSE Aquarium C100,Tue,16:00,18:00,0,0
+CSE Aquarium C100,Tue,18:00,20:00,0,0
+CSE Aquarium C100,Wed,8:00,10:00,0,0
+CSE Aquarium C100,Wed,10:00,12:00,0,0
+CSE Aquarium C100,Wed,12:00,14:00,0,0
+CSE Aquarium C100,Wed,14:00,16:00,0,0
+CSE Aquarium C100,Wed,16:00,18:00,0,0
+CSE Aquarium C100,Wed,18:00,20:00,0,0
+CSE Aquarium C100,Thu,8:00,10:00,0,0
+CSE Aquarium C100,Thu,10:00,12:00,0,0
+CSE Aquarium C100,Thu,12:00,14:00,0,0
+CSE Aquarium C100,Thu,14:00,16:00,0,0
+CSE Aquarium C100,Thu,16:00,18:00,0,0
+CSE Aquarium C100,Thu,18:00,20:00,0,0
+CSE Aquarium B100,Sun,8:00,10:00,0,0
+CSE Aquarium B100,Sun,10:00,12:00,0,0
+CSE Aquarium B100,Sun,12:00,14:00,0,0
+CSE Aquarium B100,Sun,14:00,16:00,0,0
+CSE Aquarium B100,Sun,16:00,18:00,0,0
+CSE Aquarium B100,Sun,18:00,20:00,0,0
+CSE Aquarium B100,Mon,8:00,10:00,0,0
+CSE Aquarium B100,Mon,10:00,12:00,0,0
+CSE Aquarium B100,Mon,12:00,14:00,0,0
+CSE Aquarium B100,Mon,14:00,16:00,0,0
+CSE Aquarium B100,Mon,16:00,18:00,0,0
+CSE Aquarium B100,Mon,18:00,20:00,0,0
+CSE Aquarium B100,Tue,8:00,10:00,0,0
+CSE Aquarium B100,Tue,10:00,12:00,0,0
+CSE Aquarium B100,Tue,12:00,14:00,0,0
+CSE Aquarium B100,Tue,14:00,16:00,0,0
+CSE Aquarium B100,Tue,16:00,18:00,0,0
+CSE Aquarium B100,Tue,18:00,20:00,0,0
+CSE Aquarium B100,Wed,8:00,10:00,0,0
+CSE Aquarium B100,Wed,10:00,12:00,0,0
+CSE Aquarium B100,Wed,12:00,14:00,0,0
+CSE Aquarium B100,Wed,14:00,16:00,0,0
+CSE Aquarium B100,Wed,16:00,18:00,0,0
+CSE Aquarium B100,Wed,18:00,20:00,0,0
+CSE Aquarium B100,Thu,8:00,10:00,0,0
+CSE Aquarium B100,Thu,10:00,12:00,0,0
+CSE Aquarium B100,Thu,12:00,14:00,0,0
+CSE Aquarium B100,Thu,14:00,16:00,0,0
+CSE Aquarium B100,Thu,16:00,18:00,0,0
+CSE Aquarium B100,Thu,18:00,20:00,0,0
+CSE Aquarium A100,Sun,8:00,10:00,0,0
+CSE Aquarium A100,Sun,10:00,12:00,0,0
+CSE Aquarium A100,Sun,12:00,14:00,0,0
+CSE Aquarium A100,Sun,14:00,16:00,0,0
+CSE Aquarium A100,Sun,16:00,18:00,0,0
+CSE Aquarium A100,Sun,18:00,20:00,0,0
+CSE Aquarium A100,Mon,8:00,10:00,0,0
+CSE Aquarium A100,Mon,10:00,12:00,0,0
+CSE Aquarium A100,Mon,12:00,14:00,0,0
+CSE Aquarium A100,Mon,14:00,16:00,0,0
+CSE Aquarium A100,Mon,16:00,18:00,0,0
+CSE Aquarium A100,Mon,18:00,20:00,0,0
+CSE Aquarium A100,Tue,8:00,10:00,0,0
+CSE Aquarium A100,Tue,10:00,12:00,0,0
+CSE Aquarium A100,Tue,12:00,14:00,0,0
+CSE Aquarium A100,Tue,14:00,16:00,0,0
+CSE Aquarium A100,Tue,16:00,18:00,0,0
+CSE Aquarium A100,Tue,18:00,20:00,0,0
+CSE Aquarium A100,Wed,8:00,10:00,0,0
+CSE Aquarium A100,Wed,10:00,12:00,0,0
+CSE Aquarium A100,Wed,12:00,14:00,0,0
+CSE Aquarium A100,Wed,14:00,16:00,0,0
+CSE Aquarium A100,Wed,16:00,18:00,0,0
+CSE Aquarium A100,Wed,18:00,20:00,0,0
+CSE Aquarium A100,Thu,8:00,10:00,0,0
+CSE Aquarium A100,Thu,10:00,12:00,0,0
+CSE Aquarium A100,Thu,12:00,14:00,0,0
+CSE Aquarium A100,Thu,14:00,16:00,0,0
+CSE Aquarium A100,Thu,16:00,18:00,0,0
+CSE Aquarium A100,Thu,18:00,20:00,0,0
+Einstein Institute Math Library,Sun,8:00,10:00,0,0
+Einstein Institute Math Library,Sun,10:00,12:00,0,0
+Einstein Institute Math Library,Sun,12:00,14:00,0,0
+Einstein Institute Math Library,Sun,14:00,16:00,0,0
+Einstein Institute Math Library,Sun,16:00,18:00,0,0
+Einstein Institute Math Library,Sun,18:00,20:00,0,0
+Einstein Institute Math Library,Mon,8:00,10:00,0,0
+Einstein Institute Math Library,Mon,10:00,12:00,0,0
+Einstein Institute Math Library,Mon,12:00,14:00,0,0
+Einstein Institute Math Library,Mon,14:00,16:00,0,0
+Einstein Institute Math Library,Mon,16:00,18:00,0,0
+Einstein Institute Math Library,Mon,18:00,20:00,0,0
+Einstein Institute Math Library,Tue,8:00,10:00,0,0
+Einstein Institute Math Library,Tue,10:00,12:00,0,0
+Einstein Institute Math Library,Tue,12:00,14:00,0,0
+Einstein Institute Math Library,Tue,14:00,16:00,0,0
+Einstein Institute Math Library,Tue,16:00,18:00,0,0
+Einstein Institute Math Library,Tue,18:00,20:00,0,0
+Einstein Institute Math Library,Wed,8:00,10:00,0,0
+Einstein Institute Math Library,Wed,10:00,12:00,0,0
+Einstein Institute Math Library,Wed,12:00,14:00,0,0
+Einstein Institute Math Library,Wed,14:00,16:00,0,0
+Einstein Institute Math Library,Wed,16:00,18:00,0,0
+Einstein Institute Math Library,Wed,18:00,20:00,0,0
+Einstein Institute Math Library,Thu,8:00,10:00,0,0
+Einstein Institute Math Library,Thu,10:00,12:00,0,0
+Einstein Institute Math Library,Thu,12:00,14:00,0,0
+Einstein Institute Math Library,Thu,14:00,16:00,0,0
+Einstein Institute Math Library,Thu,16:00,18:00,0,0
+Einstein Institute Math Library,Thu,18:00,20:00,0,0
+Harman Science Library - Floor 2 (Quiet),Sun,8:00,10:00,0,0
+Harman Science Library - Floor 2 (Quiet),Sun,10:00,12:00,0,0
+Harman Science Library - Floor 2 (Quiet),Sun,12:00,14:00,0,0
+Harman Science Library - Floor 2 (Quiet),Sun,14:00,16:00,0,0
+Harman Science Library - Floor 2 (Quiet),Sun,16:00,18:00,0,0
+Harman Science Library - Floor 2 (Quiet),Sun,18:00,20:00,0,0
+Harman Science Library - Floor 2 (Quiet),Mon,8:00,10:00,0,0
+Harman Science Library - Floor 2 (Quiet),Mon,10:00,12:00,0,0
+Harman Science Library - Floor 2 (Quiet),Mon,12:00,14:00,0,0
+Harman Science Library - Floor 2 (Quiet),Mon,14:00,16:00,0,0
+Harman Science Library - Floor 2 (Quiet),Mon,16:00,18:00,0,0
+Harman Science Library - Floor 2 (Quiet),Mon,18:00,20:00,0,0
+Harman Science Library - Floor 2 (Quiet),Tue,8:00,10:00,0,0
+Harman Science Library - Floor 2 (Quiet),Tue,10:00,12:00,0,0
+Harman Science Library - Floor 2 (Quiet),Tue,12:00,14:00,0,0
+Harman Science Library - Floor 2 (Quiet),Tue,14:00,16:00,0,0
+Harman Science Library - Floor 2 (Quiet),Tue,16:00,18:00,0,0
+Harman Science Library - Floor 2 (Quiet),Tue,18:00,20:00,0,0
+Harman Science Library - Floor 2 (Quiet),Wed,8:00,10:00,0,0
+Harman Science Library - Floor 2 (Quiet),Wed,10:00,12:00,0,0
+Harman Science Library - Floor 2 (Quiet),Wed,12:00,14:00,0,0
+Harman Science Library - Floor 2 (Quiet),Wed,14:00,16:00,0,0
+Harman Science Library - Floor 2 (Quiet),Wed,16:00,18:00,0,0
+Harman Science Library - Floor 2 (Quiet),Wed,18:00,20:00,0,0
+Harman Science Library - Floor 2 (Quiet),Thu,8:00,10:00,0,0
+Harman Science Library - Floor 2 (Quiet),Thu,10:00,12:00,0,0
+Harman Science Library - Floor 2 (Quiet),Thu,12:00,14:00,0,0
+Harman Science Library - Floor 2 (Quiet),Thu,14:00,16:00,0,0
+Harman Science Library - Floor 2 (Quiet),Thu,16:00,18:00,0,0
+Harman Science Library - Floor 2 (Quiet),Thu,18:00,20:00,0,0
+Harman Science Library - Floor 2 (Loud),Sun,8:00,10:00,0,0
+Harman Science Library - Floor 2 (Loud),Sun,10:00,12:00,0,0
+Harman Science Library - Floor 2 (Loud),Sun,12:00,14:00,0,0
+Harman Science Library - Floor 2 (Loud),Sun,14:00,16:00,0,0
+Harman Science Library - Floor 2 (Loud),Sun,16:00,18:00,0,0
+Harman Science Library - Floor 2 (Loud),Sun,18:00,20:00,0,0
+Harman Science Library - Floor 2 (Loud),Mon,8:00,10:00,0,0
+Harman Science Library - Floor 2 (Loud),Mon,10:00,12:00,0,0
+Harman Science Library - Floor 2 (Loud),Mon,12:00,14:00,0,0
+Harman Science Library - Floor 2 (Loud),Mon,14:00,16:00,0,0
+Harman Science Library - Floor 2 (Loud),Mon,16:00,18:00,0,0
+Harman Science Library - Floor 2 (Loud),Mon,18:00,20:00,0,0
+Harman Science Library - Floor 2 (Loud),Tue,8:00,10:00,0,0
+Harman Science Library - Floor 2 (Loud),Tue,10:00,12:00,0,0
+Harman Science Library - Floor 2 (Loud),Tue,12:00,14:00,0,0
+Harman Science Library - Floor 2 (Loud),Tue,14:00,16:00,0,0
+Harman Science Library - Floor 2 (Loud),Tue,16:00,18:00,0,0
+Harman Science Library - Floor 2 (Loud),Tue,18:00,20:00,0,0
+Harman Science Library - Floor 2 (Loud),Wed,8:00,10:00,0,0
+Harman Science Library - Floor 2 (Loud),Wed,10:00,12:00,0,0
+Harman Science Library - Floor 2 (Loud),Wed,12:00,14:00,0,0
+Harman Science Library - Floor 2 (Loud),Wed,14:00,16:00,0,0
+Harman Science Library - Floor 2 (Loud),Wed,16:00,18:00,0,0
+Harman Science Library - Floor 2 (Loud),Wed,18:00,20:00,0,0
+Harman Science Library - Floor 2 (Loud),Thu,8:00,10:00,0,0
+Harman Science Library - Floor 2 (Loud),Thu,10:00,12:00,0,0
+Harman Science Library - Floor 2 (Loud),Thu,12:00,14:00,0,0
+Harman Science Library - Floor 2 (Loud),Thu,14:00,16:00,0,0
+Harman Science Library - Floor 2 (Loud),Thu,16:00,18:00,0,0
+Harman Science Library - Floor 2 (Loud),Thu,18:00,20:00,0,0
+Harman Science Library - Floor -1,Sun,8:00,10:00,0,0
+Harman Science Library - Floor -1,Sun,10:00,12:00,0,0
+Harman Science Library - Floor -1,Sun,12:00,14:00,0,0
+Harman Science Library - Floor -1,Sun,14:00,16:00,0,0
+Harman Science Library - Floor -1,Sun,16:00,18:00,0,0
+Harman Science Library - Floor -1,Sun,18:00,20:00,0,0
+Harman Science Library - Floor -1,Mon,8:00,10:00,0,0
+Harman Science Library - Floor -1,Mon,10:00,12:00,0,0
+Harman Science Library - Floor -1,Mon,12:00,14:00,0,0
+Harman Science Library - Floor -1,Mon,14:00,16:00,0,0
+Harman Science Library - Floor -1,Mon,16:00,18:00,0,0
+Harman Science Library - Floor -1,Mon,18:00,20:00,0,0
+Harman Science Library - Floor -1,Tue,8:00,10:00,0,0
+Harman Science Library - Floor -1,Tue,10:00,12:00,0,0
+Harman Science Library - Floor -1,Tue,12:00,14:00,0,0
+Harman Science Library - Floor -1,Tue,14:00,16:00,0,0
+Harman Science Library - Floor -1,Tue,16:00,18:00,0,0
+Harman Science Library - Floor -1,Tue,18:00,20:00,0,0
+Harman Science Library - Floor -1,Wed,8:00,10:00,0,0
+Harman Science Library - Floor -1,Wed,10:00,12:00,0,0
+Harman Science Library - Floor -1,Wed,12:00,14:00,0,0
+Harman Science Library - Floor -1,Wed,14:00,16:00,0,0
+Harman Science Library - Floor -1,Wed,16:00,18:00,0,0
+Harman Science Library - Floor -1,Wed,18:00,20:00,0,0
+Harman Science Library - Floor -1,Thu,8:00,10:00,0,0
+Harman Science Library - Floor -1,Thu,10:00,12:00,0,0
+Harman Science Library - Floor -1,Thu,12:00,14:00,0,0
+Harman Science Library - Floor -1,Thu,14:00,16:00,0,0
+Harman Science Library - Floor -1,Thu,16:00,18:00,0,0
+Harman Science Library - Floor -1,Thu,18:00,20:00,0,0

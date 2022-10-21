@@ -1,4 +1,3 @@
-from email.policy import default
 import logging
 import csv
 from ast import literal_eval
@@ -15,6 +14,7 @@ REQ_SIZE = 1024
 HEBREW_ENCODING = "iso-8859-1" # An encoding that supports Hebrew on HTML)
 CURRENT_STATE_DB = 'current_state.csv'
 TRANSMISSION_LOG_DB = 'transmission_log.csv'
+LOAD_STATS_DB = "load_stats.csv"
 HOMEPAGE_FILENAME = 'webpage.html'
 LOCATION_LIST = [   "CSE Aquarium C100",
                     "CSE Aquarium B100",
@@ -26,6 +26,7 @@ LOCATION_LIST = [   "CSE Aquarium C100",
                 ]
 TRANSMISSION_FIELDS = [ "S.N.",
                         "Location",
+                        "Weekday",
                         "Time",
                         "Entrances",
                         "Exits",
@@ -43,6 +44,19 @@ CURRENT_STATE_FIELDS = [    "Location",
                             "Current Amount",
                             "Max Amount",
                         ]
+LOAD_STATS_FIELDS = [   "Location",
+                        "Day",
+                        "Start Time",
+                        "End Time",
+                        "Average",
+                        "No. of Occurences",
+                    ]
+WEEKDAYS = [    "Sun",
+                "Mon",
+                "Tue",
+                "Wed",
+                "Thu",
+            ]
 
 class hujilib_http(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -100,29 +114,33 @@ def file_to_string(filename: str, encoder: str=HEBREW_ENCODING) -> bytes:
     except IOError:
         logger.error(f"An I/O error has occurred when opening {filename}.")
 
-def file_to_string_html(filename: str, encoder: str=HEBREW_ENCODING) -> bytes:
-    """ Recieves specifically an html filename and an encoder and returns the file 
-        as a binary stream with the requested encoding.
+def file_to_string_html(html: str, encoder: str=HEBREW_ENCODING, current_state: str=CURRENT_STATE_DB) -> bytes:
+    """ Recieves the filenames of the webpage's HTML, the 
+        current state csv file and an encoder, build the html
+        according to the current state in the studyrooms, and
+        returns the HTML as a binary stream with the 
+        requested encoding.
         Writes to the logger if an error has occurred."""
     
     # Read current state DB:
     rows = []
     try:
-        with open('current_state.csv', 'r', newline='') as db:
+        with open(current_state, 'r', newline='') as db:
             reader = csv.reader(db)
             for row in reader: rows.append(row)
     except IOError:
-        logger.error(f"An I/O error has occurred when opening {filename}.")
+        logger.error(f"An I/O error has occurred when opening {current_state}.")
+    
     # Read webpage file Html:
     try:
-        with open(filename, 'r', encoding=encoder) as f:
+        with open(html, 'r', encoding=encoder) as f:
             buffer = f.read()
             tm = Template(buffer)
             sub = str(tm.render(parm_1=str(int(int(rows[5][1]) / int(rows[5][2]) * 100)), herman_top=str(int(int(rows[5][1]) / int(rows[5][2]) * 180)),
             parm_2=str(int(int(rows[6][1]) / int(rows[6][2]) * 100)), herman_top_quiet= str(int(int(rows[6][1]) / int(rows[6][2])*180)))) # all the parameters that should be substituted according to the current_state.csv
             return sub.encode(encoder)
     except IOError:
-        logger.error(f"An I/O error has occurred when opening {filename}.")
+        logger.error(f"An I/O error has occurred when opening {html}.")
 
 def open_image(filename: str) -> bytes:
     """ Recieves an image filename and an encoder and returns
@@ -135,15 +153,15 @@ def open_image(filename: str) -> bytes:
     except IOError:
         logger.error(f"An I/O error has occurred when opening {filename}.")
 
-def create_csv(csv_filename: str, headers: str, logger: logging.Logger) -> None:
+def create_csv(filename: str, headers: str, logger: logging.Logger) -> None:
     """ Receives a filename and headers and creates a csv 
         file with the desired headers."""
     try:
-        with open(csv_filename, 'w') as db:
+        with open(filename, 'w') as db:
             w = csv.DictWriter(db, fieldnames=headers)
             w.writeheader()
     except IOError:
-        logger.error(f"An I/O error has occurred when writing to {csv_filename}.")
+        logger.error(f"An I/O error has occurred when writing to {filename}.")
 
 def insert_to_csv(filename: str, data_dict: Dict, logger: logging.Logger) -> None:
     """ Recieves the filename of a csv file, a dictionary and
@@ -158,13 +176,10 @@ def insert_to_csv(filename: str, data_dict: Dict, logger: logging.Logger) -> Non
     except IOError:
         logger.error(f"An I/O error has occurred when writing to {filename}.")
 
-def update_current_state(data_dict: Dict, logger: logging.Logger, filename: str=CURRENT_STATE_DB, is_setup: bool=False) -> None:
+def update_current_state(data_dict: Dict, logger: logging.Logger, filename: str=CURRENT_STATE_DB) -> None:
     ''' Recieves a dictionary dataset sent from a sensor,
         the server's logger, then updates the current status 
-        in the file. 
-        Set 'is_setup_ to true only when inputting the 
-        default values into the DB (is used to reset current 
-        people amount in a selected location to zero).
+        in the file.
         Writes to the logger if an error has occurred.'''
     
     # Read current state DB:
@@ -204,6 +219,9 @@ def update_current_state(data_dict: Dict, logger: logging.Logger, filename: str=
         except IOError:
             logger.error(f"An I/O error has occurred when writing to {filename}.")
 
+def update_load_stats(current_state: str=CURRENT_STATE_DB, load_stats: str=LOAD_STATS_DB):
+    pass
+
 if __name__ == '__main__':
     # Logger setup:
     logging.basicConfig(filename="server.log",
@@ -216,6 +234,17 @@ if __name__ == '__main__':
 
     # DBs setup:
     create_csv(TRANSMISSION_LOG_DB, TRANSMISSION_FIELDS, logger)
+
+    create_csv(LOAD_STATS_DB, LOAD_STATS_FIELDS, logger)
+    try:
+        with open(LOAD_STATS_DB, 'a') as f:
+            for location in LOCATION_LIST:
+                for day in WEEKDAYS:
+                    for hour in range(8, 20, 2):
+                        f.write(f"{location},{day},{str(hour)}:00,{str(hour+2)}:00,0,0\n")
+    except IOError:
+        logger.error(f"An I/O error has occurred when writing to {LOAD_STATS_DB}.")
+
     create_csv(CURRENT_STATE_DB, CURRENT_STATE_FIELDS, logger)
     try:
         with open(CURRENT_STATE_DB, 'a') as f:
@@ -223,6 +252,7 @@ if __name__ == '__main__':
                 f.write(line + '\n')
     except IOError:
         logger.error(f"An I/O error has occurred when writing to {CURRENT_STATE_DB}.")
+    
     logger.info("DBs were created and set to default.")
 
     # HTTP handling:
