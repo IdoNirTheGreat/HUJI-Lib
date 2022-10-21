@@ -14,6 +14,9 @@
     <!--progress bar style-->
     <style media="screen">
 
+      html{
+        scroll-padding-top: 40px;
+      }
     /* circle animation for each room\library */
       .circle-wrap {
 
@@ -95,7 +98,6 @@
         display: block;
         row-gap: 20px;
         justify-content: space-between;
-        background: linear-gradient(to bottom, #ffffff 25%, #393b3b 100%)
       }
       .circ{
         border-radius: 12px;
@@ -122,17 +124,25 @@
         margin: auto;
         align-items: center;
         text-align: center; 
-        background-color: rgba(255, 255, 255, 0.235);
+        background-color: rgba(255, 255, 255, 0);
         max-width: 1100px;
         border-radius: 12px;
       }   
       .container3{
-        margin-bottom: 30px;
+        margin: auto;
+        align-items: center;
+        text-align: center; 
+        background-color: rgba(255, 255, 255, 0);
+        max-width: 1100px;
+        border-radius: 12px;
       } 
       .container4{
-        margin-bottom: 50px;
+        margin: auto;
         align-items: center;
-        align-content: center;
+        text-align: center; 
+        background-color: rgba(255, 255, 255, 0);
+        max-width: 1100px;
+        border-radius: 12px;
       } 
       .card3 { 
         margin:auto;
@@ -144,7 +154,26 @@
       .current_state{
         margin-bottom: 3em;
       }
+      .Weekly_Statistics{
+        margin-bottom: 3em;
+      }
+      .navigation{
+        margin-bottom: 3em;
+      }
 
+
+
+      .reveal{
+  position: relative;
+  transform: translateY(150px);
+  opacity: 0;
+  transition: 1s all ease;
+}
+
+.reveal.active{
+  transform: translateY(0);
+  opacity: 1;
+}
     </style>
   
   </head>
@@ -156,8 +185,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     
-    
-    <!-- Responsive navbar-->                
+    <!-- Responsive navbar-->
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
       <div class="container px-lg-5">
         <a class="navbar-brand" href="#!"><i class="bi bi-book"></i> HUJI-Lib</a>
@@ -165,19 +193,21 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <!--navbar buttons-->
-            <li class="nav-item"><a class="nav-link active" aria-current="page" href="#section0">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="#section1">Current Status</a></li>
-            <li class="nav-item"><a class="nav-link" href="#section2">Weekly Statistics</a></li>
-            <li class="nav-item"><a class="nav-link" href="https://www.huji.ac.il/rooms/" target="_blank">Room Reservation</a></li>
-            <li class="nav-item"><a class="nav-link" href="#section3">Navigation & Opening Hours</a></li>
+            <li class="nav-item"><a class="nav-link js-scroll-trigger" aria-current="page" href="#section0">Home</a></li>
+            <li class="nav-item"><a class="nav-link  js-scroll-trigger" href="#section1">Current Status</a></li>
+            <li class="nav-item"><a class="nav-link  js-scroll-trigger" href="#section2">Weekly Statistics</a></li>
+            <li class="nav-item"><a class="nav-link  js-scroll-trigger" href="#section3">Navigation & Opening Hours</a></li>
+            <li class="nav-item"><a class="nav-link  js-scroll-trigger" href="https://www.huji.ac.il/rooms/" target="_blank">Room Reservation</a></li>
           </ul>
         </div>
       </div>
     </nav>
 
+
     <!-- Header-->
+    <section id="section0" style="min-height: 600px">
     <header class="py-5">
-      <div  class="container1 px-lg-5" id="section0">
+      <div  class="container1 px-lg-5">
         <div class="container1 p-4 p-lg-5 rounded-3 text-center">
           <div class="m-4 m-lg-5">
             <h1 class="display-5 fw-bold">Welcome to <i class="bi bi-book"></i> HUJI-Lib</h1>
@@ -188,10 +218,12 @@
         </div>
       </div>
     </header>
+  </section>
     
   
-<!-- locations-->
-<div class="container2 px-lg-5" id="section1">
+<!-- current state-->
+<section id="section1" style="min-height: 600px; background: #dcdcdc;">
+<div class="container2 reveal px-lg-5" >
   <div class="feature"><i class="bi bi-compass-fill" ></i></div>
   <div class="current_state"><h3><strong>Current State</strong></h3></div>
   <div class="row gx-lg-5" >
@@ -329,7 +361,6 @@
             <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
 
               <p><strong>Coming Soon</strong></p>
-
           </div>
         </div>
           </div>
@@ -396,29 +427,21 @@
               </div>
             </div>
           </div>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
 </div>
-        
-
+</section>
         
 
     <!--Weekly chart-->
-    <section class="pt-4">
-      <div class="container3 px-lg-5">                
-        <div class="row gx-lg-5" id="section2">
-          <div class="card3 border-0 h-100">
-            <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
-              <div class="feature"><i class="bi bi-bar-chart-fill"></i></div>
-              <h2 class="fs-4 fw-bold">Weekly Statistics</h2>
+    <section class="pt-4" id="section2" style="min-height: 600px; background: #b7b7b7;">
+      <div class="container3 reveal px-lg-5">    
+        <div class="feature"><i class="bi bi-bar-chart-fill"></i></div>
+          <h2 class="Weekly_Statistics fs-4 fw-bold">Weekly Statistics</h2>            
+          <div class="row gx-lg-5">
               <!-- <div class="vstack gap-2 col-md-5 mx-auto"> -->
-
                 <div id="carouselExampleControls" class="carousel slide" data-bs-interval="false">
                   <div class="carousel-indicators">
                     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -595,63 +618,48 @@
                 </div>
                     </div>
                     </div>
-                  </div>
-            </div>
       </section>
 
 
-
-
     <!--map-->
-    <div class="container4 row-gap:10px px-lg-5" id="section3">                
-      <div class="row gx-lg-5 text-center align-items:center" id="section2">
-        <div class="card3 border-0 h-100">
-          <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
-            <div class="feature"><i class="bi bi-geo-alt-fill"></i></div>
-              <h2 class="fs-4 fw-bold">navigation</h2>
-              <div class="row d-flex justify-content-center">
-              <div class="col-md">
+    <section id="section3" style="min-height: 600px; background: #949494;"> 
+    <div class="container4 reveal row-gap:10px px-lg-5">  
+      <div class="feature"><i class="bi bi-geo-alt-fill"></i></div>
+              <h2 class="navigation fs-4 fw-bold">navigation</h2>         
+      <div class="row gx-lg-5 text-center justify-content-center">
+              <div class="col-md d-flex justify-content-center">
               <!--herman map-->
+
               <div class="mapouter"><div class="gmap_canvas"><iframe width="300" height="200" id="gmap_canvas" src="https://maps.google.com/maps?q=%D7%A1%D7%A4%D7%A8%D7%99%D7%99%D7%AA%20%D7%94%D7%A8%D7%9E%D7%9F&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://fmovies-online.net">fmovies</a><br><style>.mapouter{position:relative;text-align:right;height:200px;width:300px;}</style><a href="https://www.embedgooglemap.net">google maps on webpage</a><style>.gmap_canvas {overflow:hidden;background:none!important;height:200px;width:300px;}</style></div></div>
-              </div>
-              <div class="col-md">
+
+              <div><p><strong>opening hours:</strong></p></div>
+
+            </div>
+              <div class="col-md d-flex justify-content-center">
              <!--math map-->
               <div class="mapouter"><div class="gmap_canvas"><iframe width="300" height="200" id="gmap_canvas" src="https://maps.google.com/maps?q=%D7%94%D7%A1%D7%A4%D7%A8%D7%99%D7%94%20%D7%9C%D7%9E%D7%AA%D7%9E%D7%98%D7%99%D7%A7%D7%94%20%D7%95%D7%9E%D7%93%D7%A2%D7%99&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://fmovies-online.net">fmovies</a><br><style>.mapouter{position:relative;text-align:right;height:200px;width:300px;}</style><a href="https://www.embedgooglemap.net">google maps on webpage</a><style>.gmap_canvas {overflow:hidden;background:none!important;height:200px;width:300px;}</style></div></div>
-              </div>
-              <div class="col-md">
+              
+              <p><strong>opening hours:</strong></p>
+
+            
+            </div>
+              <div class="col-md d-flex justify-content-center">
               <!--cse map-->
               <div class="mapouter"><div class="gmap_canvas"><iframe width="300" height="200" id="gmap_canvas" src="https://maps.google.com/maps?q=%D7%94%D7%A0%D7%93%D7%A1%D7%94%20%D7%95%D7%9E%D7%93%D7%A2%D7%99%20%D7%94%D7%9E%D7%97%D7%A9%D7%91&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://fmovies-online.net">fmovies</a><br><style>.mapouter{position:relative;text-align:right;height:200px;width:300px;}</style><a href="https://www.embedgooglemap.net">google maps on webpage</a><style>.gmap_canvas {overflow:hidden;background:none!important;height:200px;width:300px;}</style></div></div>
-              </div>
-              </div>
-
-
-              <!--opening hours-->
-              <div class="row justify-content-center">
-                <div class="col-md">
-                <div class="card text-white rounded-8" style="background-color: rgba(26, 25, 32, 0.333); width: 300px;">
-                <!--herman-->
-                <p><strong>opening hours:</strong></p>
-                </div>
-                </div>
-                <div class="col-md">
-                <div class="card text-white rounded-8" style="background-color: rgba(26, 25, 32, 0.333) ; width: 300px;">
-                <!--math library-->
-                <p><strong>opening hours:</strong></p>
-                </div>
-                </div>
-                <div class="col-md">
-                <div class="card text-white rounded-8" style="background-color: rgba(26, 25, 32, 0.333); width: 300px;">
-                <!--sce aquarium-->
-                <p><strong>opening hours:</strong></p>
-                <p>open 24/7</p>
-                </div>
-              </div>
+              
+              <p><strong>opening hours:</strong></p>
+              <p>open 24/7</p>
+            
             </div>
+
+
+              
+                
+
+
             </div>
         </div>
-      </div>
-    </div>
-
+  </section>
 
 
 
@@ -667,7 +675,33 @@
 
 
 
+<script>
+  function reveal() {
+  var reveals = document.querySelectorAll(".reveal");
 
+  for (var i = 0; i < reveals.length; i++) {
+    var windowHeight = window.innerHeight;
+    var elementTop = reveals[i].getBoundingClientRect().top;
+    var elementVisible = 150;
+
+    if (elementTop < windowHeight - elementVisible) {
+      reveals[i].classList.add("active");
+    } else {
+      reveals[i].classList.remove("active");
+    }
+  }
+}
+
+window.addEventListener("scroll", reveal);
+
+</script>
+
+
+    <script type="text/javascript">    
+      $('.js-scroll-trigger').click(function() {
+$('.navbar-collapse').collapse('hide');
+});
+ </script>
 
   </body>
 
