@@ -27,10 +27,11 @@ LOCATION_LIST = [   "CSE Aquarium C100",
 TRANSMISSION_FIELDS = [ "S.N.",
                         "Location",
                         "Weekday",
+                        "Date",
                         "Time",
                         "Entrances",
                         "Exits",
-        ]
+                    ]
 CURRENT_STATE_DEFAULTS = [  "CSE Aquarium C100,0,90",
                             "CSE Aquarium B100,0,55",
                             "CSE Aquarium A100,0,55",
@@ -45,7 +46,7 @@ CURRENT_STATE_FIELDS = [    "Location",
                             "Max Amount",
                         ]
 LOAD_STATS_FIELDS = [   "Location",
-                        "Day",
+                        "Weekday",
                         "Start Time",
                         "End Time",
                         "Average",
@@ -102,6 +103,9 @@ class hujilib_http(BaseHTTPRequestHandler):
         # Update current state data:
         update_current_state(data_dict, logger)
 
+        # Update load stats:
+        update_load_stats(data_dict, logger)
+
 def file_to_string(filename: str, encoder: str=HEBREW_ENCODING) -> bytes:
     """ Recieves a filename and an encoder and returns the file 
         as a binary stream with the requested encoding.
@@ -136,8 +140,14 @@ def file_to_string_html(html: str, encoder: str=HEBREW_ENCODING, current_state: 
         with open(html, 'r', encoding=encoder) as f:
             buffer = f.read()
             tm = Template(buffer)
-            sub = str(tm.render(parm_1=str(int(int(rows[5][1]) / int(rows[5][2]) * 100)), herman_top=str(int(int(rows[5][1]) / int(rows[5][2]) * 180)),
-            parm_2=str(int(int(rows[6][1]) / int(rows[6][2]) * 100)), herman_top_quiet= str(int(int(rows[6][1]) / int(rows[6][2])*180)))) # all the parameters that should be substituted according to the current_state.csv
+
+            # Substitute parameters according to the current_state csv
+            sub = str(  tm.render(  parm_1=str(int(int(rows[4][1]) / int(rows[4][2]) * 100)),
+                                    herman_top=str(int(int(rows[4][1]) / int(rows[4][2]) * 180)),
+                                    parm_2 = str(int(int(rows[5][1]) / int(rows[5][2]) * 100)),
+                                    herman_top_quiet= str(int(int(rows[5][1]) / int(rows[5][2])*180))
+                                    )
+                    )
             return sub.encode(encoder)
     except IOError:
         logger.error(f"An I/O error has occurred when opening {html}.")
@@ -157,7 +167,7 @@ def create_csv(filename: str, headers: str, logger: logging.Logger) -> None:
     """ Receives a filename and headers and creates a csv 
         file with the desired headers."""
     try:
-        with open(filename, 'w') as db:
+        with open(filename, 'w', newline="") as db:
             w = csv.DictWriter(db, fieldnames=headers)
             w.writeheader()
     except IOError:
@@ -183,16 +193,13 @@ def update_current_state(data_dict: Dict, logger: logging.Logger, filename: str=
         Writes to the logger if an error has occurred.'''
     
     # Read current state DB:
-    reader_rows = []
+    current_state_dicts = []
     try:
         with open(filename, 'r', newline='') as db:
-            reader = csv.reader(db)
-            for row in reader: reader_rows.append(row)
+            reader = csv.DictReader(db)
+            for d in reader: current_state_dicts.append(d)
     except IOError:
         logger.error(f"An I/O error has occurred when writing to {filename}.")
-
-    # Takes csv fields and values and puts them in a list of dicts:
-    current_state_dicts = [{field: value for (field, value) in zip(reader_rows[0], row)} for row in reader_rows[2:]]
     
     # Update the current state according to the new data:
     found = False
@@ -219,8 +226,33 @@ def update_current_state(data_dict: Dict, logger: logging.Logger, filename: str=
         except IOError:
             logger.error(f"An I/O error has occurred when writing to {filename}.")
 
-def update_load_stats(current_state: str=CURRENT_STATE_DB, load_stats: str=LOAD_STATS_DB):
-    pass
+def update_load_stats(transmission: Dict, logger: logging.Logger, stats: str=LOAD_STATS_DB, current_state: str=CURRENT_STATE_DB) -> None:
+    # Read current state DB:
+    try:
+        with open(current_state, 'r', newline='') as current_state_db:
+            reader = csv.DictReader(current_state_db)
+            for d in reader:
+                if d['Location'] == transmission['Location']:
+                    current_state_dict = d
+    except IOError:
+        logger.error(f"An I/O error has occurred when writing to {current_state}.")
+    
+    try:
+        with open(stats, 'r+', newline='') as stats_db:
+            reader = csv.DictReader(stats_db)
+            for stat_dict in reader: 
+                if  stat_dict['Location'] == transmission['Location'] and \
+                    stat_dict['Weekday'] == transmission['Weekday'] and \
+                    int(stat_dict['Start Time'].split(':')[0]) <= int(transmission['Time'].split(':')[0]) and \
+                    int(stat_dict['End Time'].split(':')[0]) > int(transmission['Time'].split(':')[0]):
+                    average, n = int(stat_dict['Average']), int(stat_dict['No. of Occurences'])
+                    cur_amount, total_amount = int(current_state_dict['Current Amount']), int(current_state_dict['Max Amount'])
+                    print(f"Current percentage = {(cur_amount / total_amount) * 100} %")
+                    stat_dict['Average'] = str(int((average * n) / (n + 1) + (cur_amount / total_amount) * 100 / (n + 1)))
+                    print(f"Old average: {average}, new average: {stat_dict['Average']}")
+
+    except IOError:
+        logger.error(f"An I/O error has occurred when writing to {stats}.")
 
 if __name__ == '__main__':
     # Logger setup:
