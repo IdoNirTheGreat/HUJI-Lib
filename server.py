@@ -6,7 +6,6 @@ from os.path import splitext
 from typing import Dict, List
 from jinja2 import Template
 
-ALLOWED_HOSTS = "127.0.0.1"
 HOST = "127.0.0.1"
 PORT = 80
 MAX_CONNECTIONS = 5
@@ -154,10 +153,20 @@ def file_to_string_html(html: str, encoder: str=HEBREW_ENCODING, current_state: 
             for d in current_state_dicts:
                 ratio_dict[d['Location']] = int(d['Current Amount']) / int(d['Max Amount'])
             
-            sub = str(tm.render(parm_1=str(int(ratio_dict["Harman Science Library - Floor 2 (Loud)"] * 100)),
-                                herman_top=str(int(ratio_dict["Harman Science Library - Floor 2 (Loud)"] * 180)),
-                                parm_2 = str(int(ratio_dict["Harman Science Library - Floor 2 (Quiet)"] * 100)),
-                                herman_top_quiet= str(int(ratio_dict["Harman Science Library - Floor 2 (Quiet)"] * 180))
+            sub = str(tm.render(HarmanScienceLibraryFloor2LoudP = str(int(ratio_dict["Harman Science Library - Floor 2 (Loud)"] * 100)),
+                                HarmanScienceLibraryFloor2LoudD = str(int(ratio_dict["Harman Science Library - Floor 2 (Loud)"] * 180)),
+                                HarmanScienceLibraryFloor2QuietP = str(int(ratio_dict["Harman Science Library - Floor 2 (Quiet)"] * 100)),
+                                HarmanScienceLibraryFloor2QuietD = str(int(ratio_dict["Harman Science Library - Floor 2 (Quiet)"] * 180)),
+                                HarmanScienceLibraryFloor_1P = str(int(ratio_dict["Harman Science Library - Floor -1"] * 100)),
+                                HarmanScienceLibraryFloor_1D = str(int(ratio_dict["Harman Science Library - Floor -1"] * 180)),
+                                CSEAquariumC100P = str(int(ratio_dict["CSE Aquarium C100"] * 100)),
+                                CSEAquariumC100D = str(int(ratio_dict["CSE Aquarium C100"] * 180)),
+                                CSEAquariumB100P = str(int(ratio_dict["CSE Aquarium B100"] * 100)),
+                                CSEAquariumB100D = str(int(ratio_dict["CSE Aquarium B100"] * 180)),
+                                CSEAquariumA100P = str(int(ratio_dict["CSE Aquarium A100"] * 100)),
+                                CSEAquariumA100D = str(int(ratio_dict["CSE Aquarium A100"] * 180)),
+                                EinsteinInstituteMathLibraryP = str(int(ratio_dict["Einstein Institute Math Library"] * 100)),
+                                EinsteinInstituteMathLibraryD = str(int(ratio_dict["Einstein Institute Math Library"] * 180)),
                                 )
                     )
             return sub.encode(encoder)
