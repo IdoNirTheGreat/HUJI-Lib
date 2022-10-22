@@ -162,18 +162,30 @@
       }
 
 
-
       .reveal{
-  position: relative;
-  transform: translateY(150px);
-  opacity: 0;
-  transition: 1s all ease;
-}
+      position: relative;
+      transform: translateY(150px);
+      opacity: 0;
+      transition: 1s all ease;
+    }
+    .reveal .left{
+      position: relative;
+      transform: translatex(-150px);
+      opacity: 0;
+      transition: 1s all ease;
+    }
+    .reveal .right{
+      position: relative;
+      transform: translatex(150px);
+      opacity: 0;
+      transition: 1s all ease;
+    }
 
-.reveal.active{
-  transform: translateY(0);
-  opacity: 1;
-}
+      .reveal.active{
+        transform: translateY(0);
+        opacity: 1;
+        /* background-color: #8eb6df; */
+      }
     </style>
   
   </head>
@@ -208,21 +220,56 @@
     <section id="section0" style="min-height: 600px">
     <header class="py-5">
       <div  class="container1 px-lg-5">
-        <div class="container1 p-4 p-lg-5 rounded-3 text-center">
+        <div class="container1 p-4 p-lg-5 rounded-3 text-center justify-content-center">
           <div class="m-4 m-lg-5">
             <h1 class="display-5 fw-bold">Welcome to <i class="bi bi-book"></i> HUJI-Lib</h1>
             <p class="fs-4">A platform created by students for students to help you find the right space to study around the campus.</p>
             <br></br>
-            <p class="fs-4">The website is currently under development. Browse safely!</p>
+            <div class="vstack gap-2 col-md-5 mx-auto">
+            <div id="carouselExampleControls" style="width: 700px; align-self: center;" class="carousel slide justify-content-center" data-bs-target="carousel">
+              <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+              </div>
+              <div class="carousel-inner rounded-3 justify-content-center" style="background-color: #8eb6df; padding: 1em; box-shadow: 0px 10px 15px rgba(0,0,0,0.1);">
+                <div class="carousel-item active">
+                  <p class="fs-4">The website is currently under development.</p><p class="fs-4">Browse safely!</p>
+                </div>
+                <div class="carousel-item">
+                  <p class="fs-4">The website is currently under development.</p><p class="fs-4">Browse safely!</p>
+                  </div>
+                  <div class="carousel-item">
+                    <p class="fs-4">The website is currently under development.</p><p class="fs-4">Browse safely!</p>
+                    </div>
+
+
+
+
+
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+
+          </div>
+
           </div>
         </div>
       </div>
+    </div>
+
     </header>
   </section>
     
   
 <!-- current state-->
-<section id="section1" style="min-height: 600px; background: #dcdcdc;">
+<section id="section1" style="min-height: 600px; background: #c9c8c8;">
 <div class="container2 reveal px-lg-5" >
   <div class="feature"><i class="bi bi-compass-fill" ></i></div>
   <div class="current_state"><h3><strong>Current State</strong></h3></div>
@@ -274,7 +321,7 @@
 
           <div id="collapse-2" class="collapse" aria-labelledby="heading-2" data-parent="#accordion0">
             <div class="accordion-body">
-              <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
+              <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8 justify-content-center">
                   
 
                 <!-- progress bar top-floor quiet room herman-->
@@ -437,26 +484,34 @@
 
     <!--Weekly chart-->
     <section class="pt-4" id="section2" style="min-height: 600px; background: #b7b7b7;">
-      <div class="container3 reveal px-lg-5">    
+      <div class="container3 reveal px-lg-5 justify-content-center">    
         <div class="feature"><i class="bi bi-bar-chart-fill"></i></div>
           <h2 class="Weekly_Statistics fs-4 fw-bold">Weekly Statistics</h2>            
-          <div class="row gx-lg-5">
-              <!-- <div class="vstack gap-2 col-md-5 mx-auto"> -->
-                <div id="carouselExampleControls" class="carousel slide" data-bs-interval="false">
-                  <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
-                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+          <div class="row gx-lg-5 justify-content-center">
+          <div class="wrapper reveal right" style="margin-top: 0em;">
+            <header>Harman Science Library</header>
+            <input type="radio" name="slider" checked id="top_floor_main_room">
+            <input type="radio" name="slider" id="top_floot_quiet_room">
+            <input type="radio" name="slider" id="lower_floor_main_room">
+            <nav>
+              <label for="top_floor_main_room">top floor main room</label>
+              <label for="top_floot_quiet_room">top floot quiet room</label>
+              <label for="lower_floor_main_room">lower floor main room</label>
+              <div class="slider"></div>
+            </nav>
+            <section>
+              <div class="content content-1">
 
-                  </div>
+
+
+                <div id="carouselExampleControls" class="carousel slide" data-bs-interval="false">
+              
                   <div class="carousel-inner">
                     <div class="carousel-item active" data-bs-interval="false">
 
 
                       <div class="vstack gap-2 col-md-5 mx-auto">
-                      <canvas id="myChart1" style="width:100%;max-width:600px"></canvas>
+                      <canvas id="myChart1" style="width:100%; height: 200px; width: 300px;"></canvas>
                       <script>
                         var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [6, 20, 44, 70, 50];
@@ -484,9 +539,9 @@
                     </div>
                     <div class="carousel-item" data-bs-interval="false">
                       <div class="vstack gap-2 col-md-5 mx-auto">
-                      <canvas id="myChart2" style="width:100%;max-width:600px"></canvas>
+                      <canvas id="myChart2" style="width:100%; height: 200px; width: 300px;"></canvas>
                       <script>
-                       var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
+                      var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [6, 20, 44, 70, 50];
                         var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
                         new Chart("myChart2", {
@@ -515,7 +570,7 @@
                     </div>
                     <div class="carousel-item" data-bs-interval="false">
                       <div class="vstack gap-2 col-md-5 mx-auto">
-                        <canvas id="myChart3" style="width:100%;max-width:600px"></canvas>
+                        <canvas id="myChart3" style="width:100%; height: 200px; width: 300px;"></canvas>
                         <script>
                           var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [6, 20, 44, 70, 50];
@@ -545,7 +600,7 @@
 
                       <div class="carousel-item" data-bs-interval="false">
                         <div class="vstack gap-2 col-md-5 mx-auto">
-                          <canvas id="myChart4" style="width:100%;max-width:600px"></canvas>
+                          <canvas id="myChart4" style="width:100%; height: 200px; width: 300px;"></canvas>
                           <script>
                             var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                           var yValues = [6, 20, 44, 70, 50];
@@ -568,15 +623,15 @@
                               }
                             });
                             </script>
-  
-  
+
+
                         </div>
                         </div>
 
 
                         <div class="carousel-item" data-bs-interval="false">
                           <div class="vstack gap-2 col-md-5 mx-auto">
-                            <canvas id="myChart5" style="width:100%;max-width:600px"></canvas>
+                            <canvas id="myChart5" style="width:100%; height: 200px; width: 300px;"></canvas>
                             <script>
                               var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                             var yValues = [6, 20, 44, 70, 50];
@@ -599,8 +654,8 @@
                                 }
                               });
                               </script>
-    
-    
+
+
                           </div>
                           </div>
 
@@ -616,9 +671,34 @@
                     <span class="visually-hidden">Next</span>
                   </button>
                 </div>
+                
+
+              </div>
+              <div class="content content-2">
+                <div>This is a Blog content</div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit amet. Possimus doloris nesciunt mollitia culpa sint itaque, vitae praesentium assumenda suscipit fugit doloremque adipisci doloribus, sequi facere itaque cumque accusamus, quam molestias sed provident quibusdam nam deleniti. Autem eaque aut impedit eo nobis quia, eos sequi tempore! Facere ex repellendus, laboriosam perferendise. Enim quis illo harum, exercitationem nam totam fugit omnis natus quam totam, repudiandae dolor laborum! Commodi?</p>
+              </div>
+              <div class="content content-3">
+                <div>This is a Code content</div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, debitis nesciunt! Consectetur officiis, libero nobis dolorem pariatur quisquam temporibus. Labore quaerat neque facere itaque laudantium odit veniam consectetur numquam delectus aspernatur, perferendis repellat illo sequi excepturi quos ipsam aliquid est consequuntur.</p>
+              </div>
+            </section>    
+          </div>
+
+              
+
+                            
+
+
+
+
+
+                
                     </div>
                     </div>
       </section>
+
+
 
 
     <!--map-->
