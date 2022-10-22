@@ -30,6 +30,8 @@
       .circle-wrap .circle .mask,
       .circle-wrap .circle .fill-1,
       .circle-wrap .circle .fill-2
+      .circle-wrap .circle .fill-3
+
        {
         width: 150px;
         height: 150px;
@@ -65,12 +67,12 @@
       .mask.full-1,
       .circle .fill-1 {
         animation: fill-1 ease-in-out 3s;
-        transform: rotate({{herman_top}}deg);
+        transform: rotate({{HarmanScienceLibraryFloor2LoudD}}deg);
       }
 
       @keyframes fill-1{
         0% {transform: rotate(0deg);}
-        100% {transform: rotate({{herman_top}}deg)}
+        100% {transform: rotate({{HarmanScienceLibraryFloor2LoudD}}deg)}
       }
 
       /* herman top floor, quiet room */  
@@ -82,7 +84,7 @@
       .mask.full-2,
       .circle .fill-2 {
         animation: fill-2 ease-in-out 3s;
-        transform: rotate({{herman_top_quiet}}deg);
+        transform: rotate({{HarmanScienceLibraryFloor2QuietD}}deg);
       }
 
       @keyframes fill-2{
@@ -90,7 +92,115 @@
           transform: rotate(0deg);
         }
         100% {
-          transform: rotate({{herman_top_quiet}}deg);
+          transform: rotate({{HarmanScienceLibraryFloor2QuietD}}deg);
+        }
+      }
+
+      /* herman -1 floor */  
+      .mask .fill-3 {
+        clip: rect(0px, 75px, 150px, 0px);
+        background-color: #252729;
+      }
+
+      .mask.full-3,
+      .circle .fill-3 {
+        animation: fill-3 ease-in-out 3s;
+        transform: rotate({{HarmanScienceLibraryFloor_1D}}deg);
+      }
+
+      @keyframes fill-3{
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate({{HarmanScienceLibraryFloor_1D}}deg);
+        }
+      }
+
+      /* mathematics */  
+      .mask .fill-4 {
+        clip: rect(0px, 75px, 150px, 0px);
+        background-color: #252729;
+      }
+
+      .mask.full-4,
+      .circle .fill-4 {
+        animation: fill-4 ease-in-out 3s;
+        transform: rotate({{EinsteinInstituteMathLibraryD}}deg);
+      }
+
+      @keyframes fill-4{
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate({{EinsteinInstituteMathLibraryD}}deg);
+        }
+      }
+
+
+      /* CSE Aquarium C100 */  
+      .mask .fill-5 {
+        clip: rect(0px, 75px, 150px, 0px);
+        background-color: #252729;
+      }
+
+      .mask.full-5,
+      .circle .fill-5 {
+        animation: fill-5 ease-in-out 3s;
+        transform: rotate({{CSEAquariumC100D}}deg);
+      }
+
+      @keyframes fill-5{
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate({{CSEAquariumC100D}}deg);
+        }
+      }
+
+
+      /* CSE Aquarium B100 */  
+      .mask .fill-6 {
+        clip: rect(0px, 75px, 150px, 0px);
+        background-color: #252729;
+      }
+
+      .mask.full-6,
+      .circle .fill-6 {
+        animation: fill-6 ease-in-out 3s;
+        transform: rotate({{CSEAquariumB100D}}deg);
+      }
+
+      @keyframes fill-6{
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate({{CSEAquariumB100D}}deg);
+        }
+      }
+
+
+      /* CSE Aquarium A100 */  
+      .mask .fill-7 {
+        clip: rect(0px, 75px, 150px, 0px);
+        background-color: #252729;
+      }
+
+      .mask.full-7,
+      .circle .fill-7 {
+        animation: fill-7 ease-in-out 3s;
+        transform: rotate({{CSEAquariumA100D}}deg);
+      }
+
+      @keyframes fill-7{
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate({{CSEAquariumA100D}}deg);
         }
       }
       
@@ -161,8 +271,7 @@
         margin-bottom: 3em;
       }
 
-
-      .reveal{
+    .reveal{
       position: relative;
       transform: translateY(150px);
       opacity: 0;
@@ -181,10 +290,9 @@
       transition: 1s all ease;
     }
 
-      .reveal.active{
+    .reveal.active{
         transform: translateY(0);
         opacity: 1;
-        /* background-color: #8eb6df; */
       }
     </style>
   
@@ -224,9 +332,8 @@
           <div class="m-4 m-lg-5">
             <h1 class="display-5 fw-bold">Welcome to <i class="bi bi-book"></i> HUJI-Lib</h1>
             <p class="fs-4">A platform created by students for students to help you find the right space to study around the campus.</p>
-            <br></br>
             <div class="vstack gap-2 col-md-5 mx-auto">
-            <div id="carouselExampleControls" style="width: 700px; align-self: center;" class="carousel slide justify-content-center" data-bs-target="carousel">
+            <div id="carouselExampleControls" style="max-width: 500px; align-self: center;" class="carousel slide justify-content-center" data-ride="carousel">
               <div class="carousel-indicators">
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -283,16 +390,14 @@
         <div class="accordion-item">
             <div class="accordion-header" id="heading-1">
             <h2>
-                <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
+                <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse-1" aria-expanded="false" aria-controls="collapse-1">
                 Top Floor, Main Room
                 </button>
             </h2>
             </div>
-            <div id="collapse-1" class="collapse show" aria-labelledby="heading-1" data-parent="#accordion0">
+            <div id="collapse-1" class="collapse" aria-labelledby="heading-1" data-parent="#accordion0">
             <div class="accordion-body">
               <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
-
-
                 <!-- progress bar top-floor herman-->
                 <div class="circle-wrap">
                   <div class="circle">
@@ -302,7 +407,7 @@
                   <div class="mask half">
                       <div class="fill-1"></div>
                   </div>
-                  <div class="inside-circle"> {{parm_1}}% </div>
+                  <div class="inside-circle"> {{HarmanScienceLibraryFloor2LoudP}}% </div>
                   </div>
               </div> 
             </div>
@@ -318,12 +423,9 @@
                 </button>
             </h2>
           </div>
-
           <div id="collapse-2" class="collapse" aria-labelledby="heading-2" data-parent="#accordion0">
             <div class="accordion-body">
               <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8 justify-content-center">
-                  
-
                 <!-- progress bar top-floor quiet room herman-->
                  <div class="circle-wrap">
                   <div class="circle">
@@ -333,15 +435,12 @@
                   <div class="mask half">
                       <div class="fill-2"></div>
                   </div>
-                  <div class="inside-circle"> {{parm_2}}% </div>
+                  <div class="inside-circle"> {{HarmanScienceLibraryFloor2QuietP}}% </div>
                   </div>
                 </div> 
-
-
               </div>
             </div>
           </div>
-
         </div>
 
         <div class="accordion-item">
@@ -355,61 +454,54 @@
             <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#accordion0">
             <div class="accordion-body">
               <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
-                <p><strong>Coming Soon</strong></p>
-            </div>
-          </div>
-
+                  <!-- progress bar lower-floor main room herman-->
+                  <div class="circle-wrap">
+                    <div class="circle">
+                    <div class="mask full-3">
+                        <div class="fill-3"></div>
+                    </div>
+                    <div class="mask half">
+                        <div class="fill-3"></div>
+                    </div>
+                    <div class="inside-circle"> {{HarmanScienceLibraryFloor_1P}}% </div>
+                    </div>
+                  </div> 
+                </div>
+              </div>
             </div>
         </div>
-
       </div>
-
     </div>
     
     <div class="col-md ">
-
       <h5>Mathematics and Computer Science Library</h5>
       <img class= "circ" src="assets/mtmtyqh.jpg" width="250" height="150">
-
       <div class="accordion" id="accordion1">
-        
         <div class="accordion-item">
-          
           <div class="accordion-header" id="heading-4">
             <h2>
-                <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse-4" aria-expanded="true" aria-controls="collapse-4">
+                <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
                 Main Room (quiet only)
                 </button>
             </h2>
           </div>
-
-          <div id="collapse-4" class="collapse show" aria-labelledby="heading-4" data-parent="#accordion1">
-            
+          <div id="collapse-4" class="collapse" aria-labelledby="heading-4" data-parent="#accordion1">
             <div class="accordion-body">
               <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
-                <p><strong>Coming soon</strong></p>
+                <!-- progress bar mathematics-->
+                <div class="circle-wrap">
+                  <div class="circle">
+                  <div class="mask full-4">
+                      <div class="fill-4"></div>
+                  </div>
+                  <div class="mask half">
+                      <div class="fill-4"></div>
+                  </div>
+                  <div class="inside-circle"> {{EinsteinInstituteMathLibraryP}}% </div>
+                  </div>
+              </div> 
               </div>
             </div>
-
-          </div>
-          
-        </div>
-
-        <div class="accordion-item">
-        <div class="accordion-header" id="heading-5">
-          <h2>
-              <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
-              Lower Floor Room
-              </button>
-          </h2>
-          </div>
-          <div id="collapse-5" class="collapse" aria-labelledby="heading-5" data-parent="#accordion1">
-          <div class="accordion-body">
-            <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
-
-              <p><strong>Coming Soon</strong></p>
-          </div>
-        </div>
           </div>
         </div>
       </div>
@@ -424,16 +516,27 @@
         <div class="accordion-item">
           <div class="accordion-header" id="heading-7">
             <h2>
-              <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse-7" aria-expanded="true" aria-controls="collapse-7">
+              <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse-7" aria-expanded="false" aria-controls="collapse-7">
                 C100
               </button>
             </h2>
           </div>
         
-          <div id="collapse-7" class="collapse show" aria-labelledby="heading-7" data-parent="#accordion2">
+          <div id="collapse-7" class="collapse" aria-labelledby="heading-7" data-parent="#accordion2">
             <div class="accordion-body">
               <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
-                <p><strong>Coming Soon</strong></p>
+                <!-- progress bar cse c100-->
+                <div class="circle-wrap">
+                  <div class="circle">
+                  <div class="mask full-5">
+                      <div class="fill-5"></div>
+                  </div>
+                  <div class="mask half">
+                      <div class="fill-5"></div>
+                  </div>
+                  <div class="inside-circle"> {{CSEAquariumC100P}}% </div>
+                  </div>
+              </div> 
               </div>
             </div>
           </div>
@@ -451,7 +554,18 @@
           <div id="collapse-8" class="collapse" aria-labelledby="heading-8" data-parent="#accordion2">
             <div class="accordion-body">
               <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
-                <p><strong>Coming Soon</strong></p>
+                 <!-- progress bar cse b100-->
+                 <div class="circle-wrap">
+                  <div class="circle">
+                  <div class="mask full-6">
+                      <div class="fill-6"></div>
+                  </div>
+                  <div class="mask half">
+                      <div class="fill-6"></div>
+                  </div>
+                  <div class="inside-circle"> {{CSEAquariumB100P}}% </div>
+                  </div>
+              </div> 
               </div>
             </div>
           </div>
@@ -470,7 +584,18 @@
           <div id="collapse-9" class="collapse" aria-labelledby="heading-9" data-parent="#accordion2">
             <div class="accordion-body">
               <div class="card bg-rgba(255, 255, 255, 0.664) rounded-8">
-                <p><strong>Coming Soon</strong></p>
+                <!-- progress bar cse a100-->
+                <div class="circle-wrap">
+                  <div class="circle">
+                  <div class="mask full-7">
+                      <div class="fill-7"></div>
+                  </div>
+                  <div class="mask half">
+                      <div class="fill-7"></div>
+                  </div>
+                  <div class="inside-circle"> {{CSEAquariumA100P}}% </div>
+                  </div>
+              </div>       
               </div>
             </div>
           </div>
@@ -488,7 +613,7 @@
         <div class="feature"><i class="bi bi-bar-chart-fill"></i></div>
           <h2 class="Weekly_Statistics fs-4 fw-bold">Weekly Statistics</h2>            
           <div class="row gx-lg-5 justify-content-center">
-          <div class="wrapper reveal right" style="margin-top: 0em;">
+          <div class="wrapper" style="margin-top: 0em;">
             <header>Harman Science Library</header>
             <input type="radio" name="slider" checked id="top_floor_main_room">
             <input type="radio" name="slider" id="top_floot_quiet_room">
@@ -501,15 +626,9 @@
             </nav>
             <section>
               <div class="content content-1">
-
-
-
-                <div id="carouselExampleControls" class="carousel slide" data-bs-interval="false">
-              
+                <div id="carouselExampleControls1" class="carousel slide" style="max-width: 600px; align-self: center;" data-bs-interval="false">
                   <div class="carousel-inner">
                     <div class="carousel-item active" data-bs-interval="false">
-
-
                       <div class="vstack gap-2 col-md-5 mx-auto">
                       <canvas id="myChart1" style="width:100%; height: 200px; width: 300px;"></canvas>
                       <script>
@@ -534,7 +653,6 @@
                           }
                         });
                         </script>
-
                       </div>
                     </div>
                     <div class="carousel-item" data-bs-interval="false">
@@ -563,10 +681,6 @@
                         });
                         </script>
                         </div>
-
-
-
-
                     </div>
                     <div class="carousel-item" data-bs-interval="false">
                       <div class="vstack gap-2 col-md-5 mx-auto">
@@ -593,11 +707,8 @@
                             }
                           });
                           </script>
-
-
                       </div>
                       </div>
-
                       <div class="carousel-item" data-bs-interval="false">
                         <div class="vstack gap-2 col-md-5 mx-auto">
                           <canvas id="myChart4" style="width:100%; height: 200px; width: 300px;"></canvas>
@@ -623,12 +734,8 @@
                               }
                             });
                             </script>
-
-
                         </div>
                         </div>
-
-
                         <div class="carousel-item" data-bs-interval="false">
                           <div class="vstack gap-2 col-md-5 mx-auto">
                             <canvas id="myChart5" style="width:100%; height: 200px; width: 300px;"></canvas>
@@ -654,25 +761,18 @@
                                 }
                               });
                               </script>
-
-
                           </div>
                           </div>
-
-
-
                   </div>
-                  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls1" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
                   </button>
-                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls1" data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                   </button>
-                </div>
-                
-
+              </div>
               </div>
               <div class="content content-2">
                 <div>This is a Blog content</div>

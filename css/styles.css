@@ -24361,24 +24361,25 @@ textarea.form-control-lg {
   display: block;
   height: 100%;
   width: 100%;
+  max-width: 250px;
   text-align: center;
   line-height: 50px;
   cursor: pointer;
   position: relative;
   z-index: 1;
-  color: #17a2b8;
+  color: black;
   font-size: 17px;
   border-radius: 5px;
   margin: 0 5px;
   transition: all 0.3s ease;
 }
 .wrapper nav label:hover{
-  background: grey;
+  background: #8eb7df76;
 }
 #top_floor_main_room:checked ~ nav label.top_floor_main_room,
 #top_floot_quiet_room:checked ~ nav label.top_floot_quiet_room,
 #lower_floor_main_room:checked ~ nav label.lower_floor_main_room{
-  color: #fff;
+  color: white;
 }
 nav label i{
   padding-right: 7px;
@@ -24386,23 +24387,24 @@ nav label i{
 nav .slider{
   position: absolute;
   height: 100%;
-  width: 35%;
+  width: 33%;
   left: 0;
   bottom: 0;
   z-index: 0;
   border-radius: 5px;
-  background: #17a2b8;
+  background: #8eb6df;
   transition: all 0.3s ease;
 }
 input[type="radio"]{
   display: none;
 }
-#blotop_floor_main_roomg:checked ~ nav .slider{
+#top_floot_quiet_room:checked ~ nav .slider{
   left: 33%;
 }
-#top_floot_quiet_room:checked ~ nav .slider{
-  left: 30%;
+#lower_floor_main_room:checked ~ nav .slider{
+  left: 67%;
 }
+
 
 section .content{
   display: none;
@@ -24412,8 +24414,14 @@ section .content{
 #top_floot_quiet_room:checked ~ section .content-2,
 #lower_floor_main_room:checked ~ section .content-3 {
   display: block;
+  text-align: center;
+align-items: center;
+justify-items: center;
 }
 
 section .content p{
-text-align: justify;
+text-align: center;
+align-items: center;
+justify-items: center;
+align-self: center;
 }
