@@ -133,7 +133,8 @@ def file_to_string_html(html: str, encoder: str=HEBREW_ENCODING, current_state: 
             for d in reader: current_state_dicts.append(d)
     except IOError:
         logger.error(f"An I/O error has occurred when writing to {current_state}.")
-    # Read load_stats.csv DB:
+    
+    # Read load stats DB:
     load_stats_dicts = []
     try:
         with open(stats, 'r', newline='') as ls:
@@ -142,29 +143,22 @@ def file_to_string_html(html: str, encoder: str=HEBREW_ENCODING, current_state: 
     except IOError:
         logger.error(f"An I/O error has occurred when writing to {stats}.")
     
-    # rows = []
-    # try:
-    #     with open(current_state, 'r', newline='') as db:
-    #         reader = csv.reader(db)
-    #         for row in reader: rows.append(row)
-    # except IOError:
-    #     logger.error(f"An I/O error has occurred when opening {current_state}.")
-    
-    # Read webpage file Html:
+    # Read webpage file HTML:
     try:
         with open(html, 'r', encoding=encoder) as f:
             buffer = f.read()
             tm = Template(buffer)
 
-            # Substitute parameters according to the current_state csv
+            # Create a new dict in which each item is {Location: *Ratio between current amount and max amount*}
+            ratio_dict = {}
             for d in current_state_dicts:
-                if d["Location"] == "Harman Science Library - Floor 2 (Loud)":
-                    harman_top_dict = d
-            sub = str(tm.render(parm_1=str(int(int(rows[4][1]) / int(rows[4][2]) * 100)),
-                                    herman_top=str(int(int(rows[4][1]) / int(rows[4][2]) * 180)),
-                                    parm_2 = str(int(int(rows[5][1]) / int(rows[5][2]) * 100)),
-                                    herman_top_quiet= str(int(int(rows[5][1]) / int(rows[5][2])*180))
-                                    )
+                ratio_dict[d['Location']] = int(d['Current Amount']) / int(d['Max Amount'])
+            
+            sub = str(tm.render(parm_1=str(int(ratio_dict["Harman Science Library - Floor 2 (Loud)"] * 100)),
+                                herman_top=str(int(ratio_dict["Harman Science Library - Floor 2 (Loud)"] * 180)),
+                                parm_2 = str(int(ratio_dict["Harman Science Library - Floor 2 (Quiet)"] * 100)),
+                                herman_top_quiet= str(int(ratio_dict["Harman Science Library - Floor 2 (Quiet)"] * 180))
+                                )
                     )
             return sub.encode(encoder)
     except IOError:
