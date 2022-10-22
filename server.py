@@ -3,7 +3,7 @@ import csv
 from ast import literal_eval
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from os.path import splitext
-from typing import Dict
+from typing import Dict, List
 from jinja2 import Template
 
 ALLOWED_HOSTS = "127.0.0.1"
@@ -38,8 +38,7 @@ CURRENT_STATE_DEFAULTS = [  "CSE Aquarium C100,0,90",
                             "Harman Science Library - Floor 2 (Loud),50,100",
                             "Harman Science Library - Floor 2 (Quiet),50,50",
                             "Harman Science Library - Floor -1,0,150",
-                            "Einstein Institute Math Library,0,50",
-                            
+                            "Einstein Institute Math Library,0,50",           
                         ]
 CURRENT_STATE_FIELDS = [    "Location",
                             "Current Amount",
@@ -98,7 +97,7 @@ class hujilib_http(BaseHTTPRequestHandler):
         # Update transmission log:
         data_dict = literal_eval(str(post_data)[2:-1])
         logger.info("Sensor " + str(data_dict['S.N.']) + " has transmitted.")
-        insert_to_csv(TRANSMISSION_LOG_DB, data_dict, logger)
+        insert_to_csv(TRANSMISSION_LOG_DB, data_dict, TRANSMISSION_FIELDS, logger)
 
         # Update current state data:
         update_current_state(data_dict, logger)
@@ -173,15 +172,16 @@ def create_csv(filename: str, headers: str, logger: logging.Logger) -> None:
     except IOError:
         logger.error(f"An I/O error has occurred when writing to {filename}.")
 
-def insert_to_csv(filename: str, data_dict: Dict, logger: logging.Logger) -> None:
-    """ Recieves the filename of a csv file, a dictionary and
-        a logger, and appends the corresponding values of the 
-        csv fields in a new row in the csv file.
+def insert_to_csv(filename: str, data_dict: Dict, fields: List[str], logger: logging.Logger) -> None:
+    """ Recieves the filename of a csv file, a dictionary, a 
+        list of fields and a logger, and appends the 
+        corresponding values of the csv fields in a new row 
+        in the csv file.
         Writes to the logger if an error has occurred.
         """
     try:
         with open(filename, 'a', newline='') as db:
-            writer = csv.DictWriter(db, fieldnames=TRANSMISSION_FIELDS)
+            writer = csv.DictWriter(db, fieldnames=fields)
             writer.writerow(data_dict)
     except IOError:
         logger.error(f"An I/O error has occurred when writing to {filename}.")
@@ -209,50 +209,76 @@ def update_current_state(data_dict: Dict, logger: logging.Logger, filename: str=
             found = True
             break
 
-    # If the new location wasn't found in the DB, notify error and stop running this function:  
-    if not found:
-        logger.error(f"Current state DB could not be updated according to sensor {data_dict['S.N.']}'s data, because the location name {data_dict['Location']} could not be found in {filename}.")
-    
-    # Else, rewrite the DB:
-    else:
-        create_csv(CURRENT_STATE_DB, CURRENT_STATE_FIELDS, logger)
-        try:
-            with open(filename, 'a', newline='') as db:
-                writer = csv.DictWriter(db, fieldnames=CURRENT_STATE_FIELDS)
-                for location_dict in current_state_dicts:  
-                    writer.writerow(location_dict)
-            logger.info(f"Current state DB was updated according to sensor {data_dict['S.N.']}'s data.")
+    # Rewrite the DB if the new location was found:
+    if found:
+        create_csv(filename, CURRENT_STATE_FIELDS, logger)
+        for d in current_state_dicts:
+            insert_to_csv(filename, d, CURRENT_STATE_FIELDS, logger)
+        # try:
+        #     with open(filename, 'a', newline='') as db:
+        #         writer = csv.DictWriter(db, fieldnames=CURRENT_STATE_FIELDS)
+        #         for location_dict in current_state_dicts:  
+        #             writer.writerow(location_dict)
+        #     logger.info(f"Current state DB was updated according to sensor {data_dict['S.N.']}'s data.")
 
-        except IOError:
-            logger.error(f"An I/O error has occurred when writing to {filename}.")
+        # except IOError:
+        #     logger.error(f"An I/O error has occurred when writing to {filename}.")
+    
+    # Else the new location wasn't found in the DB, notify error and stop running this function:  
+    else:
+        logger.error(f"Current state DB could not be updated according to sensor {data_dict['S.N.']}'s data, because the location name {data_dict['Location']} could not be found in {filename}.")
 
 def update_load_stats(transmission: Dict, logger: logging.Logger, stats: str=LOAD_STATS_DB, current_state: str=CURRENT_STATE_DB) -> None:
-    # Read current state DB:
+    
+    # Find current state of transmission's location:
     try:
         with open(current_state, 'r', newline='') as current_state_db:
             reader = csv.DictReader(current_state_db)
             for d in reader:
                 if d['Location'] == transmission['Location']:
                     current_state_dict = d
+
+        if current_state_dict is None:
+            logger.error(f"The current state values of the location {transmission['Location']} was not found.")
     except IOError:
         logger.error(f"An I/O error has occurred when writing to {current_state}.")
-    
+
+    # Read the load stats DB:
+    load_stats_dicts = []
     try:
-        with open(stats, 'r+', newline='') as stats_db:
-            reader = csv.DictReader(stats_db)
-            for stat_dict in reader: 
+        with open(stats, 'r', newline='') as db:
+            reader = csv.DictReader(db)
+            for d in reader: load_stats_dicts.append(d)
+    except IOError:
+        logger.error(f"An I/O error has occurred when writing to {stats}.")
+
+    # Search for the right dictionary in load stats DB:
+    found = False
+    for stat_dict in load_stats_dicts: 
+                # Search for a row with the same location and weekday, and a matching time interval:
                 if  stat_dict['Location'] == transmission['Location'] and \
                     stat_dict['Weekday'] == transmission['Weekday'] and \
                     int(stat_dict['Start Time'].split(':')[0]) <= int(transmission['Time'].split(':')[0]) and \
                     int(stat_dict['End Time'].split(':')[0]) > int(transmission['Time'].split(':')[0]):
-                    average, n = int(stat_dict['Average']), int(stat_dict['No. of Occurences'])
-                    cur_amount, total_amount = int(current_state_dict['Current Amount']), int(current_state_dict['Max Amount'])
-                    print(f"Current percentage = {(cur_amount / total_amount) * 100} %")
-                    stat_dict['Average'] = str(int((average * n) / (n + 1) + (cur_amount / total_amount) * 100 / (n + 1)))
-                    print(f"Old average: {average}, new average: {stat_dict['Average']}")
+                        
+                        average, n = float(stat_dict['Average']), int(stat_dict['No. of Occurences'])
+                        cur_amount, total_amount = int(current_state_dict['Current Amount']), int(current_state_dict['Max Amount'])
+                        # print(f"Current percentage = {(cur_amount / total_amount) * 100} %")
+                        stat_dict['Average'] = str(round((average * n) / (n + 1) + (cur_amount / total_amount) * 100 / (n + 1), 2))
+                        stat_dict['No. of Occurences'] = str(n + 1)
+                        # print(f"Old average: {average}, new average: {stat_dict['Average']}, occurences: {stat_dict['No. of Occurences']}")
+                        found = True
+                        break
 
-    except IOError:
-        logger.error(f"An I/O error has occurred when writing to {stats}.")
+    # Rewrite load stats DB:
+    if found:
+        create_csv(stats, LOAD_STATS_FIELDS, logger)
+        for d in load_stats_dicts:
+            insert_to_csv(stats, d, LOAD_STATS_FIELDS, logger)
+
+    # Else write an error in the logger:
+    else:
+        logger.error(f"The transmission of sensor {transmission['S.N.']} does not belong to the load stats DB.")
 
 if __name__ == '__main__':
     # Logger setup:

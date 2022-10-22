@@ -34,8 +34,10 @@ if __name__ == "__main__":
         elif t.tm_wday == 6:
             wday = "Sun"
 
-        tstamp = f"{t.tm_mday:02d}/{t.tm_mon:02d}/{t.tm_year} {t.tm_hour:02d}:{t.tm_min:02d}:{t.tm_sec:02d}" # Only on python
-        
+        # Only on python
+        dstamp = f"{t.tm_mday:02d}/{t.tm_mon:02d}/{t.tm_year}"  
+        tstamp = f"{t.tm_hour:02d}:{t.tm_min:02d}"
+
         # # Only on Micropython
         # wday = ""
         # if t[6] == 0:
@@ -52,12 +54,16 @@ if __name__ == "__main__":
         #     wday = "Sat"
         # elif t[6] == 6:
         #     wday = "Sun"
-        # tstamp = f"{t[2]:02d}/{t[1]:02d}/{t[0]}, {t[3]:02d}:{t[4]:02d}:{t[5]:02d}" 
+        # dstamp = f"{t[2]:02d}/{t[1]:02d}/{t[0]}"
+        # tstamp = f"{t[3]:02d}:{t[4]:02d}"
 
-        # Collect data
+        # Collect data:
+        wday = "Tue" # debugging only
+        tstamp = "11:"+tstamp.split(":")[1] # debugging only
         data_dict = {   "S.N.": SENSOR_NO,
                         "Location": LOCATION,
                         "Weekday": wday,
+                        "Date": dstamp,
                         "Time": tstamp,
                         "Entrances": entrances,
                         "Exits": exits}
