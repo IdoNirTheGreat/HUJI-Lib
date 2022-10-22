@@ -18,15 +18,55 @@ if __name__ == "__main__":
 
         # Get time data
         t = localtime()
-        tstamp = f"{t.tm_mday:02d}/{t.tm_mon:02d}/{t.tm_year} {t.tm_hour:02d}:{t.tm_min:02d}:{t.tm_sec:02d}" # Only on python
-        # tstamp = f"{t[2]:02d}/{t[1]:02d}/{t[0]}, {t[3]:02d}:{t[4]:02d}:{t[5]:02d}" # Only on Micropython
+        wday = ""
+        if t.tm_wday == 0:
+            wday = "Mon"
+        elif t.tm_wday == 1:
+            wday = "Tue"
+        elif t.tm_wday == 2:
+            wday = "Wed"
+        elif t.tm_wday == 3:
+            wday = "Thu"
+        elif t.tm_wday == 4:
+            wday = "Fri"
+        elif t.tm_wday == 5:
+            wday = "Sat"
+        elif t.tm_wday == 6:
+            wday = "Sun"
 
-        # Collect data
-        data_dict = {"S.N.": SENSOR_NO,
-                "Location": LOCATION,
-                "Time": tstamp,
-                "Entrances": entrances,
-                "Exits": exits}
+        # Only on python
+        dstamp = f"{t.tm_mday:02d}/{t.tm_mon:02d}/{t.tm_year}"  
+        tstamp = f"{t.tm_hour:02d}:{t.tm_min:02d}"
+
+        # # Only on Micropython
+        # wday = ""
+        # if t[6] == 0:
+        #     wday = "Mon"
+        # elif t[6] == 1:
+        #     wday = "Tue"
+        # elif t[6] == 2:
+        #     wday = "Wed"
+        # elif t[6] == 3:
+        #     wday = "Thu"
+        # elif t[6] == 4:
+        #     wday = "Fri"
+        # elif t[6] == 5:
+        #     wday = "Sat"
+        # elif t[6] == 6:
+        #     wday = "Sun"
+        # dstamp = f"{t[2]:02d}/{t[1]:02d}/{t[0]}"
+        # tstamp = f"{t[3]:02d}:{t[4]:02d}"
+
+        # Collect data:
+        wday = "Tue" # debugging only
+        tstamp = "11:"+tstamp.split(":")[1] # debugging only
+        data_dict = {   "S.N.": SENSOR_NO,
+                        "Location": LOCATION,
+                        "Weekday": wday,
+                        "Date": dstamp,
+                        "Time": tstamp,
+                        "Entrances": entrances,
+                        "Exits": exits}
         print(data_dict)
 
         # Send data
