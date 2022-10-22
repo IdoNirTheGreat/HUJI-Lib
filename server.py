@@ -117,7 +117,7 @@ def file_to_string(filename: str, encoder: str=HEBREW_ENCODING) -> bytes:
     except IOError:
         logger.error(f"An I/O error has occurred when opening {filename}.")
 
-def file_to_string_html(html: str, encoder: str=HEBREW_ENCODING, current_state: str=CURRENT_STATE_DB) -> bytes:
+def file_to_string_html(html: str, encoder: str=HEBREW_ENCODING, current_state: str=CURRENT_STATE_DB, stats: str=LOAD_STATS_DB) -> bytes:
     """ Recieves the filenames of the webpage's HTML, the 
         current state csv file and an encoder, build the html
         according to the current state in the studyrooms, and
@@ -126,13 +126,29 @@ def file_to_string_html(html: str, encoder: str=HEBREW_ENCODING, current_state: 
         Writes to the logger if an error has occurred."""
     
     # Read current state DB:
-    rows = []
+    current_state_dicts = []
     try:
-        with open(current_state, 'r', newline='') as db:
-            reader = csv.reader(db)
-            for row in reader: rows.append(row)
+        with open(current_state, 'r', newline='') as cs:
+            reader = csv.DictReader(cs)
+            for d in reader: current_state_dicts.append(d)
     except IOError:
-        logger.error(f"An I/O error has occurred when opening {current_state}.")
+        logger.error(f"An I/O error has occurred when writing to {current_state}.")
+    # Read load_stats.csv DB:
+    load_stats_dicts = []
+    try:
+        with open(stats, 'r', newline='') as ls:
+            reader = csv.DictReader(ls)
+            for d in reader: load_stats_dicts.append(d)
+    except IOError:
+        logger.error(f"An I/O error has occurred when writing to {stats}.")
+    
+    # rows = []
+    # try:
+    #     with open(current_state, 'r', newline='') as db:
+    #         reader = csv.reader(db)
+    #         for row in reader: rows.append(row)
+    # except IOError:
+    #     logger.error(f"An I/O error has occurred when opening {current_state}.")
     
     # Read webpage file Html:
     try:
@@ -141,7 +157,10 @@ def file_to_string_html(html: str, encoder: str=HEBREW_ENCODING, current_state: 
             tm = Template(buffer)
 
             # Substitute parameters according to the current_state csv
-            sub = str(  tm.render(  parm_1=str(int(int(rows[4][1]) / int(rows[4][2]) * 100)),
+            for d in current_state_dicts:
+                if d["Location"] == "Harman Science Library - Floor 2 (Loud)":
+                    harman_top_dict = d
+            sub = str(tm.render(parm_1=str(int(int(rows[4][1]) / int(rows[4][2]) * 100)),
                                     herman_top=str(int(int(rows[4][1]) / int(rows[4][2]) * 180)),
                                     parm_2 = str(int(int(rows[5][1]) / int(rows[5][2]) * 100)),
                                     herman_top_quiet= str(int(int(rows[5][1]) / int(rows[5][2])*180))
