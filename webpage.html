@@ -67,12 +67,12 @@
       .mask.full-1,
       .circle .fill-1 {
         animation: fill-1 ease-in-out 3s;
-        transform: rotate({{HarmanScienceLibraryFloor2LoudD}}deg);
+        transform: rotate({{herman_top}}deg);
       }
 
       @keyframes fill-1{
         0% {transform: rotate(0deg);}
-        100% {transform: rotate({{HarmanScienceLibraryFloor2LoudD}}deg)}
+        100% {transform: rotate({{herman_top}}deg)}
       }
 
       /* herman top floor, quiet room */  
@@ -84,7 +84,7 @@
       .mask.full-2,
       .circle .fill-2 {
         animation: fill-2 ease-in-out 3s;
-        transform: rotate({{HarmanScienceLibraryFloor2QuietD}}deg);
+        transform: rotate({{herman_top_quiet}}deg);
       }
 
       @keyframes fill-2{
@@ -92,7 +92,7 @@
           transform: rotate(0deg);
         }
         100% {
-          transform: rotate({{HarmanScienceLibraryFloor2QuietD}}deg);
+          transform: rotate({{herman_top_quiet}}deg);
         }
       }
 
@@ -407,7 +407,7 @@
                   <div class="mask half">
                       <div class="fill-1"></div>
                   </div>
-                  <div class="inside-circle"> {{HarmanScienceLibraryFloor2LoudP}}% </div>
+                  <div class="inside-circle"> {{parm_1}}% </div>
                   </div>
               </div> 
             </div>
@@ -435,7 +435,7 @@
                   <div class="mask half">
                       <div class="fill-2"></div>
                   </div>
-                  <div class="inside-circle"> {{HarmanScienceLibraryFloor2QuietP}}% </div>
+                  <div class="inside-circle"> {{parm_2}}% </div>
                   </div>
                 </div> 
               </div>

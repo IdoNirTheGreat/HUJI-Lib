@@ -153,7 +153,14 @@ def file_to_string_html(html: str, encoder: str=HEBREW_ENCODING, current_state: 
             for d in current_state_dicts:
                 ratio_dict[d['Location']] = int(d['Current Amount']) / int(d['Max Amount'])
             
-            sub = str(tm.render(HarmanScienceLibraryFloor2LoudP = str(int(ratio_dict["Harman Science Library - Floor 2 (Loud)"] * 100)),
+            sub = str(tm.render(parm_1=str(int(ratio_dict["Harman Science Library - Floor 2 (Loud)"] * 100)),
+                                herman_top=str(int(ratio_dict["Harman Science Library - Floor 2 (Loud)"] * 180)),
+                                parm_2 = str(int(ratio_dict["Harman Science Library - Floor 2 (Quiet)"] * 100)),
+                                herman_top_quiet= str(int(ratio_dict["Harman Science Library - Floor 2 (Quiet)"] * 180))
+                                )
+                    )
+
+            """sub = str(tm.render(HarmanScienceLibraryFloor2LoudP = str(int(ratio_dict["Harman Science Library - Floor 2 (Loud)"] * 100)),
                                 HarmanScienceLibraryFloor2LoudD = str(int(ratio_dict["Harman Science Library - Floor 2 (Loud)"] * 180)),
                                 HarmanScienceLibraryFloor2QuietP = str(int(ratio_dict["Harman Science Library - Floor 2 (Quiet)"] * 100)),
                                 HarmanScienceLibraryFloor2QuietD = str(int(ratio_dict["Harman Science Library - Floor 2 (Quiet)"] * 180)),
@@ -168,7 +175,7 @@ def file_to_string_html(html: str, encoder: str=HEBREW_ENCODING, current_state: 
                                 EinsteinInstituteMathLibraryP = str(int(ratio_dict["Einstein Institute Math Library"] * 100)),
                                 EinsteinInstituteMathLibraryD = str(int(ratio_dict["Einstein Institute Math Library"] * 180)),
                                 )
-                    )
+                    )"""
             return sub.encode(encoder)
     except IOError:
         logger.error(f"An I/O error has occurred when opening {html}.")
