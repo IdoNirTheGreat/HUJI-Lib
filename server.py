@@ -229,7 +229,12 @@ def update_current_state(data_dict: Dict, logger: logging.Logger, filename: str=
         logger.error(f"Current state DB could not be updated according to sensor {data_dict['S.N.']}'s data, because the location name {data_dict['Location']} could not be found in {filename}.")
 
 def update_load_stats(transmission: Dict, logger: logging.Logger, stats: str=LOAD_STATS_DB, current_state: str=CURRENT_STATE_DB) -> None:
-    
+    """ Recieves the sensor's transmission, the server's 
+        logger, the load stats DB filename and the current
+        state DB filename and updates the load average of the
+        location and corresponding time interval mentioned in
+        the transmission.
+    """
     # Find current state of transmission's location:
     try:
         with open(current_state, 'r', newline='') as current_state_db:
