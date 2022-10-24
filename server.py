@@ -31,13 +31,13 @@ TRANSMISSION_FIELDS = [ "S.N.",
                         "Entrances",
                         "Exits",
                     ]
-CURRENT_STATE_DEFAULTS = [  "CSE Aquarium C100,0,90",
-                            "CSE Aquarium B100,0,55",
-                            "CSE Aquarium A100,0,55",
+CURRENT_STATE_DEFAULTS = [  "CSE Aquarium C100,50,90",
+                            "CSE Aquarium B100,15,55",
+                            "CSE Aquarium A100,3,55",
                             "Harman Science Library - Floor 2 (Loud),50,100",
                             "Harman Science Library - Floor 2 (Quiet),50,50",
-                            "Harman Science Library - Floor -1,0,150",
-                            "Einstein Institute Math Library,0,50",           
+                            "Harman Science Library - Floor -1,34,150",
+                            "Einstein Institute Math Library,34,50",           
                         ]
 CURRENT_STATE_FIELDS = [    "Location",
                             "Current Amount",
@@ -152,15 +152,7 @@ def file_to_string_html(html: str, encoder: str=HEBREW_ENCODING, current_state: 
             ratio_dict = {}
             for d in current_state_dicts:
                 ratio_dict[d['Location']] = int(d['Current Amount']) / int(d['Max Amount'])
-            
-            sub = str(tm.render(parm_1=str(int(ratio_dict["Harman Science Library - Floor 2 (Loud)"] * 100)),
-                                herman_top=str(int(ratio_dict["Harman Science Library - Floor 2 (Loud)"] * 180)),
-                                parm_2 = str(int(ratio_dict["Harman Science Library - Floor 2 (Quiet)"] * 100)),
-                                herman_top_quiet= str(int(ratio_dict["Harman Science Library - Floor 2 (Quiet)"] * 180))
-                                )
-                    )
-
-            """sub = str(tm.render(HarmanScienceLibraryFloor2LoudP = str(int(ratio_dict["Harman Science Library - Floor 2 (Loud)"] * 100)),
+            sub = str(tm.render(HarmanScienceLibraryFloor2LoudP = str(int(ratio_dict["Harman Science Library - Floor 2 (Loud)"] * 100)),
                                 HarmanScienceLibraryFloor2LoudD = str(int(ratio_dict["Harman Science Library - Floor 2 (Loud)"] * 180)),
                                 HarmanScienceLibraryFloor2QuietP = str(int(ratio_dict["Harman Science Library - Floor 2 (Quiet)"] * 100)),
                                 HarmanScienceLibraryFloor2QuietD = str(int(ratio_dict["Harman Science Library - Floor 2 (Quiet)"] * 180)),
@@ -175,7 +167,7 @@ def file_to_string_html(html: str, encoder: str=HEBREW_ENCODING, current_state: 
                                 EinsteinInstituteMathLibraryP = str(int(ratio_dict["Einstein Institute Math Library"] * 100)),
                                 EinsteinInstituteMathLibraryD = str(int(ratio_dict["Einstein Institute Math Library"] * 180)),
                                 )
-                    )"""
+                    )
             return sub.encode(encoder)
     except IOError:
         logger.error(f"An I/O error has occurred when opening {html}.")
