@@ -4681,7 +4681,16 @@ textarea.form-control-lg {
   .accordion-button {
     transition: none;
     text-align: center;
-
+  }
+}
+@media only screen and (max-width: 600px){
+  .accordion-item {
+    position: relative;}
+  .accordion-button {
+    max-width: 60vw;
+    position: absolute;
+    top: 50%;
+    left: 18%;
   }
 }
 .accordion-button:not(.collapsed) {
@@ -16870,7 +16879,6 @@ textarea.form-control-lg {
   width: 1.25rem;
   height: 1.25rem;
   text-align: center;
-
   margin-left: auto;
   content: "";
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
@@ -24353,7 +24361,7 @@ textarea.form-control-lg {
 .wrapper nav{
   position: relative;
   width: 100%;
-  height: 50px;
+  height: 100%;
   display: flex;
   align-items: center;
 }
@@ -24361,7 +24369,6 @@ textarea.form-control-lg {
   display: block;
   height: 100%;
   width: 100%;
-  max-width: 250px;
   text-align: center;
   line-height: 50px;
   cursor: pointer;
@@ -24378,9 +24385,11 @@ textarea.form-control-lg {
 }
 #top_floor_main_room:checked ~ nav label.top_floor_main_room,
 #top_floot_quiet_room:checked ~ nav label.top_floot_quiet_room,
-#lower_floor_main_room:checked ~ nav label.lower_floor_main_room{
+#lower_floor_main_room:checked ~ nav label.lower_floor_main_room
+{
   color: white;
 }
+
 nav label i{
   padding-right: 7px;
 }
@@ -24405,14 +24414,14 @@ input[type="radio"]{
   left: 67%;
 }
 
-
 section .content{
   display: none;
   background: transparent;
 }
 #top_floor_main_room:checked ~ section .content-1,
 #top_floot_quiet_room:checked ~ section .content-2,
-#lower_floor_main_room:checked ~ section .content-3 {
+#lower_floor_main_room:checked ~ section .content-3
+ {
   display: block;
   text-align: center;
 align-items: center;
@@ -24424,4 +24433,138 @@ text-align: center;
 align-items: center;
 justify-items: center;
 align-self: center;
+}
+
+
+
+
+
+
+
+.wrapper1{
+  width: 800px;
+  height: 100%;
+  margin: 200px auto;
+  padding: 25px 30px 30px 30px;
+  border-radius: 5px;
+  background:rgb(201, 200, 200);
+  align-items: center;
+  box-shadow: 0px 10px 15px rgba(0,0,0,0.1);
+}
+.wrapper1 header{
+  font-size: 30px;
+  font-weight: 600;
+  padding-bottom: 20px;
+}
+.wrapper1 nav{
+  position: relative;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+.wrapper1 nav label{
+  display: block;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  line-height: 50px;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  color: black;
+  font-size: 17px;
+  border-radius: 5px;
+  margin: 0 5px;
+  transition: all 0.3s ease;
+}
+.wrapper1 nav label:hover{
+  background: #8eb7df76;
+}
+
+#A100:checked ~ nav label.A100,
+#B100 ~ nav label.B100,
+#C100:checked ~ nav label.C100
+{
+  color: white;
+}
+
+nav .slider1{
+  position: absolute;
+  height: 100%;
+  width: 33%;
+  left: 0;
+  bottom: 0;
+  z-index: 0;
+  border-radius: 5px;
+  background: #8eb6df;
+  transition: all 0.3s ease;
+}
+
+#B100:checked ~ nav .slider1{
+  left: 33%;
+}
+#C100:checked ~ nav .slider1{
+  left: 67%;
+}
+
+
+#A100:checked ~ section .content-4,
+#B100:checked ~ section .content-5,
+#C100:checked ~ section .content-6{display: block;
+  text-align: center;
+align-items: center;
+justify-items: center;}
+
+
+
+
+@media only screen and (max-width: 600px){
+  .accordion-body{position: relative;}
+  .card {
+    max-width: 60vw;
+    position: absolute;
+    left: 18%;
+  }
+}
+
+
+@media only screen and (max-width: 600px) {
+  .wrapper nav label {
+    font-size: 12px;
+    line-height: 20px;
+  }
+.wrapper1 nav label{
+  font-size: 12px;
+}
+.table{
+  position: relative;
+}
+.mapouter{
+  position: absolute;
+}
+}
+
+table {
+  align-self: flex-start;
+  width: 70vw;
+  margin: 20px auto;
+  table-layout: auto;
+}
+
+.fixed {
+  table-layout: fixed;
+}
+
+table,
+td,
+th {
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: center;
+  position: relative;
 }
