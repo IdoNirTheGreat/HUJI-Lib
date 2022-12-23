@@ -6,7 +6,7 @@ from os.path import splitext
 from typing import Dict, List
 from jinja2 import Template
 
-HOST = "127.0.0.1"
+HOST = "192.168.1.215"
 PORT = 80
 MAX_CONNECTIONS = 5
 REQ_SIZE = 1024
@@ -147,22 +147,15 @@ def file_to_string_html(html: str, encoder: str=HEBREW_ENCODING, current_state: 
     except IOError:
         logger.error(f"An I/O error has occurred when writing to {stats}.")
 
+    # Read load stats DB:
+    load_stats_dicts = []
+    try:
+        with open(stats, 'r', newline='') as ls:
+            reader = csv.DictReader(ls)
+            for d in reader: load_stats_dicts.append(d)
+    except IOError:
+        logger.error(f"An I/O error has occurred when writing to {stats}.")
     
-    # Created a little automation here to write code easier:
-
-    # # Read load stats DB:
-    # load_stats_dicts = []
-    # try:
-    #     with open(stats, 'r', newline='') as ls:
-    #         reader = csv.DictReader(ls)
-    #         for d in reader: load_stats_dicts.append(d)
-    # except IOError:
-    #     logger.error(f"An I/O error has occurred when writing to {stats}.")
-    
-    with open('text.txt',"w") as f:
-        for key in load_averages.keys():
-            f.write(f"{key} = str(load_averages['{key}']),\n")
-
     # Read webpage file HTML:
     try:
         with open(html, 'r', encoding=encoder) as f:
