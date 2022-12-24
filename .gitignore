@@ -1,5 +1,2 @@
-test_server.*
 server.log
-transmission_log.csv
-current_state.csv
-load_stats.csv
+*.csv
