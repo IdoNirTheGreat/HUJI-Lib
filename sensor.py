@@ -2,28 +2,27 @@ import network
 from urequests import post
 from time import sleep, localtime, time
 from machine import Pin
+from threading import Thread
 
 SERVER_ADDR = "192.168.1.215"
 PORT = 80
 SENSOR_NO = 1
 LOCATION = "Harman Science Library - Floor 2 (Quiet)"
 TRNSMT_INTERVAL = 30
-WIFI_SSID = "Nir 2"
-WIFI_PD = "Pn0547436227"
+WIFI_SSID = "Noam"
+WIFI_PD = "0527904190"
 LAN_TIMEOUT = 15 # In seconds
 MOTION_ON = 0
 MOTION_OFF = 1
 MOTION_TIMEOUT = 1 # The timout duration to cancel an entrance or exit if only one sensor was activated.
 
 # Components' Declaration:
-led_lan_conn = Pin(13, Pin.OUT) # Lights if successfully connected to LAN, blinks if trying to connect, off if isn"t connected.
-blue = Pin(12, Pin.OUT)
-led_server_success = Pin(14, Pin.OUT) # Successfully connected to server.
-led_server_failure = Pin(27, Pin.OUT) # Failed connecting to server.
-# thermo = Pin(2, Pin.IN)
-# sound = Pin(4, Pin.IN)
-pe_sensor_L = Pin(2, Pin.IN)
-pe_sensor_R = Pin(4, Pin.IN)
+led_motion = Pin(23, Pin.OUT) # Blue: Activated when detected motion.
+led_lan_conn = Pin(22, Pin.OUT) # Yellow: Lights if successfully connected to LAN, blinks if trying to connect, off if isn't connected.
+led_server_success = Pin(21, Pin.OUT) # Green: Successfully connected to server.
+led_server_failure = Pin(19, Pin.OUT) # Red: Failed connecting to server.
+pe_sensor_L = Pin(13, Pin.IN)
+pe_sensor_R = Pin(12, Pin.IN)
 
 def check_enter(sensor_L, sensor_R, previous_L, previous_R):
     if sensor_R.value() != previous_R and sensor_R.value() == MOTION_ON:
@@ -79,7 +78,38 @@ if __name__ == '__main__':
     data_dict["Location"] = LOCATION
     entrances, exits = 0, 0
     pe_previous_R, pe_previous_L = MOTION_OFF, MOTION_OFF
-    
+
+    # Measure entrances and exits:
+    def measure_movement():
+        start_msrmnt = time()
+        print(f"Started Measurement at {start_msrmnt}.")
+        while time() - start_msrmnt <= TRNSMT_INTERVAL:
+            # print(pe_sensor_L.value(), pe_sensor_R.value())
+            entrances += check_enter(pe_sensor_L, pe_sensor_R, pe_previous_L, pe_previous_R)
+            exits += check_exit(pe_sensor_L, pe_sensor_R, pe_previous_L, pe_previous_R)
+            pe_previous_L = pe_sensor_L.value()
+            pe_previous_R = pe_sensor_R.value()
+        print("Ended Measurement.")
+
+    # Transmit to server
+    def transmit():
+        # Send data to server:
+        print("Sending to server:")
+        try:
+            post("http://"+SERVER_ADDR, data=str(data_dict))
+            print("Sent successfully.")
+            led_server_success.value(1)          
+
+        except Exception as e:
+            # Connection Failed:
+            print("Connection failed.")
+            print("Exception raised: "+str(e))
+            led_server_failure.value(1)
+
+    # Create threads:
+    t_trsmt = Thread(target=transmit)
+    t_measure = Thread(target=measure_movement)
+
     # Main measuring loop:
     while(True):              
         # Get timestamp:
@@ -107,33 +137,16 @@ if __name__ == '__main__':
         data_dict["Date"] = dstamp
         data_dict["Time"] = tstamp
 
-        # Measure entrances and exits:
-        start_msrmnt = time()
-        print(f"Started Measurement at {start_msrmnt}.")
-        while time() - start_msrmnt <= TRNSMT_INTERVAL:
-            # print(pe_sensor_L.value(), pe_sensor_R.value())
-            entrances += check_enter(pe_sensor_L, pe_sensor_R, pe_previous_L, pe_previous_R)
-            exits += check_exit(pe_sensor_L, pe_sensor_R, pe_previous_L, pe_previous_R)
-            pe_previous_L = pe_sensor_L.value()
-            pe_previous_R = pe_sensor_R.value()
-        print("Ended Measurement.")
+        t_measure.start()
+        t_trsmt.start()
 
+        t_measure.join()
+        t_trsmt.join()
         data_dict["Entrances"] = entrances
         data_dict["Exits"] = exits
         
         print(data_dict)
 
-        # Send data to server:
-        print("Sending to server:")
-        try:
-            post("http://"+SERVER_ADDR, data=str(data_dict))
-            print("Sent successfully.")
-            led_server_success.value(1)          
-
-        except Exception as e:
-            # Connection Failed:
-            print("Connection failed.")
-            print("Exception raised: "+str(e))
-            led_server_failure.value(1)
+       
 
         print("Finished Iteration.\n\n")
