@@ -2,6 +2,8 @@ import network
 from urequests import post
 from time import sleep, localtime, time
 from machine import Pin
+from sys import exit
+import _thread
 
 SERVER_ADDR = "10.0.0.10"
 PORT = 80
@@ -34,7 +36,7 @@ def check_enter(sensor_L, sensor_R, previous_L, previous_R):
                 return 1
     return 0
 
-def check_exit(sensor_L, sensor_R, previous_L, previous_R) -> int:
+def check_exit(sensor_L, sensor_R, previous_L, previous_R):
     if sensor_L.value() != previous_L and sensor_L.value() == MOTION_ON:
         print(f"Motion!: sensor_L = {sensor_L.value()}, previous_L = {previous_L}")
         start = time()
@@ -44,6 +46,17 @@ def check_exit(sensor_L, sensor_R, previous_L, previous_R) -> int:
                 print("Exit!")
                 return 1
     return 0
+
+# def write_data(data_dict):
+#     # Write constant data to file:
+#     with open(DATA_FILE, 'w') as f:
+#         f.writelines(   SENSOR_NO + '\n' + 
+#                         LOCATION + '\n' +
+#                         data_dict["Weekday"] = wday
+#         data_dict["Date"] = dstamp
+#         data_dict["Time"] = tstamp
+#                     )
+
 
 if __name__ == '__main__':
     # WiFi Declaration:
@@ -77,7 +90,42 @@ if __name__ == '__main__':
     data_dict["Location"] = LOCATION
     entrances, exits = 0, 0
     pe_previous_R, pe_previous_L = MOTION_OFF, MOTION_OFF
-    
+
+    # Measure entrances and exits:
+    def measure_movement():
+        start_msrmnt = time()
+        print(f"Started Measurement at {start_msrmnt}.")
+        while time() - start_msrmnt <= TRNSMT_INTERVAL:
+            enter_value = check_enter(pe_sensor_L, pe_sensor_R, pe_previous_L, pe_previous_R)
+            exit_value = check_exit(pe_sensor_L, pe_sensor_R, pe_previous_L, pe_previous_R)
+            
+            # Blink motion LED:
+            if enter_value and exit_value: 
+                led_motion.value(1)
+                sleep(0.5)
+                led_motion.value(0)
+
+            entrances += enter_value
+            exits += exit_value
+            pe_previous_L = pe_sensor_L.value()
+            pe_previous_R = pe_sensor_R.value()
+        print("Ended Measurement.")
+
+    # Transmit to server
+    def transmit():
+        # Send data to server:
+        print("Sending to server:")
+        try:
+            post("http://"+SERVER_ADDR, data=str(data_dict))
+            print("Sent successfully.")
+            led_server_success.value(1)          
+
+        except Exception as e:
+            # Connection Failed:
+            print("Connection failed.")
+            print("Exception raised: "+str(e))
+            led_server_failure.value(1)
+
     # Main measuring loop:
     while(True):              
         # Get timestamp:
@@ -104,34 +152,24 @@ if __name__ == '__main__':
         data_dict["Weekday"] = wday
         data_dict["Date"] = dstamp
         data_dict["Time"] = tstamp
-
-        # Measure entrances and exits:
-        start_msrmnt = time()
-        while time() - start_msrmnt <= TRNSMT_INTERVAL:
-            # print(pe_sensor_L.value(), pe_sensor_R.value())
-            entrances += check_enter(pe_sensor_L, pe_sensor_R, pe_previous_L, pe_previous_R)
-            exits += check_exit(pe_sensor_L, pe_sensor_R, pe_previous_L, pe_previous_R)
-            pe_previous_L = pe_sensor_L.value()
-            pe_previous_R = pe_sensor_R.value()
-        print("Ended Measurement.")
-
-        data_dict["Entrances"] = entrances
-        data_dict["Exits"] = exits
         
         print(data_dict)
-
-        # Send data to server:
-        print("Sending to server:")
+        
+        # Main loop - Run independant transmit and measure threads,
+        # then print the sent data.
         try:
-            post("http://"+SERVER_ADDR, data=str(data_dict))
-            print("Sent successfully.")
-            led_server_success.value(1)          
+            _thread.start_new_thread(transmit, [])
+            exit(1)
+            _thread.start_new_thread(measure_movement, [])
+            data_dict["Entrances"] = entrances
+            data_dict["Exits"] = exits
+            print(data_dict)
 
         except Exception as e:
-            # Connection Failed:
-            print("Connection failed.")
-            print("Exception raised: "+str(e))
+            print("There was an error with multithreading: ")
+            print(e)
+            led_server_success.value(0)
             led_server_failure.value(1)
+            exit(-1)
+            
 
-        print("Finished Iteration.\n\n")
-        

@@ -6,7 +6,7 @@ from os.path import splitext
 from typing import Dict, List
 from jinja2 import Template
 
-HOST = "192.168.1.215"
+HOST = "10.0.0.10"
 PORT = 80
 MAX_CONNECTIONS = 5
 REQ_SIZE = 1024
