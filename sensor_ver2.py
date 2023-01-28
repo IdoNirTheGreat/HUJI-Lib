@@ -10,7 +10,7 @@ PORT = 80
 WLAN_SSID = "MWTSOA"
 WLAN_PW = "zmora6599"
 
-# Sensor Constants:
+# Operation Constants:
 SENSOR_NO = 1
 LOCATION = "Harman Science Library - Floor 2 (Quiet)"
 TRNSMT_INTERVAL = 30 # In seconds
@@ -37,10 +37,13 @@ class Sensor:
         self.transmission = {}
         self.transmission["S.N."] = SENSOR_NO
         self.transmission["Location"] = LOCATION
+        self.transmission["Entrances"] = 0
+        self.transmission["Exits"] = 0
         self.update_time()
 
-        # WiFi Attirbutes:
+        # System Attirbutes:
         self.station = network.WLAN(network.STA_IF)
+        self.lock = thread.allocate_lock()
 
         # Component Attributes:
         self.yellow_led = Pin(YELLOW_LED_PIN, Pin.OUT)
@@ -49,7 +52,30 @@ class Sensor:
         self.red_led = Pin(RED_LED_PIN, Pin.OUT)
         self.motion_L = Pin(MOTION_L_PIN, Pin.IN)
         self.motion_R = Pin(MOTION_R_PIN, Pin.IN)
+        self.prev_L = MOTION_OFF
+        self.prev_R = MOTION_OFF
 
+    # Execution Functions:
+
+    def run(self) -> None:
+        self.connect()
+        while True:
+            try:
+                msrmnt_start = time()
+                while time() - msrmnt_start <= TRNSMT_INTERVAL:
+                    self.measure()
+                self.transmit()
+
+            except Exception as e:
+                print(f"An exception was raised: {e}, {e.value}")
+                self.red_led.value(1)
+
+                if e.errno is 104: # Handle ECONNRESET
+                    self.disconnect()
+                    self.connect()
+                
+                if e is KeyboardInterrupt:
+                    self.disconnect()
 
     # Connectibility Functions:
 
@@ -64,7 +90,7 @@ class Sensor:
         try:
             self.station.active(True)
         except Exception as e:
-            print(  f"WiFi station could not be activated.\n"
+            print(  f"\nWiFi station could not be activated.\n"
                     "Exception: {e}")
             return False
 
@@ -121,17 +147,67 @@ class Sensor:
             Lights red LED and returns False else.
         """
 
-        try:
-            post("http://"+SERVER_ADDR, data=str(self.transmission))
-        
-        except Exception as e:
-            print(f"Transmission failed.\n Exception: {e}")
-            self.red_led.value(1)
-            return False
+        self.lock.acquire()
+        self.update_time()
+        response = post("http://"+SERVER_ADDR, data=str(self.transmission))
+        print(str(response))
+        # try:
+            
+        # except Exception as e:
+        #     print(f"Transmission failed.\n Exception: {e}")
+        #     self.red_led.value(1)
+        #     return False
         
         print(f"Transmission sent at {self.transmission['Date']}, {self.transmission['Time']}")
         self.green_led.value(1)
+        self.lock.release()
         return True
+
+    # Motion Detection Functions:
+
+    def check_enter(self) -> int:
+        """
+            Checks if someone entered the room. Returns 1 if 
+            someone entered, 0 if not.
+            Entrance direction is R -> L.
+        """
+        if self.motion_R.value() != self.prev_R and self.motion_R.value() == MOTION_ON:
+            start = time()
+            while time() - start <= MOTION_TIMEOUT:
+                if self.motion_R.value() == MOTION_OFF and self.motion_L.value() == MOTION_ON:
+                    print("Entrance!")
+                    return 1
+        return 0
+
+    def check_exit(self) -> int:
+        """
+            Checks if someone has left the room. Returns 1 if 
+            someone left, 0 if not.
+            Exit direction is L -> R.
+        """
+        if self.motion_L.value() != self.prev_L and self.motion_L.value() == MOTION_ON:
+            start = time()
+            while time() - start <= MOTION_TIMEOUT:
+                if self.motion_L.value() == MOTION_OFF and self.motion_R.value() == MOTION_ON:
+                    print("Exit!")
+                    return 1
+        return 0
+
+    def measure(self) -> None:
+        """
+            Measures entrances and exits. Works for {TRNSMT_INTERVAL}
+            seconds, then updates the 'self.transmission' dictionary's
+            values of entrances and exits.
+        """
+        self.lock.acquire()
+        self.update_time()
+        start = time()
+        while time() - start <= TRNSMT_INTERVAL:
+            self.transmission['Entrances'] += self.check_enter()
+            self.prev_L, self.prev_R = self.motion_L.value(), self.motion_R.value()
+            self.transmission['Exits'] += self.check_exit()
+            self.prev_L, self.prev_R = self.motion_L.value(), self.motion_R.value()
+        self.lock.release()
 
     # Data Proccessing Functions:
 
@@ -157,8 +233,6 @@ class Sensor:
         """
             Update Weekday, date and time in self.transmission.
         """
-        
-        # Get timestamp:
         t = localtime()
         wday = ""
         if t[6] == 0:
@@ -185,7 +259,4 @@ class Sensor:
 
 if __name__ == '__main__':
     sensor = Sensor()
-    sensor.connect()
-    print(sensor)
-    sleep(3)
-    sensor.disconnect()
+    sensor.run()
