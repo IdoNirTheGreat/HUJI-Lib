@@ -2,12 +2,13 @@ import network
 from urequests import post
 from time import sleep, localtime, time
 from machine import Pin
+import _thread as thread
 
-SERVER_ADDR = "10.0.0.10"
+SERVER_ADDR = "127.0.0.1"
 PORT = 80
 SENSOR_NO = 1
 LOCATION = "Harman Science Library - Floor 2 (Quiet)"
-TRNSMT_INTERVAL = 30
+TRNSMT_INTERVAL = 30 # In seconds
 WIFI_SSID = "Noam"
 WIFI_PD = "0527904190"
 LAN_TIMEOUT = 15 # In seconds
@@ -16,12 +17,12 @@ MOTION_OFF = 1
 MOTION_TIMEOUT = 1 # The timout duration to cancel an entrance or exit if only one sensor was activated.
 
 # Components' Declaration:
-led_motion = Pin(23, Pin.OUT) # Blue: Activated when detected motion.
-led_lan_conn = Pin(22, Pin.OUT) # Yellow: Lights if successfully connected to LAN, blinks if trying to connect, off if isn't connected.
+led_lan_conn = Pin(23, Pin.OUT) # Yellow: Lights if successfully connected to LAN, blinks if trying to connect, off if isn't connected.
+led_motion = Pin(22, Pin.OUT) # Blue: Activated when detected motion.
 led_server_success = Pin(21, Pin.OUT) # Green: Successfully connected to server.
 led_server_failure = Pin(19, Pin.OUT) # Red: Failed connecting to server.
-pe_sensor_L = Pin(13, Pin.IN)
-pe_sensor_R = Pin(12, Pin.IN)
+sensor_L = Pin(13, Pin.IN)
+sensor_R = Pin(12, Pin.IN)
 
 def check_enter(sensor_L, sensor_R, previous_L, previous_R):
     if sensor_R.value() != previous_R and sensor_R.value() == MOTION_ON:
@@ -46,26 +47,26 @@ def check_exit(sensor_L, sensor_R, previous_L, previous_R) -> int:
     return 0
 
 if __name__ == '__main__':
-    # WiFi Declaration:
-    station = network.WLAN(network.STA_IF)
-    station.active(True)
-    station.connect(WIFI_SSID, WIFI_PD)
+    # # WiFi Declaration:
+    # station = network.WLAN(network.STA_IF)
+    # station.active(True)
+    # station.connect(WIFI_SSID, WIFI_PD)
 
-    # Connect to LAN:
-    start = time()
-    while not station.isconnected() and not time()-start > LAN_TIMEOUT:
-        if led_lan_conn.value():
-            led_lan_conn.value(0)
-        else:
-            led_lan_conn.value(1)
-        print(f"\r({time()-start}s) Connecting{((time()-start) % 4) * '.'}   ", end='')
-        sleep(.25)
+    # # Connect to LAN:
+    # start = time()
+    # while not station.isconnected() and not time()-start > LAN_TIMEOUT:
+    #     if led_lan_conn.value():
+    #         led_lan_conn.value(0)
+    #     else:
+    #         led_lan_conn.value(1)
+    #     print(f"\r({time()-start}s) Connecting{((time()-start) % 4) * '.'}   ", end='')
+    #     sleep(.25)
 
-    # LAN timeout:
-    if time()-start > LAN_TIMEOUT:
-        station.active(False)
-        print("Disconnected from WiFi.")
-        raise Exception(f"LAN_TIMEOUT_EXCEPTION ({LAN_TIMEOUT}s)")
+    # # LAN timeout:
+    # if time()-start > LAN_TIMEOUT:
+    #     station.active(False)
+    #     print("Disconnected from WiFi.")
+    #     raise Exception(f"LAN_TIMEOUT_EXCEPTION ({LAN_TIMEOUT}s)")
 
     print("\nConnected to WiFi.")
     if not led_lan_conn.value(): # Make LAN LED light solid
@@ -109,10 +110,10 @@ if __name__ == '__main__':
         start_msrmnt = time()
         while time() - start_msrmnt <= TRNSMT_INTERVAL:
             # print(pe_sensor_L.value(), pe_sensor_R.value())
-            entrances += check_enter(pe_sensor_L, pe_sensor_R, pe_previous_L, pe_previous_R)
-            exits += check_exit(pe_sensor_L, pe_sensor_R, pe_previous_L, pe_previous_R)
-            pe_previous_L = pe_sensor_L.value()
-            pe_previous_R = pe_sensor_R.value()
+            entrances += check_enter(sensor_L, sensor_R, pe_previous_L, pe_previous_R)
+            exits += check_exit(sensor_L, sensor_R, pe_previous_L, pe_previous_R)
+            pe_previous_L = sensor_L.value()
+            pe_previous_R = sensor_R.value()
         print("Ended Measurement.")
 
         data_dict["Entrances"] = entrances
