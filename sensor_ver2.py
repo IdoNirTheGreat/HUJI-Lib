@@ -5,15 +5,15 @@ from machine import Pin
 import _thread as thread
 
 # Network Constants:
-SERVER_ADDR = "127.0.0.1"
+SERVER_ADDR = "192.168.1.218"
 PORT = 80
-WLAN_SSID = "MWTSOA"
-WLAN_PW = "zmora6599"
+WLAN_SSID = "Nir"
+WLAN_PW = "Thenirs013"
 
 # Operation Constants:
 SENSOR_NO = 1
 LOCATION = "Harman Science Library - Floor 2 (Quiet)"
-TRNSMT_INTERVAL = 30 # In seconds
+TRNSMT_INTERVAL = 10 # In seconds
 LAN_TIMEOUT = 15 # In seconds
 MOTION_ON = 0
 MOTION_OFF = 1
@@ -27,11 +27,27 @@ RED_LED_PIN = 19 # Red: Failed connecting to server.
 MOTION_L_PIN = 13 # Left motion sensor's pin.
 MOTION_R_PIN = 12 # Right motion sensor's pin.
 
-class Sensor:
-    def __init__(self):
+class ThreadSafeQueue:
+    def __init__(self) -> None:
+        self._queue = []
+        self._lock = thread.allocate_lock()
+
+    def push(self, value):
+        self._lock.acquire()
+        self._queue.append(value)
+        self._lock.release()
+
+    def try_pop(self):
+        self._lock.acquire()
+        value = self._queue.pop() if len(self._queue) else None
+        self._lock.release()
+        return value
+
+class NetworkWorker:
+    def __init__(self, queue: ThreadSafeQueue) -> None:
         """
-            The HUJI-Lib sensor object which houses all possible
-            functions for the sensor to do.
+        HUJI-Lib network sender, sends updates from the
+        sender to the server.
         """
         # Data Attributes:
         self.transmission = {}
@@ -43,39 +59,31 @@ class Sensor:
 
         # System Attirbutes:
         self.station = network.WLAN(network.STA_IF)
-        self.lock = thread.allocate_lock()
+        self.queue = queue
 
         # Component Attributes:
         self.yellow_led = Pin(YELLOW_LED_PIN, Pin.OUT)
-        self.blue_led = Pin(BLUE_LED_PIN, Pin.OUT)
         self.green_led = Pin(GREEN_LED_PIN, Pin.OUT)
         self.red_led = Pin(RED_LED_PIN, Pin.OUT)
-        self.motion_L = Pin(MOTION_L_PIN, Pin.IN)
-        self.motion_R = Pin(MOTION_R_PIN, Pin.IN)
-        self.prev_L = MOTION_OFF
-        self.prev_R = MOTION_OFF
-
-    # Execution Functions:
 
     def run(self) -> None:
-        self.connect()
+        print("HUJI-Lib Sensor has started running...")
+        if not self.station.isconnected():
+            self.connect()
+
         while True:
-            try:
-                msrmnt_start = time()
-                while time() - msrmnt_start <= TRNSMT_INTERVAL:
-                    self.measure()
-                self.transmit()
+            sleep(TRNSMT_INTERVAL)
+            value = self.queue.try_pop()
+            if not value:
+                continue
+            print('popped')
+            entrances, exits = value
+            self.transmission["Entrances"] = entrances
+            self.transmission["Exits"] = exits
+            self.update_time()
+            self.transmit()
 
-            except Exception as e:
-                print(f"An exception was raised: {e}, {e.value}")
-                self.red_led.value(1)
-
-                if e.errno is 104: # Handle ECONNRESET
-                    self.disconnect()
-                    self.connect()
-                
-                if e is KeyboardInterrupt:
-                    self.disconnect()
+        self.disconnect()
 
     # Connectibility Functions:
 
@@ -147,10 +155,14 @@ class Sensor:
             Lights red LED and returns False else.
         """
 
-        self.lock.acquire()
         self.update_time()
-        response = post("http://"+SERVER_ADDR, data=str(self.transmission))
-        print(str(response))
+        try:
+            response = post("http://"+SERVER_ADDR, data=str(self.transmission))
+        except Exception as e:  # TODO" catch a speciifc exception?
+            print(f"Transmission failed.\n Exception: {e}")
+            self.red_led.value(1)
+            return False
+        # print(str(response))
         # try:
             
         # except Exception as e:
@@ -160,56 +172,9 @@ class Sensor:
         
         print(f"Transmission sent at {self.transmission['Date']}, {self.transmission['Time']}")
         self.green_led.value(1)
-        self.lock.release()
         return True
 
-    # Motion Detection Functions:
-
-    def check_enter(self) -> int:
-        """
-            Checks if someone entered the room. Returns 1 if 
-            someone entered, 0 if not.
-            Entrance direction is R -> L.
-        """
-        if self.motion_R.value() != self.prev_R and self.motion_R.value() == MOTION_ON:
-            start = time()
-            while time() - start <= MOTION_TIMEOUT:
-                if self.motion_R.value() == MOTION_OFF and self.motion_L.value() == MOTION_ON:
-                    print("Entrance!")
-                    return 1
-        return 0
-
-    def check_exit(self) -> int:
-        """
-            Checks if someone has left the room. Returns 1 if 
-            someone left, 0 if not.
-            Exit direction is L -> R.
-        """
-        if self.motion_L.value() != self.prev_L and self.motion_L.value() == MOTION_ON:
-            start = time()
-            while time() - start <= MOTION_TIMEOUT:
-                if self.motion_L.value() == MOTION_OFF and self.motion_R.value() == MOTION_ON:
-                    print("Exit!")
-                    return 1
-        return 0
-
-    def measure(self) -> None:
-        """
-            Measures entrances and exits. Works for {TRNSMT_INTERVAL}
-            seconds, then updates the 'self.transmission' dictionary's
-            values of entrances and exits.
-        """
-        self.lock.acquire()
-        self.update_time()
-        start = time()
-        while time() - start <= TRNSMT_INTERVAL:
-            self.transmission['Entrances'] += self.check_enter()
-            self.prev_L, self.prev_R = self.motion_L.value(), self.motion_R.value()
-            self.transmission['Exits'] += self.check_exit()
-            self.prev_L, self.prev_R = self.motion_L.value(), self.motion_R.value()
-        self.lock.release()
-
-    # Data Proccessing Functions:
+        # Data Proccessing Functions:
 
     def __str__(self) -> str:
         """
@@ -257,6 +222,84 @@ class Sensor:
         self.transmission["Date"] = dstamp
         self.transmission["Time"] = tstamp
 
+class Sensor:
+    def __init__(self, queue) -> None:
+        """
+            The HUJI-Lib sensor object which houses all possible
+            functions for the sensor to do.
+        """
+        # Data Attributes:
+        self.entrances = 0
+        self.exits = 0
+
+        # System Attirbutes:
+        self.queue = queue
+
+        # Component Attributes:
+        self.blue_led = Pin(BLUE_LED_PIN, Pin.OUT)
+        self.motion_L = Pin(MOTION_L_PIN, Pin.IN)
+        self.motion_R = Pin(MOTION_R_PIN, Pin.IN)
+        self.prev_L = MOTION_OFF
+        self.prev_R = MOTION_OFF
+
+    # Execution Functions:
+
+    def run(self) -> None:
+        while True:
+            msrmnt_start = time()
+            while time() - msrmnt_start <= TRNSMT_INTERVAL:
+                self.measure()
+            print('pushing')
+            self.queue.push((self.entrances, self.exits))
+
+    # Motion Detection Functions:
+
+    def check_enter(self) -> bool:
+        """
+            Checks if someone entered the room. Returns 1 if 
+            someone entered, 0 if not.
+            Entrance direction is R -> L.
+        """
+        if self.motion_R.value() == MOTION_ON and self.prev_R == MOTION_OFF:
+            start = time()
+            while time() - start <= MOTION_TIMEOUT:
+                l_val, r_val = self.motion_L.value(), self.motion_R.value()
+                if l_val == MOTION_ON:
+                    self.prev_L, self.prev_R = l_val, r_val
+                    print("Entrance!")
+                    return True
+        return False
+
+    def check_exit(self) -> bool:
+        """
+            Checks if someone has left the room. Returns 1 if 
+            someone left, 0 if not.
+            Exit direction is L -> R.
+        """
+        if self.motion_L.value() == MOTION_ON and self.prev_L == MOTION_OFF:
+            start = time()
+            while time() - start <= MOTION_TIMEOUT:
+                l_val, r_val = self.motion_L.value(), self.motion_R.value()
+                if r_val == MOTION_ON:
+                    self.prev_L, self.prev_R = l_val, r_val
+                    print("Exit!")
+                    return True
+        return False
+ 
+    def measure(self) -> None:
+        """
+            Measures entrances and exits. Works for {TRNSMT_INTERVAL}
+            seconds, then updates the 'self.entrances' and `self.exits`.
+        """
+        start = time()
+        while time() - start <= TRNSMT_INTERVAL:
+            self.entrances += 1 if self.check_enter() else 0
+            self.exits += 1 if self.check_exit() else 0
+            self.prev_L, self.prev_R = self.motion_L.value(), self.motion_R.value()
+
 if __name__ == '__main__':
-    sensor = Sensor()
-    sensor.run()
+    queue = ThreadSafeQueue()
+    net = NetworkWorker(queue)
+    sensor = Sensor(queue)
+    thread.start_new_thread(sensor.run, ())
+    thread.start_new_thread(net.run, ())
