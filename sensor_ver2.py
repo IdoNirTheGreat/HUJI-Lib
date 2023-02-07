@@ -76,14 +76,12 @@ class NetworkWorker:
             value = self.queue.try_pop()
             if not value:
                 continue
-            print('popped')
             entrances, exits = value
             self.transmission["Entrances"] = entrances
             self.transmission["Exits"] = exits
             self.update_time()
             self.transmit()
 
-        self.disconnect()
 
     # Connectibility Functions:
 
@@ -162,17 +160,11 @@ class NetworkWorker:
             print(f"Transmission failed.\n Exception: {e}")
             self.red_led.value(1)
             return False
-        # print(str(response))
-        # try:
-            
-        # except Exception as e:
-        #     print(f"Transmission failed.\n Exception: {e}")
-        #     self.red_led.value(1)
-        #     return False
         
         print(f"Transmission sent at {self.transmission['Date']}, {self.transmission['Time']}")
         self.green_led.value(1)
         return True
+
 
         # Data Proccessing Functions:
 
@@ -249,7 +241,6 @@ class Sensor:
             msrmnt_start = time()
             while time() - msrmnt_start <= TRNSMT_INTERVAL:
                 self.measure()
-            print('pushing')
             self.queue.push((self.entrances, self.exits))
 
     # Motion Detection Functions:
