@@ -16,13 +16,13 @@ POST_FAILURE = False
 # Operation Constants:
 _SN_VAL = 1
 _LOC_VAL = "Harman Science Library - Floor 2 (Quiet)"
-TRANSMIT_INTERVAL = 10 # In seconds
-TRANSMIT_TIMEOUT = 3 # In seconds
+TRANSMIT_INTERVAL = 60 # In seconds
+TRANSMIT_TIMEOUT = 5 # In seconds
 LAN_TIMEOUT = 15 # In seconds
 MOTION_ON = 0
 MOTION_OFF = 1
 MOTION_TIMEOUT = 1 # The timout duration to cancel an entrance or exit if only one sensor was activated.
-BLINK_TIME = 0.5 # In seconds
+BLINK_TIME = 0.25 # In seconds
 
 # Component Constants:
 YELLOW_LED_PIN = 23 # Yellow: Lights if successfully connected to LAN, blinks if trying to connect, off if isn't connected.
@@ -121,8 +121,6 @@ class Sensor:
                 break
 
             # Continue to the corresponding function:
-            print(f"Got item {item}") # debugging only
-            
             if item == TRANSMIT:
                 await self.transmit()
             
@@ -204,26 +202,29 @@ class Sensor:
         self.update_time()
 
         try:
-            print("Trying to create a connection to server...")
+            print("Transmitting to server...")
             wrap = asyncio.open_connection(SERVER_ADDR, SERVER_PORT)
             try:
                 self.input_stream, self.output_stream = yield from asyncio.wait_for(wrap, timeout=TRANSMIT_TIMEOUT)
             except asyncio.TimeoutError:
                 print("Connection attempt has reached its timeout.")
+                self.red_led.value(1)
+                self.green_led.value(0)
                 return
 
-            print("Connection created.")
             template = \
                 "POST / HTTP/1.1\r\n" \
-                "Host: {ip}:{port}\r\n" \
+                "Host: {ip}\r\n" \
+                "User-Agent: python-requests/2.28.1\r\n" \
+                "Accept-Encoding: gzip, deflate\r\n" \
+                "Accept: */*\r\n" \
                 "Content-Type: application/text\r\n" \
-                "Content-Length: {length}\r\n" \
                 "Connection: keep-alive\r\n" \
+                "Content-Length: {length}\r\n" \
                 "\r\n" \
                 "{body}"
-
-            self.output_stream.write(template.format(ip=SERVER_ADDR, port=SERVER_PORT, length=len(self.transmission), body=self.transmission))
-            print("Attempting to send to server...")
+            
+            self.output_stream.write(template.format(ip=SERVER_ADDR, length=len(str(self.transmission)), body=str(self.transmission)))
             await self.output_stream.drain()
             print(f"Transmission sent at {self.transmission['Date']}, {self.transmission['Time']}")
             self.red_led.value(0)
@@ -330,33 +331,6 @@ class Sensor:
         led.value(1)
         await asyncio.sleep(BLINK_TIME)
         led.value(0)
-
-    
-
-async def post(addr: str, data: str):
-    try:
-        input_stream, output_stream = await asyncio.open_connection(addr[0], addr[1])
-    except Exception as e:
-        print('failed to create connection:', e)
-        return
-    template = \
-        "POST / HTTP/1.1\r\n" \
-        "Host: {ip}:{port}\r\n" \
-        "Content-Type: application/text\r\n" \
-        "Content-Length: {length}\r\n" \
-        "Connection: keep-alive\r\n" \
-        "\r\n" \
-        "{body}"
-    
-    try:
-        output_stream.write(template.format(ip=addr[0], port=SERVER_PORT, length=len(data), body=data))
-        await output_stream.drain()
-    except Exception as e:
-        print('failed to execute post request:', e)
-
-    finally:
-        output_stream.close()
-        input_stream.close()
 
 if __name__ == '__main__':
     sensor = Sensor()
