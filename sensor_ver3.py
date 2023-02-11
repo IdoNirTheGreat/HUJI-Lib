@@ -204,8 +204,15 @@ class Sensor:
         self.update_time()
 
         try:
-            self.input_stream, self.output_stream = await asyncio.open_connection(SERVER_ADDR, SERVER_PORT)
-        
+            print("Trying to create a connection to server...")
+            wrap = asyncio.open_connection(SERVER_ADDR, SERVER_PORT)
+            try:
+                self.input_stream, self.output_stream = yield from asyncio.wait_for(wrap, timeout=TRANSMIT_TIMEOUT)
+            except asyncio.TimeoutError:
+                print("Connection attempt has reached its timeout.")
+                return
+
+            print("Connection created.")
             template = \
                 "POST / HTTP/1.1\r\n" \
                 "Host: {ip}:{port}\r\n" \
@@ -228,9 +235,9 @@ class Sensor:
             self.red_led.value(1)
 
         finally:
-            self.output_stream.close()
-            self.input_stream.close()
-    
+            if hasattr(self, 'output_stream'): self.output_stream.close()
+            if hasattr(self, 'input_stream'): self.input_stream.close()
+
     ### Data Proccessing Functions:
     def __str__(self) -> str:
         """
