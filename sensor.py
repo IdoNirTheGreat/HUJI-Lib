@@ -1,87 +1,267 @@
+# Module Imports:
 import network
-from urequests import post
-from time import sleep, localtime, time
+import queue
 from machine import Pin
-import _thread as thread
+import uasyncio as asyncio
+from time import sleep, localtime, time
 
-SERVER_ADDR = "127.0.0.1"
-PORT = 80
-SENSOR_NO = 1
-LOCATION = "Harman Science Library - Floor 2 (Quiet)"
-TRNSMT_INTERVAL = 30 # In seconds
-WIFI_SSID = "Noam"
-WIFI_PD = "0527904190"
+# Network Constants:
+SERVER_ADDR = "192.168.170.34"
+SERVER_PORT = 80
+WLAN_SSID = "MWTSOA"
+WLAN_PW = "zmora6599"
+POST_SUCCESS = True
+POST_FAILURE = False
+
+# Operation Constants:
+_SN_VAL = 1
+_LOC_VAL = "Harman Science Library - Floor 2 (Quiet)"
+TRANSMIT_INTERVAL = 60 # In seconds
+TRANSMIT_TIMEOUT = 5 # In seconds
 LAN_TIMEOUT = 15 # In seconds
 MOTION_ON = 0
 MOTION_OFF = 1
 MOTION_TIMEOUT = 1 # The timout duration to cancel an entrance or exit if only one sensor was activated.
+BLINK_TIME = 0.25 # In seconds
 
-# Components' Declaration:
-led_lan_conn = Pin(23, Pin.OUT) # Yellow: Lights if successfully connected to LAN, blinks if trying to connect, off if isn't connected.
-led_motion = Pin(22, Pin.OUT) # Blue: Activated when detected motion.
-led_server_success = Pin(21, Pin.OUT) # Green: Successfully connected to server.
-led_server_failure = Pin(19, Pin.OUT) # Red: Failed connecting to server.
-sensor_L = Pin(13, Pin.IN)
-sensor_R = Pin(12, Pin.IN)
+# Component Constants:
+YELLOW_LED_PIN = 23 # Yellow: Lights if successfully connected to LAN, blinks if trying to connect, off if isn't connected.
+BLUE_LED_PIN = 22 # Blue: Activated when detected motion.
+GREEN_LED_PIN = 21 # Green: Successfully connected to server.
+RED_LED_PIN = 19 # Red: Failed connecting to server.
+MOTION_L_PIN = 12 # Left motion sensor's pin.
+MOTION_R_PIN = 14 # Right motion sensor's pin.
 
-def check_enter(sensor_L, sensor_R, previous_L, previous_R):
-    if sensor_R.value() != previous_R and sensor_R.value() == MOTION_ON:
-        print(f"Motion!: sensor_R = {sensor_R.value()}, previous_R = {previous_R}")
+# Dictionary Constants:
+SN = "S.N."
+LOCATION = "Location"
+ENTRANCES = "Entrances"
+EXITS = "Exits"
+
+# Queue Put Values:
+TRANSMIT = "Transmit"
+BLINK = "Blink"
+CHECK_ENTER = "Check Enter"
+CHECK_EXIT = "Check Exit"
+
+class Sensor:
+    def __init__(self) -> None:
+        """
+        HUJI-Lib network sender, sends updates from the
+        sender to the server.
+        """
+        # Data Attributes:
+        self.transmission = {}
+        self.transmission[SN] = _SN_VAL
+        self.transmission[LOCATION] = _LOC_VAL
+        self.transmission[ENTRANCES] = 0
+        self.transmission[EXITS] = 0
+        self.update_time()
+
+        # System Attributes:
+        self.station = network.WLAN(network.STA_IF)
+
+        # Component Attributes:
+        self.yellow_led = Pin(YELLOW_LED_PIN, Pin.OUT)
+        self.green_led = Pin(GREEN_LED_PIN, Pin.OUT)
+        self.red_led = Pin(RED_LED_PIN, Pin.OUT)
+        self.blue_led = Pin(BLUE_LED_PIN, Pin.OUT)
+        self.motion_L = Pin(MOTION_L_PIN, Pin.IN)
+        self.motion_R = Pin(MOTION_R_PIN, Pin.IN)
+        self.prev_L = MOTION_OFF
+        self.prev_R = MOTION_OFF
+
+    ### Runtime Functions:
+    async def run(self) -> None:
+        print(f"HUJI-Lib Sensor {self.transmission[SN]} has started running...")
+        if not self.station.isconnected():
+            self.connect()
+
+        # Create the Consumer-Producer shared queue:
+        self.q = queue.Queue()
+
+        # Run the producer and consumer:
+        await asyncio.gather(self.producer(self.q), self.consumer(self.q))
+
+    async def producer(self, q: Queue) -> None:
+        """
+            Measures entrances and exits. Works for {TRNSMT_INTERVAL}
+            seconds, then updates the 'self.entrances' and `self.exits`.
+        """
+
+        print("Producer has started running.")
+        
+        # Generate Work:
+        while True: # TODO: Change the while condition to while the current room is open.
+            start = time()
+            while time() - start <= TRANSMIT_INTERVAL:
+                # Check entrances and exits simultaneously with gather:
+                await asyncio.gather(self.check_enter(self.q), self.check_exit(self.q))
+                
+                # Update sensors' previous values:
+                self.prev_L, self.prev_R = self.motion_L.value(), self.motion_R.value()
+            
+            # Transmit to server:
+            await q.put(TRANSMIT)
+
+    async def consumer(self, q: Queue):
+        """
+            A intermediary function that sends a transmission
+            when the producer has flagged it is ready.
+        """
+
+        print("Consumer has started running.")
+        
+        while True:
+            # Wait for work:
+            item = await q.get()
+
+            # Check for stop signal:
+            if item is None:
+                break
+
+            # Continue to the corresponding function:
+            if item == TRANSMIT:
+                await self.transmit()
+            
+            elif item == BLINK: 
+                # Could only blink blue LED for motion
+                await self.blink(self.blue_led)
+
+        print("Consumer has finished running.")
+
+    ### Connectibility Functions:
+    def connect(self) -> bool:
+        """
+            Connect to WiFi network. Blinks yellow LED while 
+            attempting to connect, solid yellow when connected,
+            red LED if connection attempt failed.
+            Returns True if attempt was successful, False other.
+        """
+        # Set station as active:
+        try:
+            self.station.active(True)
+        except Exception as e:
+            print(  f"\nWiFi station could not be activated.\n"
+                    "Exception: {e}")
+            return False
+
+        # Connect to LAN:
+        self.station.connect(WLAN_SSID, WLAN_PW)
         start = time()
-        while time() - start <= MOTION_TIMEOUT:
-            # print(f"Motion!: sensor_R = {sensor_R.value()}, sensor_L = {sensor_L.value()}")
-            if sensor_R.value() == MOTION_OFF and sensor_L.value() == MOTION_ON:
-                print("Entrance!")
-                return 1
-    return 0
+        while not self.station.isconnected() and not time()-start > LAN_TIMEOUT:
+            if self.yellow_led():
+                self.yellow_led.value(0)
+            else:
+                self.yellow_led.value(1)
+            print(f"\r({time()-start}s) Connecting{((time()-start) % 4) * '.'}   ", end='')
+            sleep(.25)
 
-def check_exit(sensor_L, sensor_R, previous_L, previous_R) -> int:
-    if sensor_L.value() != previous_L and sensor_L.value() == MOTION_ON:
-        print(f"Motion!: sensor_L = {sensor_L.value()}, previous_L = {previous_L}")
-        start = time()
-        while time() - start <= MOTION_TIMEOUT:
-            # print(f"Motion!: sensor_R = {sensor_R.value()}, sensor_L = {sensor_L.value()}")
-            if sensor_L.value() == MOTION_OFF and sensor_R.value() == MOTION_ON:
-                print("Exit!")
-                return 1
-    return 0
+        # Connection attempt passed timeout:
+        if time()-start > LAN_TIMEOUT:
+            self.station.active(False)
+            print("Could not connect to WiFi.")
+            self.yellow_led.value(0)
+            self.red_led.value(1)
+            print(f"LAN_TIMEOUT_EXCEPTION ({LAN_TIMEOUT}s)")
+            return False
+        
+        # Connection attempt was successful:
+        else:
+            print("\nConnected to WiFi.")
+            if not self.yellow_led.value():
+                self.yellow_led.value(1)
+        
+        return True
 
-if __name__ == '__main__':
-    # # WiFi Declaration:
-    # station = network.WLAN(network.STA_IF)
-    # station.active(True)
-    # station.connect(WIFI_SSID, WIFI_PD)
+    def disconnect(self) -> bool:
+        """
+            Disconnects from WLAN and deactivates WiFi station.
+            Turns yellow LED off if succeeded, turns red LED 
+            on if an error occurred.
+        """
 
-    # # Connect to LAN:
-    # start = time()
-    # while not station.isconnected() and not time()-start > LAN_TIMEOUT:
-    #     if led_lan_conn.value():
-    #         led_lan_conn.value(0)
-    #     else:
-    #         led_lan_conn.value(1)
-    #     print(f"\r({time()-start}s) Connecting{((time()-start) % 4) * '.'}   ", end='')
-    #     sleep(.25)
+        try:
+            self.station.disconnect()
+            self.station.active(False)
+            print("Connection to WLAN was terminated.")
+            return True
 
-    # # LAN timeout:
-    # if time()-start > LAN_TIMEOUT:
-    #     station.active(False)
-    #     print("Disconnected from WiFi.")
-    #     raise Exception(f"LAN_TIMEOUT_EXCEPTION ({LAN_TIMEOUT}s)")
+        except Exception as e:
+            print(  f"The sensor could not disconnect from WLAN.\n"
+                    "Exception: {e}")
+            return False
 
-    print("\nConnected to WiFi.")
-    if not led_lan_conn.value(): # Make LAN LED light solid
-        led_lan_conn.value(1)
+    async def transmit(self):
+        """
+            Sends the transmission dict to the server.
+            Lights green LED and returns True if succeeded,
+            Lights red LED and returns False else.
+        """
 
-    # Add sensor's constant data:
-    data_dict = {}
-    data_dict["S.N."] = SENSOR_NO
-    data_dict["Location"] = LOCATION
-    entrances, exits = 0, 0
-    pe_previous_R, pe_previous_L = MOTION_OFF, MOTION_OFF
-    
-    # Main measuring loop:
-    while(True):              
-        # Get timestamp:
+        self.update_time()
+
+        try:
+            print("Transmitting to server...")
+            wrap = asyncio.open_connection(SERVER_ADDR, SERVER_PORT)
+            try:
+                self.input_stream, self.output_stream = yield from asyncio.wait_for(wrap, timeout=TRANSMIT_TIMEOUT)
+            except asyncio.TimeoutError:
+                print("Connection attempt has reached its timeout.")
+                self.red_led.value(1)
+                self.green_led.value(0)
+                return
+
+            template = \
+                "POST / HTTP/1.1\r\n" \
+                "Host: {ip}\r\n" \
+                "User-Agent: python-requests/2.28.1\r\n" \
+                "Accept-Encoding: gzip, deflate\r\n" \
+                "Accept: */*\r\n" \
+                "Content-Type: application/text\r\n" \
+                "Connection: keep-alive\r\n" \
+                "Content-Length: {length}\r\n" \
+                "\r\n" \
+                "{body}"
+            
+            self.output_stream.write(template.format(ip=SERVER_ADDR, length=len(str(self.transmission)), body=str(self.transmission)))
+            await self.output_stream.drain()
+            print(f"Transmission sent at {self.transmission['Date']}, {self.transmission['Time']}")
+            self.red_led.value(0)
+            self.green_led.value(1)
+
+        except Exception as e:  # TODO: catch a speciifc exception?
+            print(f"Transmission failed.\n Exception: {e}")
+            self.green_led.value(0)
+            self.red_led.value(1)
+
+        finally:
+            if hasattr(self, 'output_stream'): self.output_stream.close()
+            if hasattr(self, 'input_stream'): self.input_stream.close()
+
+    ### Data Proccessing Functions:
+    def __str__(self) -> str:
+        """
+            Return value of all attributes of self as a string.
+        """
+
+        return  f"\n### Sensor {self.transmission['S.N.']} - Beginning of Report ###\n" + \
+                f"Sensor Location: {self.transmission['Location']}\n" + \
+                f"Connection Status: {self.station.isconnected()}\n\n" + \
+                "Dictionary Values: \n" + "".join([f"{key}: {value}\n" for key, value in zip(self.transmission.keys(), self.transmission.values())]) + \
+                "\nComponents Values: \n" + \
+                    f"Yellow LED: {self.yellow_led.value()}\n" + \
+                    f"Blue LED: {self.blue_led.value()}\n" + \
+                    f"Green LED: {self.green_led.value()}\n" + \
+                    f"Red LED: {self.red_led.value()}\n" + \
+                    f"Motion Sensor (L): {self.motion_L.value()}\n" + \
+                    f"Motion Sensor (R): {self.motion_R.value()}\n" + \
+                "\n### End of Report ###\n"
+
+    def update_time(self) -> None:
+        """
+            Update Weekday, date and time in self.transmission.
+        """
         t = localtime()
         wday = ""
         if t[6] == 0:
@@ -102,37 +282,56 @@ if __name__ == '__main__':
         tstamp = f"{t[3]:02d}:{t[4]:02d}"
         wday = "Sun" # debugging only
         tstamp = "8:"+tstamp.split(":")[1] # debugging only
-        data_dict["Weekday"] = wday
-        data_dict["Date"] = dstamp
-        data_dict["Time"] = tstamp
+        self.transmission["Weekday"] = wday
+        self.transmission["Date"] = dstamp
+        self.transmission["Time"] = tstamp
 
-        # Measure entrances and exits:
-        start_msrmnt = time()
-        while time() - start_msrmnt <= TRNSMT_INTERVAL:
-            # print(pe_sensor_L.value(), pe_sensor_R.value())
-            entrances += check_enter(sensor_L, sensor_R, pe_previous_L, pe_previous_R)
-            exits += check_exit(sensor_L, sensor_R, pe_previous_L, pe_previous_R)
-            pe_previous_L = sensor_L.value()
-            pe_previous_R = sensor_R.value()
-        print("Ended Measurement.")
+    ### Motion Detection Functions:
+    async def check_enter(self, q) -> bool:
+        """
+            Checks if someone entered the room. Returns 1 if 
+            someone entered, 0 if not.
+            Entrance direction is R -> L.
+        """
+        if self.motion_R.value() == MOTION_ON and self.prev_R == MOTION_OFF:
+            start = time()
+            while time() - start <= MOTION_TIMEOUT:
+                l_val, r_val = self.motion_L.value(), self.motion_R.value()
+                if l_val == MOTION_ON and r_val == MOTION_OFF:
+                    self.prev_L, self.prev_R = l_val, r_val
+                    print("Entrance!")
+                    self.transmission[ENTRANCES] += 1
+                    await q.put(BLINK)
+                    return True
+        return False
 
-        data_dict["Entrances"] = entrances
-        data_dict["Exits"] = exits
-        
-        print(data_dict)
+    async def check_exit(self, q) -> bool:
+        """
+            Checks if someone has left the room. Returns 1 if 
+            someone left, 0 if not.
+            Exit direction is L -> R.
+        """
+        if self.motion_L.value() == MOTION_ON and self.prev_L == MOTION_OFF:
+            start = time()
+            while time() - start <= MOTION_TIMEOUT:
+                l_val, r_val = self.motion_L.value(), self.motion_R.value()
+                if r_val == MOTION_ON and l_val == MOTION_OFF:
+                    self.prev_L, self.prev_R = l_val, r_val
+                    print("Exit!")
+                    self.transmission[EXITS] += 1
+                    await q.put(BLINK)
+                    return True
+        return False
 
-        # Send data to server:
-        print("Sending to server:")
-        try:
-            post("http://"+SERVER_ADDR, data=str(data_dict))
-            print("Sent successfully.")
-            led_server_success.value(1)          
+    # Other Functions:
+    async def blink(self, led):
+        """
+            Blink a given led using async.
+        """
+        led.value(1)
+        await asyncio.sleep(BLINK_TIME)
+        led.value(0)
 
-        except Exception as e:
-            # Connection Failed:
-            print("Connection failed.")
-            print("Exception raised: "+str(e))
-            led_server_failure.value(1)
-
-        print("Finished Iteration.\n\n")
-        
+if __name__ == '__main__':
+    sensor = Sensor()
+    asyncio.run(sensor.run())
