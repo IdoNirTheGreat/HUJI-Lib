@@ -1,10 +1,8 @@
 import uasyncio as asyncio
 
-
 # Exception raised by get_nowait().
 class QueueEmpty(Exception):
     pass
-
 
 # Exception raised by put_nowait().
 class QueueFull(Exception):

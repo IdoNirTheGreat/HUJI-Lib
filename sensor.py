@@ -10,8 +10,6 @@ SERVER_ADDR = "192.168.170.34"
 SERVER_PORT = 80
 WLAN_SSID = "MWTSOA"
 WLAN_PW = "zmora6599"
-POST_SUCCESS = True
-POST_FAILURE = False
 
 # Operation Constants:
 _SN_VAL = 1
@@ -83,7 +81,7 @@ class Sensor:
         # Run the producer and consumer:
         await asyncio.gather(self.producer(self.q), self.consumer(self.q))
 
-    async def producer(self, q: Queue) -> None:
+    async def producer(self, q: queue.Queue) -> None:
         """
             Measures entrances and exits. Works for {TRNSMT_INTERVAL}
             seconds, then updates the 'self.entrances' and `self.exits`.
@@ -104,7 +102,7 @@ class Sensor:
             # Transmit to server:
             await q.put(TRANSMIT)
 
-    async def consumer(self, q: Queue):
+    async def consumer(self, q: queue.Queue):
         """
             A intermediary function that sends a transmission
             when the producer has flagged it is ready.
@@ -204,10 +202,12 @@ class Sensor:
         try:
             print("Transmitting to server...")
             wrap = asyncio.open_connection(SERVER_ADDR, SERVER_PORT)
-            try:
+            try: # Wrap-around for the open connection function to add timeout:
                 self.input_stream, self.output_stream = yield from asyncio.wait_for(wrap, timeout=TRANSMIT_TIMEOUT)
             except asyncio.TimeoutError:
                 print("Connection attempt has reached its timeout.")
+                
+                # Set lights to failure and return from function:
                 self.red_led.value(1)
                 self.green_led.value(0)
                 return
@@ -224,18 +224,26 @@ class Sensor:
                 "\r\n" \
                 "{body}"
             
+            # Add the request output stream buffer:
             self.output_stream.write(template.format(ip=SERVER_ADDR, length=len(str(self.transmission)), body=str(self.transmission)))
+            # Drain output stream buffer (send through socket):
             await self.output_stream.drain()
+
             print(f"Transmission sent at {self.transmission['Date']}, {self.transmission['Time']}")
+
+            # Set lights to success:
             self.red_led.value(0)
             self.green_led.value(1)
 
-        except Exception as e:  # TODO: catch a speciifc exception?
+        except Exception as e:
             print(f"Transmission failed.\n Exception: {e}")
+
+            # Set lights to failure:
             self.green_led.value(0)
             self.red_led.value(1)
 
         finally:
+            # Close connections after every attempt:
             if hasattr(self, 'output_stream'): self.output_stream.close()
             if hasattr(self, 'input_stream'): self.input_stream.close()
 
@@ -280,8 +288,8 @@ class Sensor:
             wday = "Sun"
         dstamp = f"{t[2]:02d}/{t[1]:02d}/{t[0]}"
         tstamp = f"{t[3]:02d}:{t[4]:02d}"
-        wday = "Sun" # debugging only
-        tstamp = "8:"+tstamp.split(":")[1] # debugging only
+        # wday = "Sun" # debugging only
+        # tstamp = "8:"+tstamp.split(":")[1] # debugging only
         self.transmission["Weekday"] = wday
         self.transmission["Date"] = dstamp
         self.transmission["Time"] = tstamp
