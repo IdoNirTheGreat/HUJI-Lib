@@ -1,7 +1,7 @@
 # Module Imports:
 import network
 import queue
-from machine import Pin
+from machine import Pin, deepsleep
 import uasyncio as asyncio
 from time import sleep, localtime, time
 
@@ -21,6 +21,8 @@ MOTION_ON = 0
 MOTION_OFF = 1
 MOTION_TIMEOUT = 1 # The timout duration to cancel an entrance or exit if only one sensor was activated.
 BLINK_TIME = 0.25 # In seconds
+WAKEUP_TIME = (8, 0) # (Hours, Minutes)
+SLEEP_TIME = (19, 0) # (Hours, Minutes)
 
 # Component Constants:
 YELLOW_LED_PIN = 23 # Yellow: Lights if successfully connected to LAN, blinks if trying to connect, off if isn't connected.
@@ -35,6 +37,9 @@ SN = "S.N."
 LOCATION = "Location"
 ENTRANCES = "Entrances"
 EXITS = "Exits"
+WEEKDAY = "Weekday"
+DATE = "Date"
+TIME = "Time"
 
 # Queue Put Values:
 TRANSMIT = "Transmit"
@@ -72,8 +77,6 @@ class Sensor:
     ### Runtime Functions:
     async def run(self) -> None:
         print(f"HUJI-Lib Sensor {self.transmission[SN]} has started running...")
-        if not self.station.isconnected():
-            self.connect()
 
         # Create the Consumer-Producer shared queue:
         self.q = queue.Queue()
@@ -90,17 +93,30 @@ class Sensor:
         print("Producer has started running.")
         
         # Generate Work:
-        while True: # TODO: Change the while condition to while the current room is open.
-            start = time()
-            while time() - start <= TRANSMIT_INTERVAL:
-                # Check entrances and exits simultaneously with gather:
-                await asyncio.gather(self.check_enter(self.q), self.check_exit(self.q))
+        while True:
+            self.update_time()
+
+            # If the sensor should be awake:
+            if self.is_operating_hours():
+                print("Sensor is now awake.")
+                if not self.station.isconnected(): self.connect()
+                start = time()
+                while time() - start <= TRANSMIT_INTERVAL:
+                    # Check entrances and exits simultaneously with gather:
+                    await asyncio.gather(self.check_enter(self.q), self.check_exit(self.q))
+                    
+                    # Update sensors' previous values:
+                    self.prev_L, self.prev_R = self.motion_L.value(), self.motion_R.value()
                 
-                # Update sensors' previous values:
-                self.prev_L, self.prev_R = self.motion_L.value(), self.motion_R.value()
-            
-            # Transmit to server:
-            await q.put(TRANSMIT)
+                # Transmit to server:
+                await q.put(TRANSMIT)
+
+            # If the sensor should go to deep sleep:
+            else:
+                print(f"Entering deep sleep mode for {self.get_remaining_sleep_time()} seconds...")
+                if self.station.isconnected(): self.disconnect()
+                deepsleep(1000 * self.get_remaining_sleep_time())
+
 
     async def consumer(self, q: queue.Queue):
         """
@@ -253,8 +269,8 @@ class Sensor:
             Return value of all attributes of self as a string.
         """
 
-        return  f"\n### Sensor {self.transmission['S.N.']} - Beginning of Report ###\n" + \
-                f"Sensor Location: {self.transmission['Location']}\n" + \
+        return  f"\n### Sensor {self.transmission[SN]} - Beginning of Report ###\n" + \
+                f"Sensor Location: {self.transmission[LOCATION]}\n" + \
                 f"Connection Status: {self.station.isconnected()}\n\n" + \
                 "Dictionary Values: \n" + "".join([f"{key}: {value}\n" for key, value in zip(self.transmission.keys(), self.transmission.values())]) + \
                 "\nComponents Values: \n" + \
@@ -290,9 +306,9 @@ class Sensor:
         tstamp = f"{t[3]:02d}:{t[4]:02d}"
         # wday = "Sun" # debugging only
         # tstamp = "8:"+tstamp.split(":")[1] # debugging only
-        self.transmission["Weekday"] = wday
-        self.transmission["Date"] = dstamp
-        self.transmission["Time"] = tstamp
+        self.transmission[WEEKDAY] = wday
+        self.transmission[DATE] = dstamp
+        self.transmission[TIME] = tstamp
 
     ### Motion Detection Functions:
     async def check_enter(self, q) -> bool:
@@ -339,6 +355,42 @@ class Sensor:
         led.value(1)
         await asyncio.sleep(BLINK_TIME)
         led.value(0)
+
+    def get_time(self):
+        """
+            Returns a tuple format (Day, Hours, Minutes) of current time.
+        """
+        t = localtime()
+        return (t[3], t[4])
+
+    def is_operating_hours(self):
+        """
+            Returns a boolean which represents if the current time
+            is within the operating hours.
+        """
+        current_day = self.transmission[WEEKDAY]
+        current_hour, current_minute = self.get_time()
+        if  current_day in ["Sun", "Mon", "Tue", "Wed", "Thu"] and \
+            WAKEUP_TIME[0] <= current_hour <= SLEEP_TIME[0] and \
+            WAKEUP_TIME[1] <= current_minute <= SLEEP_TIME[1]:
+            return True
+        
+        return False
+
+    def get_remaining_sleep_time(self):
+        """
+            Returns the remaining sleep time (of sensor) in seconds.
+        """
+        current_hour, current_minute = self.get_time()
+        opening_hour, opening_minute = WAKEUP_TIME
+        if opening_minute < current_minute:
+            opening_hour -= 1
+            opening_minute += 60
+        
+        if opening_hour < current_hour:
+            opening_hour += 24
+
+        return (opening_hour-current_hour)*3600 + (opening_minute-current_minute+1)*60
 
 if __name__ == '__main__':
     sensor = Sensor()
