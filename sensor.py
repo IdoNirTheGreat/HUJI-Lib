@@ -5,13 +5,13 @@ from machine import Pin, deepsleep
 import uasyncio as asyncio
 from time import sleep, localtime, time
 
-# Network Constants:
+### Network Constants:
 SERVER_ADDR = "192.168.170.34"
 SERVER_PORT = 80
 WLAN_SSID = "MWTSOA"
 WLAN_PW = "zmora6599"
 
-# Operation Constants:
+### Operation Constants:
 _SN_VAL = 1
 _LOC_VAL = "Harman Science Library - Floor 2 (Quiet)"
 TRANSMIT_INTERVAL = 60 # In seconds
@@ -19,20 +19,24 @@ TRANSMIT_TIMEOUT = 5 # In seconds
 LAN_TIMEOUT = 15 # In seconds
 MOTION_ON = 0
 MOTION_OFF = 1
-MOTION_TIMEOUT = 1 # The timout duration to cancel an entrance or exit if only one sensor was activated.
+MOTION_TIMEOUT = 1  # The timout duration to cancel an 
+                    # entrance or exit if only one sensor was
+                    # activated.
 BLINK_TIME = 0.25 # In seconds
 WAKEUP_TIME = (8, 0) # (Hours, Minutes)
 SLEEP_TIME = (19, 0) # (Hours, Minutes)
 
-# Component Constants:
-YELLOW_LED_PIN = 23 # Yellow: Lights if successfully connected to LAN, blinks if trying to connect, off if isn't connected.
+### Component Constants:
+YELLOW_LED_PIN = 23 # Yellow: Lights if successfully 
+                    # connected to LAN, blinks if trying to 
+                    # connect, off if isn't connected.
 BLUE_LED_PIN = 22 # Blue: Activated when detected motion.
 GREEN_LED_PIN = 21 # Green: Successfully connected to server.
 RED_LED_PIN = 19 # Red: Failed connecting to server.
 MOTION_L_PIN = 12 # Left motion sensor's pin.
 MOTION_R_PIN = 14 # Right motion sensor's pin.
 
-# Dictionary Constants:
+### Dictionary Constants:
 SN = "S.N."
 LOCATION = "Location"
 ENTRANCES = "Entrances"
@@ -41,7 +45,7 @@ WEEKDAY = "Weekday"
 DATE = "Date"
 TIME = "Time"
 
-# Queue Put Values:
+### Queue Put Values:
 TRANSMIT = "Transmit"
 BLINK = "Blink"
 CHECK_ENTER = "Check Enter"
@@ -54,7 +58,8 @@ class Sensor:
         sender to the server.
         """
         # Data Attributes:
-        self.transmission = {}
+        self.transmission = {}  # A dict that holds all data 
+                                # to be sent.
         self.transmission[SN] = _SN_VAL
         self.transmission[LOCATION] = _LOC_VAL
         self.transmission[ENTRANCES] = 0
@@ -82,12 +87,14 @@ class Sensor:
         self.q = queue.Queue()
 
         # Run the producer and consumer:
-        await asyncio.gather(self.producer(self.q), self.consumer(self.q))
+        await asyncio.gather(   self.producer(self.q), 
+                                self.consumer(self.q))
 
     async def producer(self, q: queue.Queue) -> None:
         """
-            Measures entrances and exits. Works for {TRNSMT_INTERVAL}
-            seconds, then updates the 'self.entrances' and `self.exits`.
+            Measures entrances and exits. Works for 
+            {TRNSMT_INTERVAL} seconds, then updates the 
+            'self.entrances' and `self.exits`.
         """
 
         print("Producer has started running.")
@@ -99,23 +106,29 @@ class Sensor:
             # If the sensor should be awake:
             if self.is_operating_hours():
                 print("Sensor is now awake.")
-                if not self.station.isconnected(): self.connect()
+                if not self.station.isconnected(): 
+                    self.connect()
                 start = time()
                 while time() - start <= TRANSMIT_INTERVAL:
-                    # Check entrances and exits simultaneously with gather:
-                    await asyncio.gather(self.check_enter(self.q), self.check_exit(self.q))
+                    # Check entrances and exits 
+                    # simultaneously with gather:
+                    await asyncio.gather(
+                        self.check_enter(self.q),
+                         self.check_exit(self.q))
                     
                     # Update sensors' previous values:
-                    self.prev_L, self.prev_R = self.motion_L.value(), self.motion_R.value()
-                
+                    self.prev_R = self.motion_R.value()
+                    self.prev_L = self.motion_L.value()
+
                 # Transmit to server:
                 await q.put(TRANSMIT)
 
             # If the sensor should go to deep sleep:
             else:
-                print(f"Entering deep sleep mode for {self.get_remaining_sleep_time()} seconds...")
-                if self.station.isconnected(): self.disconnect()
-                deepsleep(1000 * self.get_remaining_sleep_time())
+                print(f"Entering deep sleep mode for {self.get_sleep_time()} seconds...")
+                if self.station.isconnected(): 
+                    self.disconnect()
+                deepsleep(1000 * self.get_sleep_time())
 
 
     async def consumer(self, q: queue.Queue):
@@ -148,22 +161,24 @@ class Sensor:
     def connect(self) -> bool:
         """
             Connect to WiFi network. Blinks yellow LED while 
-            attempting to connect, solid yellow when connected,
-            red LED if connection attempt failed.
-            Returns True if attempt was successful, False other.
+            attempting to connect, solid yellow when 
+            connected, red LED if connection attempt failed.
+            Returns True if attempt was successful, False 
+            otherwise.
         """
         # Set station as active:
         try:
             self.station.active(True)
         except Exception as e:
-            print(  f"\nWiFi station could not be activated.\n"
+            print(f"\nWiFi station could not be activated.\n"
                     "Exception: {e}")
             return False
 
         # Connect to LAN:
         self.station.connect(WLAN_SSID, WLAN_PW)
         start = time()
-        while not self.station.isconnected() and not time()-start > LAN_TIMEOUT:
+        while   not self.station.isconnected() and \
+                not time()-start > LAN_TIMEOUT:
             if self.yellow_led():
                 self.yellow_led.value(0)
             else:
@@ -190,9 +205,9 @@ class Sensor:
 
     def disconnect(self) -> bool:
         """
-            Disconnects from WLAN and deactivates WiFi station.
-            Turns yellow LED off if succeeded, turns red LED 
-            on if an error occurred.
+            Disconnects from WLAN and deactivates WiFi 
+            station. Turns yellow LED off if succeeded, turns
+            red LED on if an error occurred.
         """
 
         try:
@@ -219,7 +234,9 @@ class Sensor:
             print("Transmitting to server...")
             wrap = asyncio.open_connection(SERVER_ADDR, SERVER_PORT)
             try: # Wrap-around for the open connection function to add timeout:
-                self.input_stream, self.output_stream = yield from asyncio.wait_for(wrap, timeout=TRANSMIT_TIMEOUT)
+                self.input_stream, self.output_stream = \
+                    yield from asyncio.wait_for(wrap,
+                                    timeout=TRANSMIT_TIMEOUT)
             except asyncio.TimeoutError:
                 print("Connection attempt has reached its timeout.")
                 
@@ -260,8 +277,10 @@ class Sensor:
 
         finally:
             # Close connections after every attempt:
-            if hasattr(self, 'output_stream'): self.output_stream.close()
-            if hasattr(self, 'input_stream'): self.input_stream.close()
+            if hasattr(self, 'output_stream'): 
+                self.output_stream.close()
+            if hasattr(self, 'input_stream'): 
+                self.input_stream.close()
 
     ### Data Proccessing Functions:
     def __str__(self) -> str:
@@ -284,7 +303,8 @@ class Sensor:
 
     def update_time(self) -> None:
         """
-            Update Weekday, date and time in self.transmission.
+            Update Weekday, date and time in 
+            self.transmission.
         """
         t = localtime()
         wday = ""
@@ -317,11 +337,14 @@ class Sensor:
             someone entered, 0 if not.
             Entrance direction is R -> L.
         """
-        if self.motion_R.value() == MOTION_ON and self.prev_R == MOTION_OFF:
+        if  self.motion_R.value() == MOTION_ON and \
+            self.prev_R == MOTION_OFF:
             start = time()
             while time() - start <= MOTION_TIMEOUT:
-                l_val, r_val = self.motion_L.value(), self.motion_R.value()
-                if l_val == MOTION_ON and r_val == MOTION_OFF:
+                l_val = self.motion_L.value()
+                r_val = self.motion_R.value()
+                if  l_val == MOTION_ON and \
+                    r_val == MOTION_OFF:
                     self.prev_L, self.prev_R = l_val, r_val
                     print("Entrance!")
                     self.transmission[ENTRANCES] += 1
@@ -335,11 +358,14 @@ class Sensor:
             someone left, 0 if not.
             Exit direction is L -> R.
         """
-        if self.motion_L.value() == MOTION_ON and self.prev_L == MOTION_OFF:
+        if  self.motion_L.value() == MOTION_ON and \
+            self.prev_L == MOTION_OFF:
             start = time()
             while time() - start <= MOTION_TIMEOUT:
-                l_val, r_val = self.motion_L.value(), self.motion_R.value()
-                if r_val == MOTION_ON and l_val == MOTION_OFF:
+                l_val = self.motion_L.value()
+                r_val = self.motion_R.value()
+                if  r_val == MOTION_ON and \
+                    l_val == MOTION_OFF:
                     self.prev_L, self.prev_R = l_val, r_val
                     print("Exit!")
                     self.transmission[EXITS] += 1
@@ -358,28 +384,32 @@ class Sensor:
 
     def get_time(self):
         """
-            Returns a tuple format (Day, Hours, Minutes) of current time.
+            Returns a tuple format (Day, Hours, Minutes) of 
+            the current time.
         """
         t = localtime()
         return (t[3], t[4])
 
     def is_operating_hours(self):
         """
-            Returns a boolean which represents if the current time
-            is within the operating hours.
+            Returns a boolean which represents if the current
+            time is within the operating hours.
         """
         current_day = self.transmission[WEEKDAY]
         current_hour, current_minute = self.get_time()
-        if  current_day in ["Sun", "Mon", "Tue", "Wed", "Thu"] and \
-            WAKEUP_TIME[0] <= current_hour <= SLEEP_TIME[0] and \
+        if  current_day in \
+            ["Sun", "Mon", "Tue", "Wed", "Thu"] and \
+            WAKEUP_TIME[0] <= current_hour <= SLEEP_TIME[0] \
+            and \
             WAKEUP_TIME[1] <= current_minute <= SLEEP_TIME[1]:
             return True
         
         return False
 
-    def get_remaining_sleep_time(self):
+    def get_sleep_time(self):
         """
-            Returns the remaining sleep time (of sensor) in seconds.
+            Returns the remaining sleep time (of sensor) in
+            seconds.
         """
         current_hour, current_minute = self.get_time()
         opening_hour, opening_minute = WAKEUP_TIME
@@ -390,7 +420,8 @@ class Sensor:
         if opening_hour < current_hour:
             opening_hour += 24
 
-        return (opening_hour-current_hour)*3600 + (opening_minute-current_minute+1)*60
+        return  (opening_hour-current_hour)*3600 + \
+                (opening_minute-current_minute+1)*60
 
 if __name__ == '__main__':
     sensor = Sensor()
