@@ -8,8 +8,8 @@ from time import sleep, localtime, time
 ### Network Constants:
 SERVER_ADDR = "192.168.170.34"
 SERVER_PORT = 80
-WLAN_SSID = "MWTSOA"
-WLAN_PW = "zmora6599"
+WLAN_SSID = "HUJI-guest"
+WLAN_PW = ""
 
 ### Operation Constants:
 _SN_VAL = 1
@@ -19,7 +19,7 @@ TRANSMIT_TIMEOUT = 5 # In seconds
 LAN_TIMEOUT = 15 # In seconds
 MOTION_ON = 0
 MOTION_OFF = 1
-MOTION_TIMEOUT = 1  # The timout duration to cancel an 
+MOTION_TIMEOUT = 2  # The timout duration to cancel an 
                     # entrance or exit if only one sensor was
                     # activated.
 BLINK_TIME = 0.25 # In seconds
@@ -395,16 +395,17 @@ class Sensor:
             Returns a boolean which represents if the current
             time is within the operating hours.
         """
-        current_day = self.transmission[WEEKDAY]
-        current_hour, current_minute = self.get_time()
-        if  current_day in \
-            ["Sun", "Mon", "Tue", "Wed", "Thu"] and \
-            WAKEUP_TIME[0] <= current_hour <= SLEEP_TIME[0] \
-            and \
-            WAKEUP_TIME[1] <= current_minute <= SLEEP_TIME[1]:
-            return True
+        return True # Debugging only
+        # current_day = self.transmission[WEEKDAY]
+        # current_hour, current_minute = self.get_time()
+        # if  current_day in \
+        #     ["Sun", "Mon", "Tue", "Wed", "Thu"] and \
+        #     WAKEUP_TIME[0] <= current_hour <= SLEEP_TIME[0] \
+        #     and \
+        #     WAKEUP_TIME[1] <= current_minute <= SLEEP_TIME[1]:
+        #     return True
         
-        return False
+        # return False
 
     def get_sleep_time(self):
         """

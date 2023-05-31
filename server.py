@@ -6,7 +6,7 @@ from os.path import splitext
 from typing import Dict, List
 from jinja2 import Template
 
-HOST = "192.168.1.218"
+HOST = "192.168.111.34"
 PORT = 80
 MAX_CONNECTIONS = 5
 REQ_SIZE = 1024
@@ -15,6 +15,8 @@ CURRENT_STATE_DB = 'current_state.csv'
 TRANSMISSION_LOG_DB = 'transmission_log.csv'
 LOAD_STATS_DB = "load_stats.csv"
 HOMEPAGE_FILENAME = 'webpage.html'
+RESET_LOAD_STATS = False # Change to True if to reset load 
+                         # stats with every rest of the server.
 LOCATION_LIST = [   "CSE Aquarium C100",
                     "CSE Aquarium B100",
                     "CSE Aquarium A100",
@@ -31,13 +33,13 @@ TRANSMISSION_FIELDS = [ "S.N.",
                         "Entrances",
                         "Exits",
                     ]
-CURRENT_STATE_DEFAULTS = [  "CSE Aquarium C100,0,90",
-                            "CSE Aquarium B100,0,55",
-                            "CSE Aquarium A100,0,55",
-                            "Harman Science Library - Floor 2 (Loud),0,100",
-                            "Harman Science Library - Floor 2 (Quiet),0,50",
-                            "Harman Science Library - Floor -1,0,150",
-                            "Einstein Institute Math Library,0,50",           
+CURRENT_STATE_DEFAULTS = [  "CSE Aquarium C100,64,90",
+                            "CSE Aquarium B100,45,55",
+                            "CSE Aquarium A100,19,55",
+                            "Harman Science Library - Floor 2 (Loud),50,100",
+                            "Harman Science Library - Floor 2 (Quiet),12,50",
+                            "Harman Science Library - Floor -1,87,150",
+                            "Einstein Institute Math Library,12,50",           
                         ]
 CURRENT_STATE_FIELDS = [    "Location",
                             "Current Amount",
@@ -532,15 +534,16 @@ if __name__ == '__main__':
     # DBs setup:
     create_csv(TRANSMISSION_LOG_DB, TRANSMISSION_FIELDS, logger)
 
-    create_csv(LOAD_STATS_DB, LOAD_STATS_FIELDS, logger)
-    try:
-        with open(LOAD_STATS_DB, 'a') as f:
-            for location in LOCATION_LIST:
-                for day in WEEKDAYS:
-                    for hour in range(8, 20, 2):
-                        f.write(f"{location},{day},{str(hour)}:00,{str(hour+2)}:00,0,0\n")
-    except IOError:
-        logger.error(f"An I/O error has occurred when writing to {LOAD_STATS_DB}.")
+    if RESET_LOAD_STATS:
+        create_csv(LOAD_STATS_DB, LOAD_STATS_FIELDS, logger)
+        try:
+            with open(LOAD_STATS_DB, 'a') as f:
+                for location in LOCATION_LIST:
+                    for day in WEEKDAYS:
+                        for hour in range(8, 20, 2):
+                            f.write(f"{location},{day},{str(hour)}:00,{str(hour+2)}:00,0,0\n")
+        except IOError:
+            logger.error(f"An I/O error has occurred when writing to {LOAD_STATS_DB}.")
 
     create_csv(CURRENT_STATE_DB, CURRENT_STATE_FIELDS, logger)
     try:

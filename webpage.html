@@ -250,7 +250,7 @@
       .Weekly_Statistics{
         margin-bottom: 3em;
       }
-      .navigation{
+      .Navigation{
         margin-bottom: 3em;
       }
 
@@ -292,7 +292,7 @@
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
       <div class="container px-lg-5">
         <a class="navbar-brand" href="#!"><i class="bi bi-book"></i> HUJI-Lib</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <!--navbar buttons-->
@@ -324,13 +324,13 @@
               </div>
               <div class="carousel-inner rounded-3 justify-content-center" style="background-color: #8eb6df; padding: 1em; box-shadow: 0px 10px 15px rgba(0,0,0,0.1);">
                 <div class="carousel-item active">
-                  <p class="fs-4">The website is currently under development.</p><p class="fs-4">Browse safely!</p>
+                  <p class="fs-4">The makers of this project are looking for a job!</p><p class="fs-4">Hire us today!</p>
                 </div>
                 <div class="carousel-item">
-                  <p class="fs-4">The website is currently under development.</p><p class="fs-4">Browse safely!</p>
+                  <p class="fs-4">The makers of this project are looking for a job!</p><p class="fs-4">Hire us today!</p>
                   </div>
                   <div class="carousel-item">
-                    <p class="fs-4">The website is currently under development.</p><p class="fs-4">Browse safely!</p>
+                    <p class="fs-4">The makers of this project are looking for a job!</p><p class="fs-4">Hire us today!</p>
                     </div>
               <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -457,7 +457,7 @@
           <div class="accordion-header" id="heading-4">
             <h2>
                 <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
-                Main Room (quiet only)
+                Main Room (Quiet Only)
                 </button>
             </h2>
           </div>
@@ -618,7 +618,7 @@
                       <script>
                         var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [{{HarmanScienceLibrary_Floor2LoudSun8}}, {{HarmanScienceLibrary_Floor2LoudSun10}}, {{HarmanScienceLibrary_Floor2LoudSun12}}, {{HarmanScienceLibrary_Floor2LoudSun14}}, {{HarmanScienceLibrary_Floor2LoudSun16}}, {{HarmanScienceLibrary_Floor2LoudSun18}}];
-                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                         new Chart("myChart1", {
                           type: "bar",
                           data: {
@@ -635,12 +635,12 @@
                               text: "Sunday"
                             },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -664,7 +664,7 @@
                       <script>
                       var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [{{HarmanScienceLibrary_Floor2LoudMon8}}, {{HarmanScienceLibrary_Floor2LoudMon10}}, {{HarmanScienceLibrary_Floor2LoudMon12}}, {{HarmanScienceLibrary_Floor2LoudMon14}}, {{HarmanScienceLibrary_Floor2LoudMon16}}, {{HarmanScienceLibrary_Floor2LoudMon18}}];
-                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                         new Chart("myChart2", {
                           type: "bar",
                           data: {
@@ -681,12 +681,12 @@
                               text: "Monday"
                             },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -710,7 +710,7 @@
                         <script>
                           var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [{{HarmanScienceLibrary_Floor2LoudTue8}}, {{HarmanScienceLibrary_Floor2LoudTue10}}, {{HarmanScienceLibrary_Floor2LoudTue12}}, {{HarmanScienceLibrary_Floor2LoudTue14}}, {{HarmanScienceLibrary_Floor2LoudTue16}}, {{HarmanScienceLibrary_Floor2LoudTue18}}];
-                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                           new Chart("myChart3", {
                             type: "bar",
                             data: {
@@ -727,12 +727,12 @@
                                 text: "Tuesday"
                               },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -756,7 +756,7 @@
                           <script>
                             var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                           var yValues = [{{HarmanScienceLibrary_Floor2LoudWed8}}, {{HarmanScienceLibrary_Floor2LoudWed10}}, {{HarmanScienceLibrary_Floor2LoudWed12}}, {{HarmanScienceLibrary_Floor2LoudWed14}}, {{HarmanScienceLibrary_Floor2LoudWed16}}, {{HarmanScienceLibrary_Floor2LoudWed18}}];
-                          var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                          var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                             new Chart("myChart4", {
                               type: "bar",
                               data: {
@@ -773,12 +773,12 @@
                                   text: "Wednesday"
                                 },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -802,7 +802,7 @@
                             <script>
                               var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                             var yValues = [{{HarmanScienceLibrary_Floor2LoudThu8}}, {{HarmanScienceLibrary_Floor2LoudThu10}}, {{HarmanScienceLibrary_Floor2LoudThu12}}, {{HarmanScienceLibrary_Floor2LoudThu14}}, {{HarmanScienceLibrary_Floor2LoudThu16}}, {{HarmanScienceLibrary_Floor2LoudThu18}}];
-                            var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                            var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                               new Chart("myChart5", {
                                 type: "bar",
                                 data: {
@@ -819,12 +819,12 @@
                                     text: "Thursday"
                                   },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -869,7 +869,7 @@
                       <script>
                         var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [{{HarmanScienceLibrary_Floor2QuietSun8}}, {{HarmanScienceLibrary_Floor2QuietSun10}}, {{HarmanScienceLibrary_Floor2QuietSun12}}, {{HarmanScienceLibrary_Floor2QuietSun14}}, {{HarmanScienceLibrary_Floor2QuietSun16}}, {{HarmanScienceLibrary_Floor2QuietSun18}}];
-                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                         new Chart("myChart6", {
                           type: "bar",
                           data: {
@@ -886,12 +886,12 @@
                               text: "Sunday"
                             },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -915,7 +915,7 @@
                       <script>
                       var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [{{HarmanScienceLibrary_Floor2QuietMon8}}, {{HarmanScienceLibrary_Floor2QuietMon10}}, {{HarmanScienceLibrary_Floor2QuietMon12}}, {{HarmanScienceLibrary_Floor2QuietMon14}}, {{HarmanScienceLibrary_Floor2QuietMon16}}, {{HarmanScienceLibrary_Floor2QuietMon18}}];
-                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                         new Chart("myChart7", {
                           type: "bar",
                           data: {
@@ -932,12 +932,12 @@
                               text: "Monday"
                             },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -961,7 +961,7 @@
                         <script>
                           var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [{{HarmanScienceLibrary_Floor2QuietTue8}}, {{HarmanScienceLibrary_Floor2QuietTue10}}, {{HarmanScienceLibrary_Floor2QuietTue12}}, {{HarmanScienceLibrary_Floor2QuietTue14}}, {{HarmanScienceLibrary_Floor2QuietTue16}}, {{HarmanScienceLibrary_Floor2QuietTue18}}];
-                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                           new Chart("myChart8", {
                             type: "bar",
                             data: {
@@ -978,12 +978,12 @@
                                 text: "Tuesday"
                               },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1007,7 +1007,7 @@
                           <script>
                             var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                           var yValues = [{{HarmanScienceLibrary_Floor2QuietWed8}}, {{HarmanScienceLibrary_Floor2QuietWed10}}, {{HarmanScienceLibrary_Floor2QuietWed12}}, {{HarmanScienceLibrary_Floor2QuietWed14}}, {{HarmanScienceLibrary_Floor2QuietWed16}}, {{HarmanScienceLibrary_Floor2QuietWed18}}];
-                          var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                          var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                             new Chart("myChart9", {
                               type: "bar",
                               data: {
@@ -1024,12 +1024,12 @@
                                   text: "Wednesday"
                                 },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1053,7 +1053,7 @@
                             <script>
                               var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                             var yValues = [{{HarmanScienceLibrary_Floor2QuietThu8}}, {{HarmanScienceLibrary_Floor2QuietThu10}}, {{HarmanScienceLibrary_Floor2QuietThu12}}, {{HarmanScienceLibrary_Floor2QuietThu14}}, {{HarmanScienceLibrary_Floor2QuietThu16}}, {{HarmanScienceLibrary_Floor2QuietThu18}}];
-                            var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                            var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                               new Chart("myChart10", {
                                 type: "bar",
                                 data: {
@@ -1070,12 +1070,12 @@
                                     text: "Thursday"
                                   },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1120,7 +1120,7 @@
                       <script>
                         var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [{{HarmanScienceLibrary_Floor_1Sun8}}, {{HarmanScienceLibrary_Floor_1Sun10}}, {{HarmanScienceLibrary_Floor_1Sun12}}, {{HarmanScienceLibrary_Floor_1Sun14}}, {{HarmanScienceLibrary_Floor_1Sun16}}, {{HarmanScienceLibrary_Floor_1Sun18}}];
-                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                         new Chart("myChart11", {
                           type: "bar",
                           data: {
@@ -1137,12 +1137,12 @@
                               text: "Sunday"
                             },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1166,7 +1166,7 @@
                       <script>
                       var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [{{HarmanScienceLibrary_Floor_1Mon8}}, {{HarmanScienceLibrary_Floor_1Mon10}}, {{HarmanScienceLibrary_Floor_1Mon12}}, {{HarmanScienceLibrary_Floor_1Mon14}}, {{HarmanScienceLibrary_Floor_1Mon16}}, {{HarmanScienceLibrary_Floor_1Mon18}}];
-                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                         new Chart("myChart12", {
                           type: "bar",
                           data: {
@@ -1183,12 +1183,12 @@
                               text: "Monday"
                             },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1212,7 +1212,7 @@
                         <script>
                           var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [{{HarmanScienceLibrary_Floor_1Tue8}}, {{HarmanScienceLibrary_Floor_1Tue10}}, {{HarmanScienceLibrary_Floor_1Tue12}}, {{HarmanScienceLibrary_Floor_1Tue14}}, {{HarmanScienceLibrary_Floor_1Tue16}}, {{HarmanScienceLibrary_Floor_1Tue18}}];
-                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                           new Chart("myChart13", {
                             type: "bar",
                             data: {
@@ -1229,12 +1229,12 @@
                                 text: "Tuesday"
                               },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1258,7 +1258,7 @@
                           <script>
                             var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                           var yValues = [{{HarmanScienceLibrary_Floor_1Wed8}}, {{HarmanScienceLibrary_Floor_1Wed10}}, {{HarmanScienceLibrary_Floor_1Wed12}}, {{HarmanScienceLibrary_Floor_1Wed14}}, {{HarmanScienceLibrary_Floor_1Wed16}}, {{HarmanScienceLibrary_Floor_1Wed18}}]
-                          var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                          var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                             new Chart("myChart14", {
                               type: "bar",
                               data: {
@@ -1275,12 +1275,12 @@
                                   text: "Wednesday"
                                 },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1304,7 +1304,7 @@
                             <script>
                               var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                             var yValues = [{{HarmanScienceLibrary_Floor_1Thu8}}, {{HarmanScienceLibrary_Floor_1Thu10}}, {{HarmanScienceLibrary_Floor_1Thu12}}, {{HarmanScienceLibrary_Floor_1Thu14}}, {{HarmanScienceLibrary_Floor_1Thu16}}, {{HarmanScienceLibrary_Floor_1Thu18}}];
-                            var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                            var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                               new Chart("myChart15", {
                                 type: "bar",
                                 data: {
@@ -1321,12 +1321,12 @@
                                     text: "Thursday"
                                   },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1378,7 +1378,7 @@
                   <script>
                     var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                     var yValues = [{{EinsteinInstituteMathLibrarySun8}}, {{EinsteinInstituteMathLibrarySun10}}, {{EinsteinInstituteMathLibrarySun12}}, {{EinsteinInstituteMathLibrarySun14}}, {{EinsteinInstituteMathLibrarySun16}}, {{EinsteinInstituteMathLibrarySun18}}];
-                    var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                    var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                     new Chart("myChart16", {
                       type: "bar",
                       data: {
@@ -1395,12 +1395,12 @@
                           text: "Sunday"
                         },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1424,7 +1424,7 @@
                   <script>
                   var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                     var yValues = [{{EinsteinInstituteMathLibraryMon8}}, {{EinsteinInstituteMathLibraryMon10}}, {{EinsteinInstituteMathLibraryMon12}}, {{EinsteinInstituteMathLibraryMon14}}, {{EinsteinInstituteMathLibraryMon16}}, {{EinsteinInstituteMathLibraryMon18}}];
-                    var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                    var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                     new Chart("myChart17", {
                       type: "bar",
                       data: {
@@ -1441,12 +1441,12 @@
                           text: "Monday"
                         },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1470,7 +1470,7 @@
                     <script>
                       var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                     var yValues = [{{EinsteinInstituteMathLibraryTue8}}, {{EinsteinInstituteMathLibraryTue10}}, {{EinsteinInstituteMathLibraryTue12}}, {{EinsteinInstituteMathLibraryTue14}}, {{EinsteinInstituteMathLibraryTue16}}, {{EinsteinInstituteMathLibraryTue18}}];
-                    var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                    var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                       new Chart("myChart18", {
                         type: "bar",
                         data: {
@@ -1487,12 +1487,12 @@
                             text: "Tuesday"
                           },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1516,7 +1516,7 @@
                       <script>
                         var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                       var yValues = [{{EinsteinInstituteMathLibraryWed8}}, {{EinsteinInstituteMathLibraryWed10}}, {{EinsteinInstituteMathLibraryWed12}}, {{EinsteinInstituteMathLibraryWed14}}, {{EinsteinInstituteMathLibraryWed16}}, {{EinsteinInstituteMathLibraryWed18}}];
-                      var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                      var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                         new Chart("myChart19", {
                           type: "bar",
                           data: {
@@ -1533,12 +1533,12 @@
                               text: "Wednesday"
                             },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1562,7 +1562,7 @@
                         <script>
                           var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [{{EinsteinInstituteMathLibraryThu8}}, {{EinsteinInstituteMathLibraryThu10}}, {{EinsteinInstituteMathLibraryThu12}}, {{EinsteinInstituteMathLibraryThu14}}, {{EinsteinInstituteMathLibraryThu16}}, {{EinsteinInstituteMathLibraryThu18}}];
-                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                           new Chart("myChart20", {
                             type: "bar",
                             data: {
@@ -1579,12 +1579,12 @@
                                 text: "Thursday"
                               },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1645,7 +1645,7 @@
                       <script>
                         var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [{{CSEAquariumA100Sun8}}, {{CSEAquariumA100Sun10}}, {{CSEAquariumA100Sun12}}, {{CSEAquariumA100Sun14}}, {{CSEAquariumA100Sun16}}, {{CSEAquariumA100Sun18}}];
-                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                         new Chart("myChart21", {
                           type: "bar",
                           data: {
@@ -1662,12 +1662,12 @@
                               text: "Sunday"
                             },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1691,7 +1691,7 @@
                       <script>
                       var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [{{CSEAquariumA100Mon8}}, {{CSEAquariumA100Mon10}}, {{CSEAquariumA100Mon12}}, {{CSEAquariumA100Mon14}}, {{CSEAquariumA100Mon16}}, {{CSEAquariumA100Mon18}}];
-                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                         new Chart("myChart22", {
                           type: "bar",
                           data: {
@@ -1708,12 +1708,12 @@
                               text: "Monday"
                             },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1737,7 +1737,7 @@
                         <script>
                           var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [{{CSEAquariumA100Tue8}}, {{CSEAquariumA100Tue10}}, {{CSEAquariumA100Tue12}}, {{CSEAquariumA100Tue14}}, {{CSEAquariumA100Tue16}}, {{CSEAquariumA100Tue18}}];
-                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                           new Chart("myChart23", {
                             type: "bar",
                             data: {
@@ -1754,12 +1754,12 @@
                                 text: "Tuesday"
                               },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1783,7 +1783,7 @@
                           <script>
                             var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                           var yValues = [{{CSEAquariumA100Wed8}}, {{CSEAquariumA100Wed10}}, {{CSEAquariumA100Wed12}}, {{CSEAquariumA100Wed14}}, {{CSEAquariumA100Wed16}}, {{CSEAquariumA100Wed18}}];
-                          var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                          var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                             new Chart("myChart24", {
                               type: "bar",
                               data: {
@@ -1800,12 +1800,12 @@
                                   text: "Wednesday"
                                 },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1829,7 +1829,7 @@
                             <script>
                               var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                             var yValues = [{{CSEAquariumA100Thu8}}, {{CSEAquariumA100Thu10}}, {{CSEAquariumA100Thu12}}, {{CSEAquariumA100Thu14}}, {{CSEAquariumA100Thu16}}, {{CSEAquariumA100Thu18}}];
-                            var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                            var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                               new Chart("myChart25", {
                                 type: "bar",
                                 data: {
@@ -1846,12 +1846,12 @@
                                     text: "Thursday"
                                   },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1896,7 +1896,7 @@
                     <script>
                       var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                       var yValues = [{{CSEAquariumB100Sun8}}, {{CSEAquariumB100Sun10}}, {{CSEAquariumB100Sun12}}, {{CSEAquariumB100Sun14}}, {{CSEAquariumB100Sun16}}, {{CSEAquariumB100Sun18}}];
-                      var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                      var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                       new Chart("myChart26", {
                         type: "bar",
                         data: {
@@ -1913,12 +1913,12 @@
                             text: "Sunday"
                           },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1942,7 +1942,7 @@
                     <script>
                     var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                       var yValues = [{{CSEAquariumB100Mon8}}, {{CSEAquariumB100Mon10}}, {{CSEAquariumB100Mon12}}, {{CSEAquariumB100Mon14}}, {{CSEAquariumB100Mon16}}, {{CSEAquariumB100Mon18}}];
-                      var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                      var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                       new Chart("myChart27", {
                         type: "bar",
                         data: {
@@ -1959,12 +1959,12 @@
                             text: "Monday"
                           },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -1988,7 +1988,7 @@
                       <script>
                         var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                       var yValues = [{{CSEAquariumB100Tue8}}, {{CSEAquariumB100Tue10}}, {{CSEAquariumB100Tue12}}, {{CSEAquariumB100Tue14}}, {{CSEAquariumB100Tue16}}, {{CSEAquariumB100Tue18}}];
-                      var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                      var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                         new Chart("myChart28", {
                           type: "bar",
                           data: {
@@ -2005,12 +2005,12 @@
                               text: "Tuesday"
                             },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -2034,7 +2034,7 @@
                         <script>
                           var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [{{CSEAquariumB100Wed8}}, {{CSEAquariumB100Wed10}}, {{CSEAquariumB100Wed12}}, {{CSEAquariumB100Wed14}}, {{CSEAquariumB100Wed16}}, {{CSEAquariumB100Wed18}}];
-                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                           new Chart("myChart29", {
                             type: "bar",
                             data: {
@@ -2051,12 +2051,12 @@
                                 text: "Wednesday"
                               },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -2080,7 +2080,7 @@
                           <script>
                             var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                           var yValues = [{{CSEAquariumB100Thu8}}, {{CSEAquariumB100Thu10}}, {{CSEAquariumB100Thu12}}, {{CSEAquariumB100Thu14}}, {{CSEAquariumB100Thu16}}, {{CSEAquariumB100Thu18}}];
-                          var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                          var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                             new Chart("myChart30", {
                               type: "bar",
                               data: {
@@ -2097,12 +2097,12 @@
                                   text: "Thursday"
                                 },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -2147,7 +2147,7 @@
                     <script>
                       var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                       var yValues = [{{CSEAquariumC100Sun8}}, {{CSEAquariumC100Sun10}}, {{CSEAquariumC100Sun12}}, {{CSEAquariumC100Sun14}}, {{CSEAquariumC100Sun16}}, {{CSEAquariumC100Sun18}}];
-                      var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                      var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                       new Chart("myChart31", {
                         type: "bar",
                         data: {
@@ -2164,12 +2164,12 @@
                             text: "Sunday"
                           },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -2193,7 +2193,7 @@
                     <script>
                     var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                       var yValues = [{{CSEAquariumC100Mon8}}, {{CSEAquariumC100Mon10}}, {{CSEAquariumC100Mon12}}, {{CSEAquariumC100Mon14}}, {{CSEAquariumC100Mon16}}, {{CSEAquariumC100Mon18}}];
-                      var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                      var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                       new Chart("myChart32", {
                         type: "bar",
                         data: {
@@ -2210,12 +2210,12 @@
                             text: "Monday"
                           },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -2239,7 +2239,7 @@
                       <script>
                         var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                       var yValues = [{{CSEAquariumC100Tue8}}, {{CSEAquariumC100Tue10}}, {{CSEAquariumC100Tue12}}, {{CSEAquariumC100Tue14}}, {{CSEAquariumC100Tue16}}, {{CSEAquariumC100Tue18}}];
-                      var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                      var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                         new Chart("myChart33", {
                           type: "bar",
                           data: {
@@ -2256,12 +2256,12 @@
                               text: "Tuesday"
                             },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -2285,7 +2285,7 @@
                         <script>
                           var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                         var yValues = [{{CSEAquariumC100Wed8}}, {{CSEAquariumC100Wed10}}, {{CSEAquariumC100Wed12}}, {{CSEAquariumC100Wed14}}, {{CSEAquariumC100Wed16}}, {{CSEAquariumC100Wed18}}];
-                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                        var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                           new Chart("myChart34", {
                             type: "bar",
                             data: {
@@ -2302,12 +2302,12 @@
                                 text: "Wednesday"
                               },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -2331,7 +2331,7 @@
                           <script>
                             var xValues = ["08:00-10:00", "10:00-12:00", "12:00-14:00", "14:00-16:00", "16:00-18:00", "18:00-20:00"];
                           var yValues = [{{CSEAquariumC100Thu8}}, {{CSEAquariumC100Thu10}}, {{CSEAquariumC100Thu12}}, {{CSEAquariumC100Thu14}}, {{CSEAquariumC100Thu16}}, {{CSEAquariumC100Thu18}}];
-                          var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b"];
+                          var barColors = ["#2d2d3b", "gray","#2d2d3b","gray","#2d2d3b","gray"];
                             new Chart("myChart35", {
                               type: "bar",
                               data: {
@@ -2348,12 +2348,12 @@
                                   text: "Thursday"
                                 },
                             scales: {
-                            yAxes: [{
+                              yAxes: [{ ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                max: 100 
+                            },
                                 display: true,
-                                ticks: {
-                                    beginAtZero: true,
-                                    max: 100
-                                },
                                 scaleLabel: {
                                 display: true,
                                 labelString: 'Percentage'
@@ -2393,7 +2393,7 @@
     <section id="section3" style="min-height: 100vh; background: #949494;"> 
     <div class="container4 reveal row-gap:10px px-lg-5">  
       <div class="feature"><i class="bi bi-geo-alt-fill"></i></div>
-              <h2 class="navigation fs-4 fw-bold">navigation</h2>         
+              <h2 class="Navigation fs-4 fw-bold">Navigation</h2>         
       <div class="row gx-lg-5 text-center justify-content-center">
               <div class="col-md d-flex justify-content-center">
               <!--herman map-->
@@ -2407,7 +2407,15 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td style="background-color: #8eb7df81; border-radius: 12px;"><p><strong>Opening Hours:</strong></p></td>
+                    <td style="background-color: #8eb7df81; border-radius: 12px;"><p><strong>Opening Hours:</strong></p>
+                      <p>Sunday 8:30-21:45</p>
+                      <p>Monday 8:30-21:45</p>
+                      <p>Tuesday 8:30-21:45</p>
+                      <p>Wednesday 8:30-21:45</p>
+                      <p>Thursday 8:30-17:45</p>
+                      <p>Friday Closed</p>
+                      <p>Saturday Closed</p>
+                    </td>
                   </tr>
                 </tbody>
               </table>
